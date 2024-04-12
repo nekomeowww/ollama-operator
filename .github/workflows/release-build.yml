@@ -50,6 +50,8 @@ jobs:
 
   ghcr_build:
     name: Build for GitHub Container Registry
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
