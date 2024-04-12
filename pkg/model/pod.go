@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	OllamaBaseImage = "m.daocloud.io/docker.io/ollama/ollama"
+	OllamaBaseImage = "ollama/ollama"
 )
 
 func NewOllamaServerContainer(readOnly bool) corev1.Container {

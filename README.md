@@ -128,14 +128,14 @@ The detailed resources it creates, and the relationships between them are shown 
 
  <picture>
     <source
-      srcset="./docs/architecture-theme-night.png"
+      srcset="./docs/public/architecture-theme-night.png"
       media="(prefers-color-scheme: dark)"
     />
     <source
-      srcset="./docs/architecture-theme-day.png"
+      srcset="./docs/public/architecture-theme-day.png"
       media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
     />
-    <img src="./docs/architecture-theme-day.png" />
+    <img src="./docs/public/architecture-theme-day.png" />
   </picture>
 
 ## Contributing

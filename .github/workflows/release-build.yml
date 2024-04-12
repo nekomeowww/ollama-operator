@@ -63,8 +63,13 @@ jobs:
           export LAST_TAG=$(git describe --tags $LAST_TAGGED_COMMIT)
           echo "version=${LAST_TAG#v}" >> $GITHUB_OUTPUT
 
+      - # Add support for more platforms with QEMU (optional)
+        # https://github.com/docker/setup-qemu-action
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
         with:
           platforms: linux/amd64,linux/arm64
 
@@ -84,6 +89,7 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v4
         with:
+          platforms: linux/amd64,linux/arm64
           context: ./
           file: ./Dockerfile
           push: true
@@ -92,3 +98,12 @@ jobs:
             ${{ steps.dockerinfo.outputs.taglatest }}
             ${{ steps.dockerinfo.outputs.tag }}
 
+      - name: Build installer
+        run: |
+          make build-installer IMG=ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }}
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ollama-operator-installer-${{ steps.version.outputs.version }}
+          path: dist/install.yaml

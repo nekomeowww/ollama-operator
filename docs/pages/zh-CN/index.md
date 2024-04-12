@@ -82,7 +82,7 @@ kubectl apply -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/ma
 2. 等待 Operator 就绪：
 
 ```shell
-kubectl wait --for=jsonpath='{.status.replicas}'=2 deployment/ollama-operator-controller-manager -n ollama-operator-system
+kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-operator-controller-manager -n ollama-operator-system
 ```
 
 3. 创建一个 `Model` 类型的 CRD 资源

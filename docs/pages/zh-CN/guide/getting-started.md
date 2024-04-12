@@ -37,7 +37,13 @@ kind create cluster --config kind-config.yaml
 kubectl apply -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/main/dist/install.yaml
 ```
 
-2. 创建一个 `Model` 类型的 CRD 资源
+2. 等待 Operator 就绪：
+
+```shell
+kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-operator-controller-manager -n ollama-operator-system
+```
+
+3. 创建一个 `Model` 类型的 CRD 资源
 
 ::: tip 什么是 CRD？
 
@@ -92,7 +98,6 @@ EOF
 
 或者您可以创建自己的文件：
 
-
 ::: code-group
 
 ```yaml [ollama-model-phi.yaml]
@@ -106,25 +111,25 @@ spec: # [!code ++]
 
 :::
 
-1. 将 `Model` CRD 应用到 Kubernetes 集群：
+4. 将 `Model` CRD 应用到 Kubernetes 集群：
 
 ```shell
 kubectl apply -f ollama-model-phi.yaml
 ```
 
-1. 等待模型就绪：
+5. 等待模型就绪：
 
 ```shell
 kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-model-phi
 ```
 
-5. 准备就绪！现在让我们转发访问模型的端口到本地：
+6. 准备就绪！现在让我们转发访问模型的端口到本地：
 
 ```shell
 kubectl port-forward svc/ollama-model-phi ollama
 ```
 
-1. 直接与模型交互：
+7. 直接与模型交互：
 
 ```shell
 ollama run phi
