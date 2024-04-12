@@ -173,27 +173,3 @@ curl http://localhost:11434/v1/chat/completions -H "Content-Type: application/js
   ]
 }'
 ```
-
-```shell
-kubectl get pods
-
-cat <<EOF >> ollama-model-phi.yaml
-apiVersion: ollama.ayaka.io/v1
-kind: Model
-metadata:
-  name: phi
-spec:
-  image: phi
-  persistentVolume:
-    accessMode: ReadWriteOnce
-EOF
-
-kubectl apply -f ollama-model-phi.yaml
-kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 statefulset/ollama-models-store
-kubectl get pods
-kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-model-phi
-kubectl get pods
-kubectl expose deployment ollama-model-phi --name=ollama-model-phi-nodeport --type=NodePort --port 11434
-kubectl patch service ollama-model-phi-nodeport --type='json' --patch='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value":30101}]'
-kubectl get svc -o wide
-```
