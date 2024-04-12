@@ -72,6 +72,10 @@ export default defineConfig({
               { text: 'CRD definition', link: '/pages/en/references/crd' },
               { text: 'Architectural Design', link: '/pages/en/references/architectural-design' },
             ]
+          },
+          {
+            text: 'Acknowledgements',
+            link: '/pages/en/acknowledgements'
           }
         ],
         sidebar: [
@@ -89,6 +93,10 @@ export default defineConfig({
               { text: 'CRD definition', link: '/pages/en/references/crd' },
               { text: 'Architectural Design', link: '/pages/en/references/architectural-design' },
             ]
+          },
+          {
+            text: 'Acknowledgements',
+            link: '/pages/en/acknowledgements'
           }
         ]
       },
@@ -115,6 +123,10 @@ export default defineConfig({
               { text: 'CRD 定义', link: '/pages/zh-CN/references/crd' },
               { text: '架构设计', link: '/pages/zh-CN/references/architectural-design' },
             ]
+          },
+          {
+            text: '致谢',
+            link: '/pages/zh-CN/acknowledgements'
           }
         ],
         sidebar: [
@@ -132,6 +144,10 @@ export default defineConfig({
               { text: 'CRD 定义', link: '/pages/zh-CN/references/crd' },
               { text: '架构设计', link: '/pages/zh-CN/references/architectural-design' },
             ]
+          },
+          {
+            text: '致谢',
+            link: '/pages/zh-CN/acknowledgements'
           }
         ]
       },

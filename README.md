@@ -142,3 +142,13 @@ The detailed resources it creates, and the relationships between them are shown 
 
 - Refer to the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 - More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
+
+## Acknowledgements
+
+Gratefully thanks to the following projects and their authors, contributors:
+
+- [Ollama](https://github.com/ollama/ollama)
+- [llama.cpp](https://github.com/ggerganov/llama.cpp)
+- [Kubebuilder](https://book.kubebuilder.io/introduction.html)
+
+It is because of their hard work and contributions that this program exists.
