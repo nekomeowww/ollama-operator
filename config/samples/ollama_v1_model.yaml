@@ -1,0 +1,9 @@
+apiVersion: ollama.ayaka.io/v1
+kind: Model
+metadata:
+  labels:
+    app.kubernetes.io/name: ollama-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: model-sample
+spec:
+  image: phi

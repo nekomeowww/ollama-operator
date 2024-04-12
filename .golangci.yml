@@ -1,0 +1,69 @@
+run:
+  allow-parallel-runners: true
+
+issues:
+  exclude:
+    - "if statements should only be cuddled with assignments" # from wsl
+    - "if statements should only be cuddled with assignments used in the if statement itself" # from wsl
+    - "assignments should only be cuddled with other assignments" # from wsl. false positive case: var a bool\nb := true
+    - "declarations should never be cuddled" # from wsl
+  # don't skip warning about doc comments
+  # don't exclude the default set of lint
+  exclude-use-default: false
+  # restore some of the defaults
+  # (fill in the rest as needed)
+  exclude-rules:
+    - path: internal/*
+      linters:
+        - dupl
+
+linters-settings:
+  wsl:
+    allow-assign-and-call: false
+    strict-append: false
+  revive:
+    rules:
+      - name: blank-imports
+        disabled: true
+
+linters:
+  disable-all: true
+  enable:
+    - dupl
+    - errcheck
+    - exportloopref
+    - goconst
+    - gocyclo
+    - gofmt
+    - goimports
+    - gosimple
+    - govet
+    - ineffassign
+    # - lll
+    - misspell
+    - nakedret
+    - prealloc
+    - staticcheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - containedctx
+    - durationcheck
+    - errname
+    - exhaustive
+    - forcetypeassert
+    - goheader
+    - goprintffuncname
+    # - gosec
+    - musttag
+    - nestif
+    - nolintlint
+    - nosprintfhostport
+    - predeclared
+    - reassign
+    - revive
+    - tenv
+    - testableexamples
+    - whitespace
+    - wsl

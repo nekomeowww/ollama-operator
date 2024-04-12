@@ -1,0 +1,31 @@
+# permissions for end users to edit models.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: model-editor-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: ollama-operator
+    app.kubernetes.io/part-of: ollama-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: model-editor-role
+rules:
+- apiGroups:
+  - ollama.ayaka.io
+  resources:
+  - models
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ollama.ayaka.io
+  resources:
+  - models/status
+  verbs:
+  - get
