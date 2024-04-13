@@ -6,7 +6,7 @@ title: Ollama Operator
 
 hero:
   name: Ollama Operator
-  text: LLMs, Scaled, Deployed
+  text: Large language models, scaled, deployed
   tagline: Yet another operator for running large language models on Kubernetes with ease. Powered by Ollama! 🐫
   image:
     src: /logo.png

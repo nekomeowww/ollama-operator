@@ -35,6 +35,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.12.7
     version: 20.12.7
+  '@vueuse/core':
+    specifier: ^10.9.0
+    version: 10.9.0(vue@3.4.21)
   asciinema-player:
     specifier: ^3.7.1
     version: 3.7.1

@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Ollama Operator",
-  description: "Yet another operator for running large language models on Kubernetes with ease. 🙀",
+  description: "Large language models, scaled, deployed. - Yet another operator for running large language models on Kubernetes with ease. 🙀",
   lastUpdated: true,
   ignoreDeadLinks: [
     // Site Config | VitePress
@@ -55,7 +55,7 @@ export default defineConfig({
       lang: 'en',
       link: '/pages/en/',
       title: 'Ollama Operator',
-      description: 'Yet another operator for running large language models on Kubernetes with ease. 🙀',
+      description: 'Large language models, scaled, deployed - Yet another operator for running large language models on Kubernetes with ease. 🙀',
       themeConfig: {
         nav: [
           {
@@ -106,7 +106,7 @@ export default defineConfig({
       lang: 'zh-CN',
       link: '/pages/zh-CN/',
       title: 'Ollama Operator',
-      description: '一个用于在 Kubernetes 上轻松运行大型语言模型的 Operator。 🙀',
+      description: '大语言模型，伸缩自如，轻松部署 - 一个用于在 Kubernetes 上轻松运行大型语言模型的 Operator。 🙀',
       themeConfig: {
         nav: [
           {

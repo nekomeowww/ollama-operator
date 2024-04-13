@@ -16,6 +16,7 @@
     "@nolebase/vitepress-plugin-git-changelog": "^1.28.0",
     "@nolebase/vitepress-plugin-highlight-targeted-heading": "^1.28.0",
     "@types/node": "^20.12.7",
+    "@vueuse/core": "^10.9.0",
     "asciinema-player": "^3.7.1",
     "eslint": "^8.57.0",
     "typescript": "^5.4.5",
