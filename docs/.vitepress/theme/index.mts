@@ -3,16 +3,16 @@ import { h } from 'vue'
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 
-import { InjectionKey, NolebaseEnhancedReadabilitiesMenu, NolebaseEnhancedReadabilitiesScreenMenu } from '@nolebase/vitepress-plugin-enhanced-readabilities'
+import { InjectionKey, NolebaseEnhancedReadabilitiesMenu, NolebaseEnhancedReadabilitiesScreenMenu } from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
 import { NolebaseGitChangelogPlugin } from '@nolebase/vitepress-plugin-git-changelog/client'
 import {
   NolebaseHighlightTargetedHeading,
-} from '@nolebase/vitepress-plugin-highlight-targeted-heading'
+} from '@nolebase/vitepress-plugin-highlight-targeted-heading/client'
 
 
 import '@nolebase/vitepress-plugin-enhanced-mark/client/style.css'
-import '@nolebase/vitepress-plugin-enhanced-readabilities/dist/style.css'
-import '@nolebase/vitepress-plugin-highlight-targeted-heading/dist/style.css'
+import '@nolebase/vitepress-plugin-enhanced-readabilities/client/style.css'
+import '@nolebase/vitepress-plugin-highlight-targeted-heading/client/style.css'
 
 import AsciinemaPlayer from './components/AsciinemaPlayer.vue'
 
@@ -35,7 +35,7 @@ export default {
       ],
     })
   },
-  enhanceApp({ app, router, siteData }) {
+  enhanceApp({ app }) {
     app.component('AsciinemaPlayer', AsciinemaPlayer)
     app.provide(InjectionKey, {
       spotlight: {
