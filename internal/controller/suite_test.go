@@ -32,7 +32,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	ollamav1 "github.com/nekomeowww/ollama-operator/api/v1"
+	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 	//+kubebuilder:scaffold:imports
 )
 

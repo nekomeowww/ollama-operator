@@ -14,7 +14,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	ollamav1 "github.com/nekomeowww/ollama-operator/api/v1"
+	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 )
 
 const (

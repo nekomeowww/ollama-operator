@@ -138,12 +138,12 @@ type ModelStatus struct {
 	Conditions []ModelStatusCondition `json:"conditions,omitempty"`
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// Model is the Schema for the models API
+// +genclient
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Model",type=string,JSONPath=`.spec.image`
 // +kubebuilder:printcolumn:name="Status",type=string,JSONPath=`.status.conditions[0].type`
-
-// Model is the Schema for the models API
 type Model struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`

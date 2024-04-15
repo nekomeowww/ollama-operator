@@ -25,31 +25,24 @@ export default defineConfig({
       }
     }),
     GitChangelogMarkdownSection({
-      getChangelogTitle: (_, __, { helpers }): string => {
-        if (helpers.idStartsWith(join('pages', 'en')))
-          return 'Page History'
-        if (helpers.idStartsWith(join('pages', 'zh-CN')))
-          return '页面历史'
-
-        return 'Page History'
+      locales: {
+        'en': {
+          gitChangelogMarkdownSectionTitles: {
+            changelog: 'Changelog',
+            contributors: 'Contributors'
+          }
+        },
+        'zh-CN': {
+          gitChangelogMarkdownSectionTitles: {
+            changelog: '页面历史',
+            contributors: '贡献者'
+          }
+        }
       },
-      getContributorsTitle: (_, __, { helpers }): string => {
-        if (helpers.idStartsWith(join('pages', 'en')))
-          return 'Contributors'
-        if (helpers.idStartsWith(join('pages', 'zh-CN')))
-          return '贡献者'
-
-        return 'Contributors'
-      },
-      excludes: [],
-      exclude: (_, { helpers }): boolean => {
-        if (helpers.idEquals(join('pages', 'en', 'index.md')))
-          return true
-        if (helpers.idEquals(join('pages', 'zh-CN', 'index.md')))
-          return true
-
-        return false
-      },
+      excludes: [
+        join('pages', 'en', 'index.md'),
+        join('pages', 'zh-CN', 'index.md')
+      ],
     }),
     UnoCSS()
   ],

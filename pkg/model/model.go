@@ -14,7 +14,7 @@ import (
 
 	"github.com/samber/lo"
 
-	ollamav1 "github.com/nekomeowww/ollama-operator/api/v1"
+	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 )
 
 func ModelAppName(name string) string {
@@ -56,8 +56,8 @@ func EnsureDeploymentCreated(
 
 	deployment = &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      map[string]string{},
-			Annotations: map[string]string{},
+			Labels:      make(map[string]string),
+			Annotations: make(map[string]string),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
 			OwnerReferences: []metav1.OwnerReference{{
@@ -218,8 +218,8 @@ func EnsureServiceCreated(
 
 	service = &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      map[string]string{},
-			Annotations: map[string]string{},
+			Labels:      make(map[string]string),
+			Annotations: make(map[string]string),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
 			OwnerReferences: []metav1.OwnerReference{{
@@ -279,6 +279,112 @@ func IsServiceReady(
 	}
 
 	log.Info("service is ready", "service", service)
+
+	return true, nil
+}
+
+func IsProgressing(ctx context.Context, ollamaModelResource ollamav1.Model) bool {
+	return len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
+		return item.Type == ollamav1.ModelProgressing
+	})) > 0
+}
+
+func SetProgressing(
+	ctx context.Context,
+	c client.Client,
+	ollamaModelResource ollamav1.Model,
+) (bool, error) {
+	hasProgressing := len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
+		return item.Type == ollamav1.ModelProgressing
+	})) > 0
+	if hasProgressing {
+		return false, nil
+	}
+
+	ollamaModelResource.Status.Conditions = []ollamav1.ModelStatusCondition{
+		{
+			Type:               ollamav1.ModelProgressing,
+			Status:             corev1.ConditionTrue,
+			LastUpdateTime:     metav1.Now(),
+			LastTransitionTime: metav1.Now(),
+		},
+	}
+
+	err := c.Status().Update(ctx, &ollamaModelResource)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func IsAvailable(ctx context.Context, ollamaModelResource ollamav1.Model) bool {
+	return len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
+		return item.Type == ollamav1.ModelAvailable
+	})) > 0
+}
+
+func SetAvailable(
+	ctx context.Context,
+	c client.Client,
+	ollamaModelResource ollamav1.Model,
+) (bool, error) {
+	hasAvailable := len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
+		return item.Type == ollamav1.ModelAvailable
+	})) > 0
+	if hasAvailable {
+		return false, nil
+	}
+
+	ollamaModelResource.Status.Conditions = []ollamav1.ModelStatusCondition{
+		{
+			Type:               ollamav1.ModelAvailable,
+			Status:             corev1.ConditionTrue,
+			LastUpdateTime:     metav1.Now(),
+			LastTransitionTime: metav1.Now(),
+		},
+	}
+
+	err := c.Status().Update(ctx, &ollamaModelResource)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func ShouldSetReplicas(
+	ctx context.Context,
+	ollamaModelResource ollamav1.Model,
+	replicas int32,
+	readyReplicas int32,
+	availableReplicas int32,
+	unavailableReplicas int32,
+) bool {
+	return ollamaModelResource.Status.Replicas != replicas ||
+		ollamaModelResource.Status.ReadyReplicas != readyReplicas ||
+		ollamaModelResource.Status.AvailableReplicas != availableReplicas ||
+		ollamaModelResource.Status.UnavailableReplicas != unavailableReplicas
+}
+
+func SetReplicas(
+	ctx context.Context,
+	c client.Client,
+	ollamaModelResource ollamav1.Model,
+	replicas int32,
+	readyReplicas int32,
+	availableReplicas int32,
+	unavailableReplicas int32,
+) (bool, error) {
+	ollamaModelResource.Status.Replicas = replicas
+	ollamaModelResource.Status.ReadyReplicas = readyReplicas
+	ollamaModelResource.Status.AvailableReplicas = availableReplicas
+	ollamaModelResource.Status.UnavailableReplicas = unavailableReplicas
+
+	err := c.Status().Update(ctx, &ollamaModelResource)
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }

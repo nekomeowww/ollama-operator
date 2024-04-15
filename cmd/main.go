@@ -34,7 +34,7 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	ollamav1 "github.com/nekomeowww/ollama-operator/api/v1"
+	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 	"github.com/nekomeowww/ollama-operator/internal/controller"
 	//+kubebuilder:scaffold:imports
 )

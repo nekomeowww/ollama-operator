@@ -27,7 +27,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	ollamav1 "github.com/nekomeowww/ollama-operator/api/v1"
+	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 )
 
 var _ = Describe("Model Controller", func() {

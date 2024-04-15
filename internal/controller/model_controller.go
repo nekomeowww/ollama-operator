@@ -20,17 +20,14 @@ import (
 	"context"
 	"time"
 
-	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/tools/record"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	ollamav1 "github.com/nekomeowww/ollama-operator/api/v1"
+	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 	model "github.com/nekomeowww/ollama-operator/pkg/model"
-	"github.com/samber/lo"
 )
 
 // ModelReconciler reconciles a Model object
@@ -68,8 +65,8 @@ func (r *ModelReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 
 	modelRecorder := model.NewWrappedRecorder(r.Recorder, &m)
 
-	if !r.IsAvailable(ctx, m) {
-		hasSet, err := r.SetProgressing(ctx, m)
+	if !model.IsAvailable(ctx, m) {
+		hasSet, err := model.SetProgressing(ctx, r.Client, m)
 		if err != nil {
 			return reconcile.Result{}, err
 		}
@@ -148,8 +145,8 @@ func (r *ModelReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 5}, nil
 	}
 
-	if r.ShouldSetReplicas(ctx, m, deployment.Status.Replicas, deployment.Status.ReadyReplicas, deployment.Status.AvailableReplicas, deployment.Status.UnavailableReplicas) {
-		hasSet, err := r.SetReplicas(ctx, m, deployment.Status.Replicas, deployment.Status.ReadyReplicas, deployment.Status.AvailableReplicas, deployment.Status.UnavailableReplicas)
+	if model.ShouldSetReplicas(ctx, m, deployment.Status.Replicas, deployment.Status.ReadyReplicas, deployment.Status.AvailableReplicas, deployment.Status.UnavailableReplicas) {
+		hasSet, err := model.SetReplicas(ctx, r.Client, m, deployment.Status.Replicas, deployment.Status.ReadyReplicas, deployment.Status.AvailableReplicas, deployment.Status.UnavailableReplicas)
 		if err != nil {
 			return reconcile.Result{}, err
 		}
@@ -158,7 +155,7 @@ func (r *ModelReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		}
 	}
 
-	_, err = r.SetAvailable(ctx, m)
+	_, err = model.SetAvailable(ctx, r.Client, m)
 	if err != nil {
 		return reconcile.Result{}, err
 	}
@@ -173,101 +170,4 @@ func (r *ModelReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&ollamav1.Model{}).
 		Complete(r)
-}
-
-func (r *ModelReconciler) IsProgressing(ctx context.Context, ollamaModelResource ollamav1.Model) bool {
-	return len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
-		return item.Type == ollamav1.ModelProgressing
-	})) > 0
-}
-
-func (r *ModelReconciler) SetProgressing(ctx context.Context, ollamaModelResource ollamav1.Model) (bool, error) {
-	hasProgressing := len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
-		return item.Type == ollamav1.ModelProgressing
-	})) > 0
-	if hasProgressing {
-		return false, nil
-	}
-
-	ollamaModelResource.Status.Conditions = []ollamav1.ModelStatusCondition{
-		{
-			Type:               ollamav1.ModelProgressing,
-			Status:             corev1.ConditionTrue,
-			LastUpdateTime:     metav1.Now(),
-			LastTransitionTime: metav1.Now(),
-		},
-	}
-
-	err := r.Status().Update(ctx, &ollamaModelResource)
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
-}
-
-func (r *ModelReconciler) IsAvailable(ctx context.Context, ollamaModelResource ollamav1.Model) bool {
-	return len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
-		return item.Type == ollamav1.ModelAvailable
-	})) > 0
-}
-
-func (r *ModelReconciler) SetAvailable(ctx context.Context, ollamaModelResource ollamav1.Model) (bool, error) {
-	hasAvailable := len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
-		return item.Type == ollamav1.ModelAvailable
-	})) > 0
-	if hasAvailable {
-		return false, nil
-	}
-
-	ollamaModelResource.Status.Conditions = []ollamav1.ModelStatusCondition{
-		{
-			Type:               ollamav1.ModelAvailable,
-			Status:             corev1.ConditionTrue,
-			LastUpdateTime:     metav1.Now(),
-			LastTransitionTime: metav1.Now(),
-		},
-	}
-
-	err := r.Status().Update(ctx, &ollamaModelResource)
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
-}
-
-func (r *ModelReconciler) ShouldSetReplicas(
-	ctx context.Context,
-	ollamaModelResource ollamav1.Model,
-	replicas int32,
-	readyReplicas int32,
-	availableReplicas int32,
-	unavailableReplicas int32,
-) bool {
-	return ollamaModelResource.Status.Replicas != replicas ||
-		ollamaModelResource.Status.ReadyReplicas != readyReplicas ||
-		ollamaModelResource.Status.AvailableReplicas != availableReplicas ||
-		ollamaModelResource.Status.UnavailableReplicas != unavailableReplicas
-}
-
-func (r *ModelReconciler) SetReplicas(
-	ctx context.Context,
-	ollamaModelResource ollamav1.Model,
-	replicas int32,
-	readyReplicas int32,
-	availableReplicas int32,
-	unavailableReplicas int32,
-) (bool, error) {
-	ollamaModelResource.Status.Replicas = replicas
-	ollamaModelResource.Status.ReadyReplicas = readyReplicas
-	ollamaModelResource.Status.AvailableReplicas = availableReplicas
-	ollamaModelResource.Status.UnavailableReplicas = unavailableReplicas
-
-	err := r.Status().Update(ctx, &ollamaModelResource)
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
 }
