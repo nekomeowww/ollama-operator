@@ -1,4 +1,4 @@
-project_name: ollama-operator
+project_name: kollama
 release:
   github:
     owner: nekomeowww
