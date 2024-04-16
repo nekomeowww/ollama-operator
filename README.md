@@ -33,7 +33,94 @@ The journey to large language models, AIGC, localized agents, [🦜🔗 Langchai
 - ✅ Easy to expose with existing Kubernetes services, ingress, etc.
 - ✅ Doesn't require any additional dependencies, just Kubernetes
 
-## Description
+## Getting started
+
+### Install operator
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/main/dist/install.yaml
+```
+
+### Wait for the operator to be ready
+
+```shell
+kubectl wait --for=jsonpath='{.status.replicas}'=2 deployment/ollama-operator-controller-manager -n ollama-operator-system
+```
+
+### Create model
+
+> [!IMPORTANT]
+> Working with `kind`?
+>
+> The default provisioned `StorageClass` in `kind` is `standard`, and will only work with `ReadWriteOnce` access mode, therefore if you would need to run the operator with `kind`, you should specify `persistentVolume` with `accessMode: ReadWriteOnce` in the `Model` CRD:
+> ```yaml
+> apiVersion: ollama.ayaka.io/v1
+> kind: Model
+> metadata:
+>   name: phi
+> spec:
+>   image: phi
+>   persistentVolume:
+>     accessMode: ReadWriteOnce
+> ```
+
+```yaml
+apiVersion: ollama.ayaka.io/v1
+kind: Model
+metadata:
+  name: phi
+spec:
+  image: phi
+```
+
+Apply the `Model` CRD to your Kubernetes cluster:
+
+```shell
+kubectl apply -f ollama-model-phi.yaml
+```
+
+Wait for the model to be ready:
+
+```shell
+kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-model-phi
+```
+
+### Access the model
+
+1. Ready! Now let's forward the ports to access the model:
+
+```shell
+kubectl port-forward svc/ollama-model-phi ollama
+```
+
+7. Interact with the model:
+
+```shell
+ollama run phi
+```
+
+### Full options
+
+```yaml
+apiVersion: ollama.ayaka.io/v1
+kind: Model
+metadata:
+  name: phi
+spec:
+  # Scale the model to 2 replicas
+  replicas: 2
+  # Use the model image `phi`
+  image: phi
+  imagePullPolicy: IfNotPresent
+  storageClassName: local-path
+  # If you have your own PersistentVolumeClaim created
+  persistentVolumeClaim: your-pvc
+  # If you need to specify the access mode for the PersistentVolume
+  persistentVolume:
+    accessMode: ReadWriteOnce
+```
+
+## Supported models
 
 Unlock the abilities to run the following models with the Ollama Operator over Kubernetes:
 
@@ -69,53 +156,6 @@ Full list of available images can be found at [Ollama Library](https://ollama.co
 > 1. Fast and stable network connection is recommended to download the models.
 > 2. Efficient storage is required to store the models if you want to run models larger than 13B.
 
-## Getting Started
-
-```yaml
-apiVersion: ollama.ayaka.io/v1
-kind: Model
-metadata:
-  name: phi
-spec:
-  image: phi
-```
-
-> [!IMPORTANT]
-> Working with `kind`?
-> 
-> The default provisioned `StorageClass` in `kind` is `standard`, and will only work with `ReadWriteOnce` access mode, therefore if you would need to run the operator with `kind`, you should specify `persistentVolume` with `accessMode: ReadWriteOnce` in the `Model` CRD:
-> ```yaml
-> apiVersion: ollama.ayaka.io/v1
-> kind: Model
-> metadata:
->   name: phi
-> spec:
->   image: phi
->   persistentVolume:
->     accessMode: ReadWriteOnce
-> ```
-
-### Full options
-
-```yaml
-apiVersion: ollama.ayaka.io/v1
-kind: Model
-metadata:
-  name: phi
-spec:
-  # Scale the model to 2 replicas
-  replicas: 2
-  # Use the model image `phi`
-  image: phi
-  imagePullPolicy: IfNotPresent
-  storageClassName: local-path
-  # If you have your own PersistentVolumeClaim created
-  persistentVolumeClaim: your-pvc
-  # If you need to specify the access mode for the PersistentVolume
-  persistentVolume:
-    accessMode: ReadWriteOnce
-```
-
 ## Architecture Overview
 
 There are two major components that the Ollama Operator will create for:
@@ -128,17 +168,17 @@ There are two major components that the Ollama Operator will create for:
 
 The detailed resources it creates, and the relationships between them are shown in the following diagram:
 
- <picture>
-    <source
-      srcset="./docs/public/architecture-theme-night.png"
-      media="(prefers-color-scheme: dark)"
-    />
-    <source
-      srcset="./docs/public/architecture-theme-day.png"
-      media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
-    />
-    <img src="./docs/public/architecture-theme-day.png" />
-  </picture>
+<picture>
+  <source
+    srcset="./docs/public/architecture-theme-night.png"
+    media="(prefers-color-scheme: dark)"
+  />
+  <source
+    srcset="./docs/public/architecture-theme-day.png"
+    media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
+  />
+  <img src="./docs/public/architecture-theme-day.png" />
+</picture>
 
 ## Contributing
 
