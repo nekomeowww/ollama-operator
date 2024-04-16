@@ -16,6 +16,7 @@ import '@nolebase/vitepress-plugin-highlight-targeted-heading/client/style.css'
 
 import AsciinemaPlayer from './components/AsciinemaPlayer.vue'
 
+import 'virtual:uno.css'
 import './style.css'
 
 export default {

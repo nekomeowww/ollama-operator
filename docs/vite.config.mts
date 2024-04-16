@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 import { defineConfig } from 'vite'
 import UnoCSS from 'unocss/vite'
+import Inspect from 'vite-plugin-inspect'
 
 import { GitChangelog,GitChangelogMarkdownSection } from '@nolebase/vitepress-plugin-git-changelog/vite'
 
@@ -17,6 +18,7 @@ export default defineConfig({
     exclude: ['vitepress'],
   },
   plugins: [
+    Inspect(),
     // https://vitejs.dev/guide/api-plugin.html
     GitChangelog({
       repoURL: 'https://github.com/nekomeowww/ollama-operator',

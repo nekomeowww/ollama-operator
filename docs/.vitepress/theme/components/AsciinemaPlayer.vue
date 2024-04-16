@@ -10,8 +10,6 @@ const playerRef = ref<HTMLDivElement>();
 const asciinemaPlayer = ref<any>();
 
 onMounted(async () => {
-  console.log(playerRef.value)
-
   if (!window)
     return
   if (!document)
