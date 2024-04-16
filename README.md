@@ -80,7 +80,9 @@ spec:
   image: phi
 ```
 
-> [!IMPORTANT] Working with `kind`
+> [!IMPORTANT]
+> Working with `kind`?
+> 
 > The default provisioned `StorageClass` in `kind` is `standard`, and will only work with `ReadWriteOnce` access mode, therefore if you would need to run the operator with `kind`, you should specify `persistentVolume` with `accessMode: ReadWriteOnce` in the `Model` CRD:
 > ```yaml
 > apiVersion: ollama.ayaka.io/v1
