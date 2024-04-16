@@ -1,0 +1,27 @@
+project_name: ollama-operator
+release:
+  github:
+    owner: nekomeowww
+    name: ollama-operator
+builds:
+  - id: kollama
+    goos:
+    - linux
+    - windows
+    - darwin
+    goarch:
+    - arm64
+    - amd64
+    - "386"
+    env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    main: cmd/kollama/main.go
+archives:
+  - id: kollama
+    builds:
+    - kollama
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+    - goos: windows
+      format: zip

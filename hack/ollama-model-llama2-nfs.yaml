@@ -1,0 +1,7 @@
+apiVersion: ollama.ayaka.io/v1
+kind: Model
+metadata:
+  name: llama2
+spec:
+  image: llama2
+  storageClassName: nfs-csi

@@ -1,0 +1,8 @@
+apiVersion: ollama.ayaka.io/v1
+kind: Model
+metadata:
+  name: phi
+spec:
+  image: phi
+  persistentVolume:
+    accessMode: ReadWriteOnce
