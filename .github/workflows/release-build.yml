@@ -49,7 +49,7 @@ jobs:
   #           ${{ steps.dockerinfo.outputs.tag }}
 
   goreleaser:
-    name: GoReleaser
+    name: kollama - Build for GitHub Releases
     permissions:
       contents: write
       packages: write
@@ -96,7 +96,7 @@ jobs:
         uses: rajatjindal/krew-release-bot@v0.0.46
 
   ghcr_build:
-    name: Build for GitHub Container Registry
+    name: ollama-operator - Build for ghcr.io
     permissions:
       packages: write
     runs-on: ubuntu-latest

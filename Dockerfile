@@ -29,8 +29,8 @@ RUN go env -w CGO_ENABLED=0
 RUN go env -w GOOS=${TARGETOS:-linux}
 RUN go env -w GOARCH=${TARGETARCH}
 
-go build -a -o manager cmd/ollama-operator/main.go
-go build -a -o kollama cmd/kollama/main.go
+RUN go build -a -o manager cmd/ollama-operator/main.go
+RUN go build -a -o kollama cmd/kollama/main.go
 
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
