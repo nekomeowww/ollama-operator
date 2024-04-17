@@ -34,7 +34,7 @@ var (
 // NewCmd provides a cobra command wrapping NamespaceOptions
 func NewCmd(streams genericiooptions.IOStreams) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:          "ollama [cmd] [args] [flags]",
+		Use:          "kollama [cmd] [args] [flags]",
 		Short:        "CLI for Ollama Operator",
 		SilenceUsage: true,
 		RunE: func(c *cobra.Command, args []string) error {

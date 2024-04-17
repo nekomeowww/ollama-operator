@@ -73,8 +73,6 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringP("namespace", "n", "", "The namespace to deploy the model")
-
 	o.configFlags.AddFlags(cmd.Flags())
 	o.clientConfig = o.configFlags.ToRawKubeConfigLoader()
 	o.kubeConfig = lo.Must(o.clientConfig.ClientConfig())
