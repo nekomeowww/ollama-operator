@@ -21,21 +21,24 @@ import (
 )
 
 const (
-	deployExample = `# Deploy a phi model
+	deployExample = `
+  # Deploy a phi model
+  $ kollama deploy phi
 
-kollama deploy phi
+  or if using as kubectl plugin
+  $ kubectl ollama deploy phi
 
-or
+  # Deploy a model with a specific image
+  $ kollama deploy phi --image=phi-image
 
-kubectl ollama deploy phi
+  or if using as kubectl plugin
+  $ kubectl ollama deploy phi --image=phi-image
 
-# Deploy a phi model in a specific namespace
+  # Deploy a phi model in a specific namespace
+  $ kollama deploy phi -n phi-namespace
 
-kollama deploy phi -n phi-namespace
-
-or
-
-kubectl ollama deploy phi -n phi-namespace`
+  or if using as kubectl plugin
+  $ kubectl ollama deploy phi -n phi-namespace`
 )
 
 // CmdDeployOptions provides information required to deploy a model
@@ -47,6 +50,7 @@ type CmdDeployOptions struct {
 	discoveryClient discovery.DiscoveryInterface
 
 	userSpecifiedNamespace string
+	modelImage             string
 
 	genericiooptions.IOStreams
 }
@@ -64,14 +68,28 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	o := NewCmdDeployOptions(streams)
 
 	cmd := &cobra.Command{
-		Use:          "deploy [model name] [flags]",
-		Short:        "Deploy a model with the given name by using Ollama Operator",
-		Example:      deployExample,
-		SilenceUsage: true,
+		Use:     "deploy [model name] [flags]",
+		Short:   "Deploy a model with the given name by using Ollama Operator",
+		Example: deployExample,
+		Args: func(cmd *cobra.Command, args []string) error {
+			if len(args) < 1 {
+				return fmt.Errorf("model name is required")
+			}
+			if args[0] == "" {
+				return fmt.Errorf("model name cannot be empty")
+			}
+
+			return nil
+		},
 		RunE: func(c *cobra.Command, args []string) error {
 			return o.runE(c, args)
 		},
 	}
+
+	cmd.Flags().StringVar(&o.modelImage, "image", "", ""+
+		"Model image to deploy. If not specified, the model name will be used as the "+
+		"image name (will be pulled from registry.ollama.ai/library/<model name> by "+
+		"default if no registry is specified), the tag will be latest.")
 
 	o.configFlags.AddFlags(cmd.Flags())
 	o.clientConfig = o.configFlags.ToRawKubeConfigLoader()
@@ -109,22 +127,30 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		return ErrOllamaModelNotSupported
 	}
 
-	modelImage := args[0]
+	modelName := args[0]
+
+	modelImage, err := cmd.Flags().GetString("image")
+	if err != nil {
+		return err
+	}
+	if modelImage == "" {
+		modelImage = modelName
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
-	model, err := getOllama(ctx, o.dynamicClient, o.userSpecifiedNamespace, modelImage)
+	model, err := getOllama(ctx, o.dynamicClient, o.userSpecifiedNamespace, modelName)
 	if err != nil {
 		return err
 	}
 	if model != nil {
-		if model.Spec.Image == modelImage {
-			fmt.Println(modelImage, "deploy")
+		if model.Spec.Image == modelName {
+			fmt.Println(modelName, "deployed")
 			return nil
 		}
 
-		model.Spec.Image = modelImage
+		model.Spec.Image = modelName
 
 		unstructuredObj, err := Unstructured(model)
 		if err != nil {
@@ -139,7 +165,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
-		fmt.Println(modelImage, "updated")
+		fmt.Println(modelName, "updated")
 
 		return nil
 	}
@@ -150,7 +176,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 			Kind:       "Model",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: modelImage,
+			Name: modelName,
 		},
 		Spec: ollamav1.ModelSpec{
 			Image: modelImage,
@@ -170,7 +196,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Println(modelImage, "deployed")
+	fmt.Println(modelName, "deployed")
 
 	return nil
 }

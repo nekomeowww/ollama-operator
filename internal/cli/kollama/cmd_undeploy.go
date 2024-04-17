@@ -19,21 +19,18 @@ import (
 )
 
 const (
-	unDeployExample = `# Undeploy a phi model
+	unDeployExample = `
+  # Undeploy a phi model
+  $ kollama undeploy phi
 
-kollama undeploy phi
+  # or if using as kubectl plugin
+  $ kubectl ollama undeploy phi
 
-or
+  # Undeploy a phi model in a specific namespace
+  $ kollama undeploy phi -n phi-namespace
 
-kubectl ollama undeploy phi
-
-# Undeploy a phi model in a specific namespace
-
-kollama undeploy phi -n phi-namespace
-
-or
-
-kubectl ollama undeploy phi -n phi-namespace`
+  # or if using as kubectl plugin
+  $ kubectl ollama undeploy phi -n phi-namespace`
 )
 
 type CmdUndeployOptions struct {
@@ -59,10 +56,19 @@ func NewCmdUndeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	o := NewCmdUndeployOptions(streams)
 
 	cmd := &cobra.Command{
-		Use:          "undeploy [model name] [flags]",
-		Short:        "Undeploy a model with the given name by using Ollama Operator",
-		Example:      unDeployExample,
-		SilenceUsage: true,
+		Use:     "undeploy [model name] [flags]",
+		Short:   "Undeploy a model with the given name by using Ollama Operator",
+		Example: unDeployExample,
+		Args: func(cmd *cobra.Command, args []string) error {
+			if len(args) < 1 {
+				return fmt.Errorf("model name is required")
+			}
+			if args[0] == "" {
+				return fmt.Errorf("model name cannot be empty")
+			}
+
+			return nil
+		},
 		RunE: func(c *cobra.Command, args []string) error {
 			return o.runE(c, args)
 		},
