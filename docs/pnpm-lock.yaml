@@ -21,17 +21,17 @@ importers:
         specifier: ^1.1.15
         version: 1.1.15
       '@nolebase/vitepress-plugin-enhanced-mark':
-        specifier: ^2.0.0-rc7
-        version: 2.0.0-rc7(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))
+        specifier: ^2.0.0-rc8
+        version: 2.0.0-rc8(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))
       '@nolebase/vitepress-plugin-enhanced-readabilities':
-        specifier: 2.0.0-rc7
-        version: 2.0.0-rc7(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
+        specifier: 2.0.0-rc8
+        version: 2.0.0-rc8(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
       '@nolebase/vitepress-plugin-git-changelog':
-        specifier: 2.0.0-rc7
-        version: 2.0.0-rc7(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
+        specifier: 2.0.0-rc8
+        version: 2.0.0-rc8(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
       '@nolebase/vitepress-plugin-highlight-targeted-heading':
-        specifier: 2.0.0-rc7
-        version: 2.0.0-rc7(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))
+        specifier: 2.0.0-rc8
+        version: 2.0.0-rc8(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))
       '@types/node':
         specifier: ^20.12.7
         version: 20.12.7
@@ -602,8 +602,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@nolebase/ui@2.0.0-rc7':
-    resolution: {integrity: sha512-CkmzPexGiP2PufAeU14r0iIrTBMOzAvepKwO7Gau9YGrcjwHO4wIZWIqV8nitVgWxn6lVP2qMiyXU4102pn3mw==}
+  '@nolebase/ui@2.0.0-rc8':
+    resolution: {integrity: sha512-voq6DMy+6Twx/AN2Ro5csQiYO4dFF8gehBdcf4BbItjbryqEDJvTEMvRkO47dXQlKw0HkHEDgo3hU5EJmAZxLQ==}
     peerDependencies:
       '@rive-app/canvas': ^2.11.1
       asciinema-player: ^3.7.1
@@ -617,23 +617,23 @@ packages:
       vitepress:
         optional: true
 
-  '@nolebase/vitepress-plugin-enhanced-mark@2.0.0-rc7':
-    resolution: {integrity: sha512-nTng8nUN7C88WGtlpggy/6vVbpHp7hj1X20J6WzlpUGkOTqlXuFTQq5EBu5z1a0NxVsjJ0DwlLYRhf1y+rN1/g==}
+  '@nolebase/vitepress-plugin-enhanced-mark@2.0.0-rc8':
+    resolution: {integrity: sha512-7xvkwKjyD2Tvr6hb6yxS04D7O8eZxegJjD8fM+mxKqHBnckxqez7wroURhiWXv67JME1yHcOKLDymPlif6x1bw==}
     peerDependencies:
       vitepress: ^1.0.0
 
-  '@nolebase/vitepress-plugin-enhanced-readabilities@2.0.0-rc7':
-    resolution: {integrity: sha512-bdPnpexlmDY0KvJ5XkhkVoBMM0T8Zfq7AdM5LRybbm1eaYlTsFRzVlkN4NJf4EgcztyXCmZqaeLIDemfEI0Faw==}
+  '@nolebase/vitepress-plugin-enhanced-readabilities@2.0.0-rc8':
+    resolution: {integrity: sha512-w1djP+Lo0MtYF8rcZZeaiJommA0+AxFs9jCrCPYgX8fvxjKrao/Bwm4baFrFJ6YmNKTXQ8jYiDh0sVrm/4LC4w==}
     peerDependencies:
       vitepress: ^1.0.0
 
-  '@nolebase/vitepress-plugin-git-changelog@2.0.0-rc7':
-    resolution: {integrity: sha512-oWZAq+7NOrjjRUXAbSFbZ23WRZdy4tFDAjV0SHW6c0BpCagExnyNIhmO8IQ4hZ/+3Rt/mKsJxvcbq050dPKeYg==}
+  '@nolebase/vitepress-plugin-git-changelog@2.0.0-rc8':
+    resolution: {integrity: sha512-iyZGiKV9LyJj+XiOG6BI9/KIZEYnAqj0/d333O5Dx5ErAkwc2W+1vp5zRvEOSJrErolWH6q+qNNW8/C6TMtbqg==}
     peerDependencies:
       vitepress: ^1.0.0
 
-  '@nolebase/vitepress-plugin-highlight-targeted-heading@2.0.0-rc7':
-    resolution: {integrity: sha512-WXXbTQfraUBSEbxcq7zlFK6DXItbUOXiAY7OnS/CkODqCwN+sWNE0eRpTZbEYXCoc3O0ZDPzLkYiJy9JyAcRBg==}
+  '@nolebase/vitepress-plugin-highlight-targeted-heading@2.0.0-rc8':
+    resolution: {integrity: sha512-78oupBe5I6HcrGzIUhPPSpxx/hwqfEOB3VMfz6QR7wS6d00CXs25FiSVP3Usvb9Z7pTC5kDDvzhdVdkVsFe+WQ==}
     peerDependencies:
       vitepress: ^1.0.0
 
@@ -3362,7 +3362,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@nolebase/ui@2.0.0-rc7(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))':
+  '@nolebase/ui@2.0.0-rc8(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))':
     dependencies:
       '@iconify-json/octicon': 1.1.53
       less: 4.2.0
@@ -3372,16 +3372,16 @@ snapshots:
       asciinema-player: 3.7.1
       vitepress: 1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5)
 
-  '@nolebase/vitepress-plugin-enhanced-mark@2.0.0-rc7(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))':
+  '@nolebase/vitepress-plugin-enhanced-mark@2.0.0-rc8(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))':
     dependencies:
       less: 4.2.0
       vitepress: 1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5)
 
-  '@nolebase/vitepress-plugin-enhanced-readabilities@2.0.0-rc7(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))':
+  '@nolebase/vitepress-plugin-enhanced-readabilities@2.0.0-rc8(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))':
     dependencies:
       '@iconify-json/carbon': 1.1.31
       '@iconify-json/icon-park-outline': 1.1.15
-      '@nolebase/ui': 2.0.0-rc7(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
+      '@nolebase/ui': 2.0.0-rc8(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
       less: 4.2.0
       vitepress: 1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5)
     transitivePeerDependencies:
@@ -3389,10 +3389,10 @@ snapshots:
       - asciinema-player
       - vue
 
-  '@nolebase/vitepress-plugin-git-changelog@2.0.0-rc7(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))':
+  '@nolebase/vitepress-plugin-git-changelog@2.0.0-rc8(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))':
     dependencies:
       '@iconify-json/octicon': 1.1.53
-      '@nolebase/ui': 2.0.0-rc7(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
+      '@nolebase/ui': 2.0.0-rc8(@rive-app/canvas@2.14.3)(asciinema-player@3.7.1)(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))(vue@3.4.21(typescript@5.4.5))
       colorette: 2.0.20
       date-fns: 3.6.0
       gray-matter: 4.0.3
@@ -3407,7 +3407,7 @@ snapshots:
       - supports-color
       - vue
 
-  '@nolebase/vitepress-plugin-highlight-targeted-heading@2.0.0-rc7(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))':
+  '@nolebase/vitepress-plugin-highlight-targeted-heading@2.0.0-rc8(vitepress@1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5))':
     dependencies:
       less: 4.2.0
       vitepress: 1.1.0(@algolia/client-search@4.23.3)(@types/node@20.12.7)(less@4.2.0)(postcss@8.4.38)(search-insights@2.13.0)(typescript@5.4.5)
