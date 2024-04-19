@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { defineConfig } from 'vite'
-// import UnoCSS from 'unocss/vite'
+import UnoCSS from 'unocss/vite'
 import Inspect from 'vite-plugin-inspect'
 
 import { GitChangelog,GitChangelogMarkdownSection } from '@nolebase/vitepress-plugin-git-changelog/vite'
@@ -46,6 +46,6 @@ export default defineConfig({
         join('pages', 'zh-CN', 'index.md')
       ],
     }),
-    // UnoCSS()
+    UnoCSS()
   ],
 })
