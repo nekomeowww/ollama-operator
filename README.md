@@ -44,7 +44,7 @@ kubectl apply -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/ma
 ### Wait for the operator to be ready
 
 ```shell
-kubectl wait --for=jsonpath='{.status.replicas}'=2 deployment/ollama-operator-controller-manager -n ollama-operator-system
+kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-operator-controller-manager -n ollama-operator-system
 ```
 
 ### Deploy a model
