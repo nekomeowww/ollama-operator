@@ -95,11 +95,13 @@ type CmdDeployOptions struct {
 	dynamicClient   dynamic.Interface
 	discoveryClient discovery.DiscoveryInterface
 
-	modelImage  string
-	expose      bool
-	serviceType string
-	serviceName string
-	nodePort    int32
+	modelImage   string
+	expose       bool
+	serviceType  string
+	serviceName  string
+	nodePort     int32
+	storageClass string
+	pvAccessMode string
 
 	genericiooptions.IOStreams
 }
@@ -140,19 +142,36 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 		"image name (will be pulled from registry.ollama.ai/library/<model name> by "+
 		"default if no registry is specified), the tag will be latest.",
 	)
+
+	cmd.Flags().StringVarP(&o.storageClass, "storage-class", "", "", ""+
+		"Storage class to use for the model's persistent volume claim. If not specified, "+
+		"the default storage class will be used.",
+	)
+
+	cmd.Flags().StringVarP(&o.pvAccessMode, "pv-access-mode", "", "", ""+
+		"Access mode for the model's persistent volume for image store StatefulSet. If not "+
+		"specified, the access mode will be ReadWriteOnce. If you are deploying models "+
+		"into default deployed kind and k3s clusters, you should keep it as ReadWriteOnce. "+
+		"If you are deploying models into a custom cluster, you can set it to ReadWriteMany "+
+		"if storage class supports it.",
+	)
+
 	cmd.Flags().BoolVar(&o.expose, "expose", false, ""+
 		"Whether to expose the model through a service for external access and makes it "+
 		"easy to interact with the model. By default, --expose will create a NodePort "+
 		"service. Use --expose=LoadBalancer to create a LoadBalancer service",
 	)
+
 	cmd.Flags().StringVar(&o.serviceType, "service-type", "", ""+
 		"Type of the service to expose the model. If not specified, the service will be "+
 		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
 	)
+
 	cmd.Flags().StringVar(&o.serviceName, "service-name", "", ""+
 		"Name of the service to expose the model. If not specified, the model name will "+
 		"be used as the service name with -nodeport as the suffix for NodePort.",
 	)
+
 	cmd.Flags().Int32Var(&o.nodePort, "node-port", 0, ""+
 		"NodePort to expose the model. If not specified, a random port will be assigned."+
 		"Only valid when --expose is set to true, and --service-type is set to NodePort.",
@@ -203,7 +222,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		os.Exit(1)
 	}
 
-	createdModel, err := createOllamaModel(ctx, o.dynamicClient, namespace, modelName, modelImage)
+	createdModel, err := createOllamaModel(ctx, o.dynamicClient, namespace, modelName, modelImage, o.storageClass, o.pvAccessMode)
 	if err != nil {
 		return err
 	}

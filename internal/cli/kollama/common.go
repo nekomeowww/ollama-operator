@@ -20,6 +20,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
@@ -131,7 +132,15 @@ func getImage(cmd *cobra.Command, args []string) (string, error) {
 	return modelImage, nil
 }
 
-func createOllamaModel(ctx context.Context, dynamicClient dynamic.Interface, namespace string, name string, image string) (*ollamav1.Model, error) {
+func createOllamaModel(
+	ctx context.Context,
+	dynamicClient dynamic.Interface,
+	namespace string,
+	name string,
+	image string,
+	storageClass string,
+	pvAccessMode string,
+) (*ollamav1.Model, error) {
 	model := &ollamav1.Model{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: schemaGroupVersion.String(),
@@ -146,6 +155,14 @@ func createOllamaModel(ctx context.Context, dynamicClient dynamic.Interface, nam
 		Spec: ollamav1.ModelSpec{
 			Image: image,
 		},
+	}
+	if storageClass != "" {
+		model.Spec.StorageClassName = lo.ToPtr(storageClass)
+	}
+	if pvAccessMode != "" {
+		model.Spec.PersistentVolume = &ollamav1.ModelPersistentVolumeSpec{
+			AccessMode: lo.ToPtr(corev1.PersistentVolumeAccessMode(pvAccessMode)),
+		}
 	}
 
 	unstructuredObj, err := Unstructured(model)
