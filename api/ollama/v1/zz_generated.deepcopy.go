@@ -182,4 +182,3 @@ func (in *ModelStatusCondition) DeepCopy() *ModelStatusCondition {
 	in.DeepCopyInto(out)
 	return out
 }
-
