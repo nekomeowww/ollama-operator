@@ -8,6 +8,7 @@ bin/*
 Dockerfile.cross
 
 # Built application files
+!dist/install.yaml
 dist/
 
 # Test binary, built with `go test -c`
