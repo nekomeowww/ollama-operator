@@ -22,50 +22,7 @@ import (
 )
 
 const (
-	deployExample = `
-  # Deploy a phi model
-  $ %s deploy phi
-
-  # Deploy a model with exposed through NodePort service
-  $ %s deploy phi --expose
-
-  # Deploy a model with a specific image
-  $ %s deploy phi --image=phi-image
-
-  # Deploy a phi model in a specific namespace
-  $ %s deploy phi -n phi-namespace
-
-`
-
-	deployedAlreadyMessage = `%s has been deployed already.
-
-To undeploy it, use
-
-  %s undeploy %s
-
-`
-
-	deployedNonExposedMessage = `🎉 Successfully deployed %s.
-
-💡 Currently the deployed model has not yet exposed. If this is unintentional, you can expose the model through
-
-  %s expose %s
-
-Or create with a exposed port with
-
-  %s deploy %s --expose
-
-next time.
-
-To expose manually, use the following command:
-
-  kubectl expose deployment %s --name=%s-nodeport --type=NodePort --port 11434
-
-`
-
-	deployedExposedMessage = `🎉 Successfully deployed %s.
-
-🌐 The model has been exposed through a service over %s.
+	exposedMessage = `🎉 The model has been exposed through a service over %s.
 
 To start a chat with ollama:
 
@@ -81,13 +38,12 @@ To integrate with your OpenAI API compatible client:
         "content": "Hello!"
       }
     ]
-  }'
-
-	`
+  }'.
+`
 )
 
-// CmdDeployOptions provides information required to deploy a model
-type CmdDeployOptions struct {
+// CmdDeployOptions provides information required to expose a model
+type CmdExposeOptions struct {
 	configFlags     *genericclioptions.ConfigFlags
 	clientConfig    clientcmd.ClientConfig
 	kubeConfig      *rest.Config
@@ -95,8 +51,6 @@ type CmdDeployOptions struct {
 	dynamicClient   dynamic.Interface
 	discoveryClient discovery.DiscoveryInterface
 
-	modelImage  string
-	expose      bool
 	serviceType string
 	serviceName string
 	nodePort    int32
@@ -104,21 +58,21 @@ type CmdDeployOptions struct {
 	genericiooptions.IOStreams
 }
 
-// NewCmdDeployOptions provides an instance of CmdDeployOptions with default values
-func NewCmdDeployOptions(streams genericiooptions.IOStreams) *CmdDeployOptions {
-	return &CmdDeployOptions{
+// NewCmdExposeOptions provides an instance of CmdExposeOptions with default values
+func NewCmdExposeOptions(streams genericiooptions.IOStreams) *CmdExposeOptions {
+	return &CmdExposeOptions{
 		IOStreams:   streams,
 		configFlags: genericclioptions.NewConfigFlags(true),
 	}
 }
 
-// NewCmdNamespace provides a cobra command wrapping CmdDeployOptions
-func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
-	o := NewCmdDeployOptions(streams)
+// NewCmdExpose provides a cobra command wrapping NamespaceOptions
+func NewCmdExpose(streams genericiooptions.IOStreams) *cobra.Command {
+	o := NewCmdExposeOptions(streams)
 
 	cmd := &cobra.Command{
-		Use:     "deploy [model name] [flags]",
-		Short:   "Deploy a model with the given name by using Ollama Operator",
+		Use:     "expose [model name] [flags]",
+		Short:   "Expose a model with the given name as NodePort, or LoadBalancer service for external access",
 		Example: fmt.Sprintf(deployExample, command(), command(), command(), command()),
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
@@ -135,16 +89,6 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&o.modelImage, "image", "", ""+
-		"Model image to deploy. If not specified, the model name will be used as the "+
-		"image name (will be pulled from registry.ollama.ai/library/<model name> by "+
-		"default if no registry is specified), the tag will be latest.",
-	)
-	cmd.Flags().BoolVar(&o.expose, "expose", false, ""+
-		"Whether to expose the model through a service for external access and makes it "+
-		"easy to interact with the model. By default, --expose will create a NodePort "+
-		"service. Use --expose=LoadBalancer to create a LoadBalancer service",
-	)
 	cmd.Flags().StringVar(&o.serviceType, "service-type", "", ""+
 		"Type of the service to expose the model. If not specified, the service will be "+
 		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
@@ -168,7 +112,7 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	return cmd
 }
 
-func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
+func (o *CmdExposeOptions) runE(cmd *cobra.Command, args []string) error {
 	var err error
 
 	namespace, err := getNamespace(o.clientConfig, cmd)
@@ -186,11 +130,6 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 
 	modelName := args[0]
 
-	modelImage, err := getImage(cmd, args)
-	if err != nil {
-		return err
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
@@ -198,17 +137,10 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	if model != nil {
-		fmt.Printf(deployedAlreadyMessage, modelName, command(), modelName)
+	if model == nil {
+		fmt.Println("Ollama Model", modelName, "not found, did you deploy it?")
 		os.Exit(1)
-	}
 
-	createdModel, err := createOllamaModel(ctx, o.dynamicClient, namespace, modelName, modelImage)
-	if err != nil {
-		return err
-	}
-	if !o.expose {
-		fmt.Printf(deployedNonExposedMessage, modelName, command(), modelName, command(), modelName, createdModel.Name, createdModel.Name)
 		return nil
 	}
 
@@ -231,7 +163,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 	}
 
 	ollamaHost := fmt.Sprintf("%s:%d", parsedHost.Hostname(), svc.Spec.Ports[0].NodePort)
-	fmt.Printf(deployedExposedMessage, modelName, ollamaHost, ollamaHost, modelName, ollamaHost, modelName)
+	fmt.Printf(exposedMessage, ollamaHost, ollamaHost, modelName, ollamaHost, modelName)
 
 	return nil
 }

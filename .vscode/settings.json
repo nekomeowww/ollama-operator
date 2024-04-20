@@ -59,6 +59,7 @@
         "musttag",
         "nakedret",
         "nestif",
+        "nodeport",
         "nolint",
         "nolintlint",
         "nosprintfhostport",

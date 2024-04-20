@@ -200,6 +200,37 @@ func getService(ctx context.Context, c client.Client, namespace string, name str
 	return &service, nil
 }
 
+func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, serviceType corev1.ServiceType) *corev1.Service {
+	return &corev1.Service{
+		ObjectMeta: metav1.ObjectMeta{
+			Labels:      make(map[string]string),
+			Annotations: make(map[string]string),
+			Name:        ModelAppName(name),
+			Namespace:   namespace,
+			OwnerReferences: []metav1.OwnerReference{{
+				APIVersion:         "apps/v1",
+				Kind:               "Deployment",
+				Name:               deployment.Name,
+				UID:                deployment.UID,
+				BlockOwnerDeletion: lo.ToPtr(true),
+			}},
+		},
+		Spec: corev1.ServiceSpec{
+			Type: serviceType,
+			Selector: map[string]string{
+				"app": ModelAppName(name),
+			},
+			Ports: []corev1.ServicePort{
+				{
+					Name:       "ollama",
+					Port:       11434,
+					TargetPort: intstr.FromInt(11434),
+				},
+			},
+		},
+	}
+}
+
 func EnsureServiceCreated(
 	ctx context.Context,
 	c client.Client,
@@ -216,34 +247,7 @@ func EnsureServiceCreated(
 		return service, nil
 	}
 
-	service = &corev1.Service{
-		ObjectMeta: metav1.ObjectMeta{
-			Labels:      make(map[string]string),
-			Annotations: make(map[string]string),
-			Name:        ModelAppName(name),
-			Namespace:   namespace,
-			OwnerReferences: []metav1.OwnerReference{{
-				APIVersion:         "apps/v1",
-				Kind:               "Deployment",
-				Name:               deployment.Name,
-				UID:                deployment.UID,
-				BlockOwnerDeletion: lo.ToPtr(true),
-			}},
-		},
-		Spec: corev1.ServiceSpec{
-			Type: corev1.ServiceTypeClusterIP,
-			Selector: map[string]string{
-				"app": ModelAppName(name),
-			},
-			Ports: []corev1.ServicePort{
-				{
-					Name:       "ollama",
-					Port:       11434,
-					TargetPort: intstr.FromInt(11434),
-				},
-			},
-		},
-	}
+	service = NewServiceForModel(namespace, name, deployment, corev1.ServiceTypeClusterIP)
 
 	err = c.Create(ctx, service)
 	if err != nil {

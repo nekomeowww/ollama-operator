@@ -40,8 +40,6 @@ type CmdUndeployOptions struct {
 	dynamicClient   dynamic.Interface
 	discoveryClient discovery.DiscoveryInterface
 
-	userSpecifiedNamespace string
-
 	genericiooptions.IOStreams
 }
 
@@ -86,20 +84,9 @@ func NewCmdUndeploy(streams genericiooptions.IOStreams) *cobra.Command {
 func (o *CmdUndeployOptions) runE(cmd *cobra.Command, args []string) error {
 	var err error
 
-	o.userSpecifiedNamespace, err = cmd.Flags().GetString("namespace")
+	namespace, err := getNamespace(o.clientConfig, cmd)
 	if err != nil {
 		return err
-	}
-	if o.userSpecifiedNamespace == "" {
-		var ok bool
-
-		o.userSpecifiedNamespace, ok, err = o.clientConfig.Namespace()
-		if err != nil {
-			return err
-		}
-		if !ok {
-			o.userSpecifiedNamespace = "default"
-		}
 	}
 
 	supported, err := IsOllamaOperatorCRDSupported(o.discoveryClient, modelSchemaResourceName)
@@ -115,7 +102,7 @@ func (o *CmdUndeployOptions) runE(cmd *cobra.Command, args []string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
-	model, err := getOllama(ctx, o.dynamicClient, o.userSpecifiedNamespace, modelImage)
+	model, err := getOllama(ctx, o.dynamicClient, namespace, modelImage)
 	if err != nil {
 		return err
 	}
@@ -126,7 +113,7 @@ func (o *CmdUndeployOptions) runE(cmd *cobra.Command, args []string) error {
 
 	err = o.dynamicClient.
 		Resource(modelSchemaGroupVersionResource).
-		Namespace(o.userSpecifiedNamespace).
+		Namespace(namespace).
 		Delete(ctx, modelImage, metav1.DeleteOptions{})
 	if err != nil {
 		return err

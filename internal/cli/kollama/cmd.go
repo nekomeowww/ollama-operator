@@ -40,6 +40,8 @@ func NewCmd(streams genericiooptions.IOStreams) *cobra.Command {
 	}
 
 	cmd.AddCommand(NewCmdDeploy(streams))
+	cmd.AddCommand(NewCmdUndeploy(streams))
+	cmd.AddCommand(NewCmdExpose(streams))
 
 	return cmd
 }
