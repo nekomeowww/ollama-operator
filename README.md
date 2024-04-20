@@ -47,7 +47,24 @@ kubectl apply -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/ma
 kubectl wait --for=jsonpath='{.status.replicas}'=2 deployment/ollama-operator-controller-manager -n ollama-operator-system
 ```
 
-### Create model
+### Deploy a model
+
+> [!NOTE]
+> You can also use the `kollama` CLI natively shipped by Ollama Operator, and will be easier to interact with the operator.
+>
+> Install `kollama` CLI:
+>
+> ```shell
+> go install github.com/nekomeowww/ollama-operator/cmd/kollama@latest
+> ```
+>
+> Deploy a model can be done with the following command:
+>
+> ```shell
+> kollama deploy phi --expose --node-port 30001
+> ```
+>
+> More information can be found at [CLI](https://ollama-operator.ayaka.io/pages/en/guide/getting-started/cli.html)
 
 > [!IMPORTANT]
 > Working with `kind`?
@@ -63,6 +80,8 @@ kubectl wait --for=jsonpath='{.status.replicas}'=2 deployment/ollama-operator-co
 >   persistentVolume:
 >     accessMode: ReadWriteOnce
 > ```
+
+Let's create a `Model` CRD for the model `phi`:
 
 ```yaml
 apiVersion: ollama.ayaka.io/v1

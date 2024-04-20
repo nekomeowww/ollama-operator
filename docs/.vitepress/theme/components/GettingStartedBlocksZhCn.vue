@@ -16,15 +16,15 @@
       </template>
       <div flex="~ col" h-full>
         <div>
-          <p m="0!" pt="2" text="zinc-500">讨厌 YAML？</p>
-          <p m="0!" text="zinc-500">更好更快的使用体验？</p>
-          <p m="0!" text="zinc-500">没问题的，用 kollama 也可以！</p>
+          <p m="0!" pt="2" text="zinc-600 dark:zinc-300">讨厌 YAML？</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">更好更快的使用体验？</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">没问题的，用 kollama 也可以！</p>
         </div>
         <div class="title-block-body" transition="all ease-in-out duration-300" font-mono p-2 mt-2 bg="zinc-200/50 dark:zinc-700/80" rounded-lg>
           <p m="0!" text="zinc-400"># <span>常规二进制</span></p>
           <p m="0!">$ <span text="blue-800 dark:blue-300">kollama </span><span text="green-800 dark:green-300">deploy phi</span></p>
         </div>
-        <span flex="~ 1" items-center>or</span>
+        <span flex="~ 1" items-center>或者</span>
         <div class="title-block-body" transition="all ease-in-out duration-300" font-mono p-2 mt-2 bg="zinc-200/50 dark:zinc-700/80" rounded-lg>
           <p m="0!" text="zinc-400"># <span>作为 kubectl 插件</span></p>
           <p m="0!">$ <span text="blue-800 dark:blue-300">kubectl </span><span text="green-800 dark:green-300">ollama deploy phi</span></p>
@@ -47,9 +47,9 @@
       </template>
       <div flex="~ col" h-full>
         <div>
-          <p m="0!" pt="2" text="zinc-500">对部署参数的精细控制？</p>
-          <p m="0!" text="zinc-500">GitOps 和自动化部署？</p>
-          <p m="0!" text="zinc-500">CRD 也超简单，只有 6 行！</p>
+          <p m="0!" pt="2" text="zinc-600 dark:zinc-300">对部署参数的精细控制？</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">GitOps 和自动化部署？</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">CRD 也超简单，只有 6 行！</p>
         </div>
         <div class="title-block-body" transition="all ease-in-out duration-300" font-mono p-2 mt-2 bg="zinc-200/50 dark:zinc-700/80" rounded-lg>
           <p m="0!"><span text="blue-800 dark:blue-300">apiVersion: </span><span text="green-800 dark:green-300">ollama.ayaka.io/v1</span></p>

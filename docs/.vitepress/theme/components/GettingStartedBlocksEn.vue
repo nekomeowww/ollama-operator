@@ -16,9 +16,9 @@
       </template>
       <div flex="~ col" h-full>
         <div>
-          <p m="0!" pt="2" text="zinc-500">Dislike YAML?</p>
-          <p m="0!" text="zinc-500">Faster and better UX?</p>
-          <p m="0!" text="zinc-500">No worries, kollama here to rescue!</p>
+          <p m="0!" pt="2" text="zinc-600 dark:zinc-300">Dislike YAML?</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">Faster and better UX?</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">No worries, kollama here to rescue!</p>
         </div>
         <div class="title-block-body" transition="all ease-in-out duration-300" font-mono p-2 mt-2 bg="zinc-200/50 dark:zinc-700/80" rounded-lg>
           <p m="0!" text="zinc-400"># <span>as regular binary cli</span></p>
@@ -47,9 +47,9 @@
       </template>
       <div flex="~ col" h-full>
         <div>
-          <p m="0!" pt="2" text="zinc-500">Fine-grained control over parameters?</p>
-          <p m="0!" text="zinc-500">GitOps and CI/CD?</p>
-          <p m="0!" text="zinc-500">CRD is simple enough with 6 lines!</p>
+          <p m="0!" pt="2" text="zinc-600 dark:zinc-300">Fine-grained control over parameters?</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">GitOps and CI/CD?</p>
+          <p m="0!" text="zinc-600 dark:zinc-300">CRD is simple enough with 6 lines!</p>
         </div>
         <div class="title-block-body" transition="all ease-in-out duration-300" font-mono p-2 mt-2 bg="zinc-200/50 dark:zinc-700/80" rounded-lg>
           <p m="0!"><span text="blue-800 dark:blue-300">apiVersion: </span><span text="green-800 dark:green-300">ollama.ayaka.io/v1</span></p>

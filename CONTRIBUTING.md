@@ -166,7 +166,7 @@ its dependencies.
 
 2. Using the installer
 
-Users can just run kubectl apply -f <URL for YAML BUNDLE> to install the project, i.e.:
+Users can just run `kubectl apply -f <URL for YAML BUNDLE>` to install the project, i.e.:
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/<org>/ollama-operator/<tag or branch>/dist/install.yaml
