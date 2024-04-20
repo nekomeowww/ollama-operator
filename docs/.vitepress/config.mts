@@ -1,7 +1,13 @@
 import { defineConfig } from 'vitepress'
+import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  markdown: {
+    config(md) {
+      md.use(tabsMarkdownPlugin)
+    }
+  },
   title: "Ollama Operator",
   description: "Large language models, scaled, deployed. - Yet another operator for running large language models on Kubernetes with ease. 🙀",
   lastUpdated: true,
@@ -62,8 +68,15 @@ export default defineConfig({
             text: 'Guide',
             items: [
               { text: 'Overview', link: '/pages/en/guide/overview' },
+              {
+                text: 'Getting started',
+                items: [
+                  { text: 'Install Ollama Operator', link: '/pages/en/guide/getting-started/' },
+                  { text: 'Deploy models through CLI', link: '/pages/en/guide/getting-started/cli' },
+                  { text: 'Deploy models through CRD', link: '/pages/en/guide/getting-started/crd' },
+                ]
+              },
               { text: 'Supported models', link: '/pages/en/guide/supported-models' },
-              { text: 'Getting started', link: '/pages/en/guide/getting-started' },
             ]
           },
           {
@@ -83,8 +96,15 @@ export default defineConfig({
             text: 'Guide',
             items: [
               { text: 'Overview', link: '/pages/en/guide/overview' },
+              {
+                text: 'Getting started',
+                items: [
+                  { text: 'Install Ollama Operator', link: '/pages/en/guide/getting-started/' },
+                  { text: 'Deploy models through CLI', link: '/pages/en/guide/getting-started/cli' },
+                  { text: 'Deploy models through CRD', link: '/pages/en/guide/getting-started/crd' },
+                ]
+              },
               { text: 'Supported models', link: '/pages/en/guide/supported-models' },
-              { text: 'Getting started', link: '/pages/en/guide/getting-started' },
             ]
           },
           {
@@ -113,8 +133,15 @@ export default defineConfig({
             text: '指南',
             items: [
               { text: '概览', link: '/pages/zh-CN/guide/overview' },
+              {
+                text: '快速上手',
+                items: [
+                  { text: '安装 Ollama Operator', link: '/pages/zh-CN/guide/getting-started/' },
+                  { text: '通过 CLI 部署模型', link: '/pages/zh-CN/guide/getting-started/cli' },
+                  { text: '通过 CRD 部署模型', link: '/pages/zh-CN/guide/getting-started/crd' },
+                ]
+              },
               { text: '支持模型', link: '/pages/zh-CN/guide/supported-models' },
-              { text: '快速开始', link: '/pages/zh-CN/guide/getting-started' },
             ]
           },
           {
@@ -134,8 +161,15 @@ export default defineConfig({
             text: '指南',
             items: [
               { text: '概览', link: '/pages/zh-CN/guide/overview' },
+              {
+                text: '快速上手',
+                items: [
+                  { text: '安装 Ollama Operator', link: '/pages/zh-CN/guide/getting-started/' },
+                  { text: '通过 CLI 部署模型', link: '/pages/zh-CN/guide/getting-started/cli' },
+                  { text: '通过 CRD 部署模型', link: '/pages/zh-CN/guide/getting-started/crd' },
+                ]
+              },
               { text: '支持模型', link: '/pages/zh-CN/guide/supported-models' },
-              { text: '快速开始', link: '/pages/zh-CN/guide/getting-started' },
             ]
           },
           {

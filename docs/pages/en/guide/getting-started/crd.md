@@ -1,49 +1,8 @@
-# Getting Started
+# Deploy models through CRD
 
-::: tip Don't have an existing Kubernetes cluster?
+## Deploy the model
 
-Run the following commands to create a new Kubernetes cluster with `kind`:
-
-::: code-group
-
-```shell [macOS]
-brew install --cask docker
-brew install docker kind kubectl
-wget https://raw.githubusercontent.com/nekomeowww/ollama-operator/main/hack/kind-config.yaml
-kind create cluster --config kind-config.yaml
-```
-
-```shell [Windows]
-Invoke-WebRequest  -OutFile "./Docker Desktop Installer.exe"
-Start-Process 'Docker Desktop Installer.exe' -Wait install
-start /w "" "Docker Desktop Installer.exe" install
-
-scoop install docker kubectl go
-go install sigs.k8s.io/kind@latest
-wget https://raw.githubusercontent.com/nekomeowww/ollama-operator/main/hack/kind-config.yaml
-kind create cluster --config kind-config.yaml
-```
-
-```shell [Linux]
-# refer to Install Docker Engine on Debian | Docker Docs https://docs.docker.com/engine/install/debian/
-# and Install and Set Up kubectl on Linux | Kubernetes https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-```
-
-:::
-
-1. Install operator.
-
-```shell
-kubectl apply -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/main/dist/install.yaml
-```
-
-2. Wait for the operator to be ready:
-
-```shell
-kubectl wait --for=jsonpath='{.status.replicas}'=2 deployment/ollama-operator-controller-manager -n ollama-operator-system
-```
-
-3. Create one `Model` CRD to rule them all.
+1. Create one `Model` CRD to rule them all.
 
 ::: tip What is CRD?
 
@@ -111,25 +70,25 @@ spec: # [!code ++]
 
 :::
 
-4. Apply the `Model` CRD to your Kubernetes cluster:
+2. Apply the `Model` CRD to your Kubernetes cluster:
 
 ```shell
 kubectl apply -f ollama-model-phi.yaml
 ```
 
-5. Wait for the model to be ready:
+3. Wait for the model to be ready:
 
 ```shell
 kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-model-phi
 ```
 
-6. Ready! Now let's forward the ports to access the model:
+4. Ready! Now let's forward the ports to access the model:
 
 ```shell
 kubectl port-forward svc/ollama-model-phi ollama
 ```
 
-7. Interact with the model:
+5. Interact with the model:
 
 ```shell
 ollama run phi
