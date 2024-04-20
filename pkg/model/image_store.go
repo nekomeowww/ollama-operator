@@ -59,7 +59,7 @@ func EnsureImageStorePVCCreated(
 
 	log.Info("no existing image storage PVC found, creating one...")
 
-	accessMode := corev1.ReadWriteMany
+	accessMode := corev1.ReadWriteOnce
 	if pvSpec != nil && pvSpec.AccessMode != nil {
 		accessMode = *pvSpec.AccessMode
 	}
