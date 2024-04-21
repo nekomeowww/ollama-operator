@@ -21,11 +21,19 @@ func ModelAppName(name string) string {
 	return fmt.Sprintf("ollama-model-%s", name)
 }
 
-func ModelLabels(appName, name string, imageStore bool) map[string]string {
+func ModelLabels(name string) map[string]string {
+	return map[string]string{
+		"app":                        ModelAppName(name),
+		"model.ollama.ayaka.io":      name,
+		"model.ollama.ayaka.io/type": "model",
+	}
+}
+
+func ImageStoreLabels(name string) map[string]string {
 	return map[string]string{
 		"app":                        name,
 		"model.ollama.ayaka.io":      name,
-		"model.ollama.ayaka.io/type": lo.Ternary(imageStore, "image-store", "model"),
+		"model.ollama.ayaka.io/type": "image-store",
 	}
 }
 
@@ -71,7 +79,7 @@ func EnsureDeploymentCreated(
 
 	deployment = &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      ModelLabels(ModelAppName(name), name, false),
+			Labels:      ModelLabels(name),
 			Annotations: ModelAnnotations(ModelAppName(name), false),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
@@ -86,11 +94,11 @@ func EnsureDeploymentCreated(
 		Spec: appsv1.DeploymentSpec{
 			Replicas: lo.Ternary(replicas == nil, lo.ToPtr(int32(1)), replicas),
 			Selector: &metav1.LabelSelector{
-				MatchLabels: ModelLabels(ModelAppName(name), name, false),
+				MatchLabels: ModelLabels(name),
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels:      ModelLabels(ModelAppName(name), name, false),
+					Labels:      ModelLabels(name),
 					Annotations: ModelAnnotations(ModelAppName(name), false),
 				},
 				Spec: corev1.PodSpec{
@@ -215,7 +223,7 @@ func getService(ctx context.Context, c client.Client, namespace string, name str
 func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, serviceType corev1.ServiceType) *corev1.Service {
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      ModelLabels(ModelAppName(name), name, false),
+			Labels:      ModelLabels(name),
 			Annotations: ModelAnnotations(ModelAppName(name), false),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
@@ -228,10 +236,8 @@ func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, s
 			}},
 		},
 		Spec: corev1.ServiceSpec{
-			Type: serviceType,
-			Selector: map[string]string{
-				"app": ModelAppName(name),
-			},
+			Type:     serviceType,
+			Selector: ModelLabels(name),
 			Ports: []corev1.ServicePort{
 				{
 					Name:       "ollama",
