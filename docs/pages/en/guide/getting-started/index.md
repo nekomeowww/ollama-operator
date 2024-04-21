@@ -10,7 +10,7 @@
 
 There are two major ways to get started with the Ollama Operator:
 
-<GettingStartedBlocksEn />
+<GettingStartedBlocksEn text-sm />
 
 1. `kollama` provides a simple way to deploy the Ollama model CRD to your Kubernetes cluster.
 2. General Kubernetes CRD is available for advanced users who want to customize the Ollama model CRD.

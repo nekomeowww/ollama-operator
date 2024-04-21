@@ -13,8 +13,8 @@ hero:
     alt: Ollama Operator
   actions:
     - theme: brand
-      text: 阅读文档
-      link: /pages/zh-CN/guide/overview
+      text: 快速开始
+      link: /pages/zh-CN/guide/getting-started/
     - theme: alt
       text: 在 GitHub 上查看
       link: https://github.com/nekomeowww/ollama-operator

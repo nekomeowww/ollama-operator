@@ -14,7 +14,7 @@ hero:
   actions:
     - theme: brand
       text: Getting Started
-      link: /pages/en/guide/overview
+      link: /pages/en/guide/getting-started/
     - theme: alt
       text: View on GitHub
       link: https://github.com/nekomeowww/ollama-operator

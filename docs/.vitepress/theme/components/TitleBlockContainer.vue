@@ -6,7 +6,18 @@ const props = defineProps<{
 </script>
 
 <template>
-  <a w-full p-4 rounded-lg transition="all ease-in-out duration-300" cursor-pointer flex="~ col" :href="props.href" decoration="none!">
+  <a
+    w-full
+    p-4
+    rounded-lg
+    transition="all ease-in-out duration-300"
+    cursor-pointer
+    flex="~ col"
+    decoration="none!"
+    bg="zinc-50 dark:zinc-800"
+    border="~ solid 2 transparent hover:zinc-200 dark:hover:zinc-600"
+    :href="props.href"
+  >
     <div flex="1">
       <div flex="~" items-center>
         <div v-if="props.title" text-lg font-semibold flex-1>

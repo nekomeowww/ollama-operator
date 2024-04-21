@@ -101,9 +101,9 @@ export default defineConfig({
               {
                 text: 'Getting started',
                 items: [
-                  { text: 'Install Ollama Operator', link: '/pages/en/guide/getting-started/' },
-                  { text: 'Deploy models through CLI', link: '/pages/en/guide/getting-started/cli' },
-                  { text: 'Deploy models through CRD', link: '/pages/en/guide/getting-started/crd' },
+                  { text: '1. Install Ollama Operator', link: '/pages/en/guide/getting-started/' },
+                  { text: '2. Deploy models through CLI', link: '/pages/en/guide/getting-started/cli' },
+                  { text: '3. Deploy models through CRD', link: '/pages/en/guide/getting-started/crd' },
                 ]
               },
               { text: 'Supported models', link: '/pages/en/guide/supported-models' },
@@ -121,7 +121,7 @@ export default defineConfig({
                     items: [
                       { text: 'kollama deploy', link: '/pages/en/references/cli/commands/deploy' },
                       { text: 'kollama undeploy', link: '/pages/en/references/cli/commands/undeploy' },
-                      { text: 'kollama expose', link: '/pages/en/references/cli/commands/undeploy' }
+                      { text: 'kollama expose', link: '/pages/en/references/cli/commands/expose' }
                     ]
                   }
                 ]
@@ -192,9 +192,9 @@ export default defineConfig({
               {
                 text: '快速上手',
                 items: [
-                  { text: '安装 Ollama Operator', link: '/pages/zh-CN/guide/getting-started/' },
-                  { text: '通过 CLI 部署模型', link: '/pages/zh-CN/guide/getting-started/cli' },
-                  { text: '通过 CRD 部署模型', link: '/pages/zh-CN/guide/getting-started/crd' },
+                  { text: '1. 安装 Ollama Operator', link: '/pages/zh-CN/guide/getting-started/' },
+                  { text: '2. 通过 CLI 部署模型', link: '/pages/zh-CN/guide/getting-started/cli' },
+                  { text: '3. 通过 CRD 部署模型', link: '/pages/zh-CN/guide/getting-started/crd' },
                 ]
               },
               { text: '支持模型', link: '/pages/zh-CN/guide/supported-models' },
@@ -212,7 +212,7 @@ export default defineConfig({
                     items: [
                       { text: 'kollama deploy', link: '/pages/zh-CN/references/cli/commands/deploy' },
                       { text: 'kollama undeploy', link: '/pages/zh-CN/references/cli/commands/undeploy' },
-                      { text: 'kollama expose', link: '/pages/zh-CN/references/cli/commands/undeploy' }
+                      { text: 'kollama expose', link: '/pages/zh-CN/references/cli/commands/expose' }
                     ]
                   }
                 ]
