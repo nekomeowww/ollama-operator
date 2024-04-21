@@ -1,7 +1,7 @@
 <template>
   <TitleBlockContainerGroup>
     <TitleBlockContainer
-      href="/pages/en/guide/getting-started/cli"
+      href="/pages/en/guide/getting-started/cli/"
       bg="zinc-50 dark:zinc-800"
       border="transparent solid 2 hover:zinc-200 dark:hover:zinc-800"
       class="[&_.title-block-container]:bg-zinc-200 [&_.title-block-container]:dark:bg-zinc-600 [&_.title-block-container]:text-zinc-900 [&_.title-block-container]:dark:text-zinc-100"
@@ -32,7 +32,7 @@
       </div>
     </TitleBlockContainer>
     <TitleBlockContainer
-      href="/pages/en/guide/getting-started/crd"
+      href="/pages/en/guide/getting-started/crd/"
       bg="zinc-50 dark:zinc-800"
       border="transparent solid 2 hover:zinc-200 dark:hover:zinc-800"
       class="[&_.title-block-container]:bg-zinc-200 [&_.title-block-container]:dark:bg-zinc-600 [&_.title-block-container]:text-zinc-900 [&_.title-block-container]:dark:text-zinc-100"

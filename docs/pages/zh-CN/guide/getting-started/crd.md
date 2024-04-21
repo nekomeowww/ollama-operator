@@ -2,7 +2,7 @@
 
 ## 部署模型
 
-1. 创建一个 `Model` 类型的 CRD 资源
+1. 创建一个 [`Model`](/pages/zh-CN/references/crd/model) 类型的 CRD 资源
 
 ::: tip 什么是 CRD？
 
@@ -40,7 +40,7 @@ spec:
 
 :::
 
-复制以下命令以创建一个名为 phi 的模型 CRD：
+复制以下命令以创建一个名为 phi 的 [`Model` CRD](/pages/zh-CN/references/crd/model)：
 
 ```shell
 cat <<EOF >> ollama-model-phi.yaml
@@ -70,13 +70,13 @@ spec: # [!code ++]
 
 :::
 
-2. 将 `Model` CRD 应用到 Kubernetes 集群：
+1. 将 [`Model` CRD](/pages/zh-CN/references/crd/model) 应用到 Kubernetes 集群：
 
 ```shell
 kubectl apply -f ollama-model-phi.yaml
 ```
 
-3. 等待模型就绪：
+3. 等待 [`Model` CRD](/pages/zh-CN/references/crd/model) 就绪：
 
 ```shell
 kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-model-phi

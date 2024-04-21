@@ -144,37 +144,37 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	)
 
 	cmd.Flags().StringVarP(&o.storageClass, "storage-class", "", "", ""+
-		"Storage class to use for the model's persistent volume claim. If not specified, "+
-		"the default storage class will be used.",
+		"StorageClass to use for the model's associated PersistentVolumeClaim. If not specified, "+
+		"the default StorageClass will be used.",
 	)
 
 	cmd.Flags().StringVarP(&o.pvAccessMode, "pv-access-mode", "", "", ""+
-		"Access mode for the model's persistent volume for image store StatefulSet. If not "+
-		"specified, the access mode will be ReadWriteOnce. If you are deploying models "+
-		"into default deployed kind and k3s clusters, you should keep it as ReadWriteOnce. "+
-		"If you are deploying models into a custom cluster, you can set it to ReadWriteMany "+
-		"if storage class supports it.",
+		"Access mode for Ollama Operator created image store (to cache pulled images)'s StatefulSet "+
+		"resource associated PersistentVolume. If not specified, the access mode will be ReadWriteOnce. "+
+		"If you are deploying models into default deployed kind and k3s clusters, you should keep "+
+		"it as ReadWriteOnce. If you are deploying models into a custom cluster, you can set it to "+
+		"ReadWriteMany if StorageClass supports it.",
 	)
 
 	cmd.Flags().BoolVar(&o.expose, "expose", false, ""+
 		"Whether to expose the model through a service for external access and makes it "+
 		"easy to interact with the model. By default, --expose will create a NodePort "+
-		"service. Use --expose=LoadBalancer to create a LoadBalancer service",
+		"service. Use --service-type=LoadBalancer to create a LoadBalancer service",
 	)
 
 	cmd.Flags().StringVar(&o.serviceType, "service-type", "", ""+
-		"Type of the service to expose the model. If not specified, the service will be "+
+		"Type of the Service to expose the model. If not specified, the service will be "+
 		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
 	)
 
 	cmd.Flags().StringVar(&o.serviceName, "service-name", "", ""+
-		"Name of the service to expose the model. If not specified, the model name will "+
+		"Name of the Service to expose the model. If not specified, the model name will "+
 		"be used as the service name with -nodeport as the suffix for NodePort.",
 	)
 
 	cmd.Flags().Int32Var(&o.nodePort, "node-port", 0, ""+
 		"NodePort to expose the model. If not specified, a random port will be assigned."+
-		"Only valid when --expose is set to true, and --service-type is set to NodePort.",
+		"Only valid when --expose is specified, and --service-type is set to NodePort.",
 	)
 
 	o.configFlags.AddFlags(cmd.Flags())
@@ -236,7 +236,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		o.kubeClient,
 		namespace,
 		modelName,
-		corev1.ServiceType("NodePort"),
+		lo.Ternary(o.serviceType == "", corev1.ServiceTypeNodePort, corev1.ServiceType(o.serviceType)),
 		o.serviceName,
 		o.nodePort,
 	)

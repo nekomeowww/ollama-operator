@@ -1,7 +1,8 @@
+import { text } from 'stream/consumers'
 import { defineConfig } from 'vitepress'
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
-// https://vitepress.dev/reference/site-config
+// https://vitepress.dev/references/site-config
 export default defineConfig({
   markdown: {
     config(md) {
@@ -13,7 +14,7 @@ export default defineConfig({
   lastUpdated: true,
   ignoreDeadLinks: [
     // Site Config | VitePress
-    // https://vitepress.dev/reference/site-config#ignoredeadlinks
+    // https://vitepress.dev/references/site-config#ignoredeadlinks
     //
     // ignore all localhost links
     /^https?:\/\/localhost/,
@@ -82,7 +83,8 @@ export default defineConfig({
           {
             text: 'Reference',
             items: [
-              { text: 'CRD definition', link: '/pages/en/references/crd' },
+              { text: 'CLI Reference', link: '/pages/en/references/cli/' },
+              { text: 'CRD Reference', link: '/pages/en/references/crd/' },
               { text: 'Architectural Design', link: '/pages/en/references/architectural-design' },
             ]
           },
@@ -110,7 +112,27 @@ export default defineConfig({
           {
             text: 'Reference',
             items: [
-              { text: 'CRD definition', link: '/pages/en/references/crd' },
+              {
+                text: 'CLI Reference',
+                items: [
+                  { text: 'Commands list', link: '/pages/en/references/cli/' },
+                  {
+                    text: 'Commands',
+                    items: [
+                      { text: 'kollama deploy', link: '/pages/en/references/cli/commands/deploy' },
+                      { text: 'kollama undeploy', link: '/pages/en/references/cli/commands/undeploy' },
+                      { text: 'kollama expose', link: '/pages/en/references/cli/commands/undeploy' }
+                    ]
+                  }
+                ]
+              },
+              {
+                text: 'CRD Reference',
+                items: [
+                  { text: 'CRD list', link: '/pages/en/references/crd/' },
+                  { text: 'Model', link: '/pages/en/references/crd/model' }
+                ]
+              },
               { text: 'Architectural Design', link: '/pages/en/references/architectural-design' },
             ]
           },
@@ -147,7 +169,13 @@ export default defineConfig({
           {
             text: '参考',
             items: [
-              { text: 'CRD 定义', link: '/pages/zh-CN/references/crd' },
+              {
+                text: 'CLI 参考',
+                items: [
+                  { text: '命令列表', link: '/pages/zh-CN/references/cli/' },
+                ]
+              },
+              { text: 'CRD 参考', link: '/pages/zh-CN/references/crd/' },
               { text: '架构设计', link: '/pages/zh-CN/references/architectural-design' },
             ]
           },
@@ -175,7 +203,27 @@ export default defineConfig({
           {
             text: '参考',
             items: [
-              { text: 'CRD 定义', link: '/pages/zh-CN/references/crd' },
+              {
+                text: 'CLI 参考',
+                items: [
+                  { text: '命令列表', link: '/pages/zh-CN/references/cli/' },
+                  {
+                    text: '子命令',
+                    items: [
+                      { text: 'kollama deploy', link: '/pages/zh-CN/references/cli/commands/deploy' },
+                      { text: 'kollama undeploy', link: '/pages/zh-CN/references/cli/commands/undeploy' },
+                      { text: 'kollama expose', link: '/pages/zh-CN/references/cli/commands/undeploy' }
+                    ]
+                  }
+                ]
+              },
+              {
+                text: 'CRD 参考',
+                items: [
+                  { text: 'CRD 列表', link: '/pages/zh-CN/references/crd/' },
+                  { text: 'Model 模型资源', link: '/pages/zh-CN/references/crd/model' }
+                ]
+              },
               { text: '架构设计', link: '/pages/zh-CN/references/architectural-design' },
             ]
           },

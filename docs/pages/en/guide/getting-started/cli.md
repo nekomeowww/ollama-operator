@@ -10,11 +10,15 @@ We have a CLI called `kollama` here to simplify the deployment process. It is a 
 go install github.com/nekomeowww/ollama-operator/cmd/kollama@latest
 ```
 
+> To learn about the supported commands, please refer to [`kollama`](/pages/en/references/cli/).
+
 2. Deploy a model:
 
 ```shell
 kollama deploy phi --expose --node-port 30001
 ```
+
+> For more information about the `deploy` command, please refer to [`kollama deploy`](/pages/en/references/cli/commands/deploy).
 
 That's it.
 

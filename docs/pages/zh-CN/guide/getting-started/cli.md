@@ -10,11 +10,15 @@
 go install github.com/nekomeowww/ollama-operator/cmd/kollama@latest
 ```
 
+> 要了解 `kollama` CLI 支持的命令，请参阅 [`kollama`](/pages/zh-CN/references/cli/)。
+
 2. 部署 Ollama 模型 CRD 到 Kubernetes 集群：
 
 ```shell
 kollama deploy phi --expose --node-port 30001
 ```
+
+> 有关 `deploy` 命令的更多信息，请参阅 [`kollama deploy`](/pages/zh-CN/references/cli/commands/deploy)。
 
 3. 开始与模型进行交互吧：
 

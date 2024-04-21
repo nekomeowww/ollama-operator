@@ -21,6 +21,21 @@ func ModelAppName(name string) string {
 	return fmt.Sprintf("ollama-model-%s", name)
 }
 
+func ModelLabels(appName, name string, imageStore bool) map[string]string {
+	return map[string]string{
+		"app":                        name,
+		"model.ollama.ayaka.io":      name,
+		"model.ollama.ayaka.io/type": lo.Ternary(imageStore, "image-store", "model"),
+	}
+}
+
+func ModelAnnotations(name string, imageStore bool) map[string]string {
+	return map[string]string{
+		"model.ollama.ayaka.io/name": name,
+		"model.ollama.ayaka.io/type": lo.Ternary(imageStore, "image-store", "model"),
+	}
+}
+
 func getDeployment(ctx context.Context, c client.Client, namespace string, name string) (*appsv1.Deployment, error) {
 	var deployment appsv1.Deployment
 
@@ -56,8 +71,8 @@ func EnsureDeploymentCreated(
 
 	deployment = &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      make(map[string]string),
-			Annotations: make(map[string]string),
+			Labels:      ModelLabels(ModelAppName(name), name, false),
+			Annotations: ModelAnnotations(ModelAppName(name), false),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
 			OwnerReferences: []metav1.OwnerReference{{
@@ -77,9 +92,8 @@ func EnsureDeploymentCreated(
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: map[string]string{
-						"app": ModelAppName(name),
-					},
+					Labels:      ModelLabels(ModelAppName(name), name, false),
+					Annotations: ModelAnnotations(ModelAppName(name), false),
 				},
 				Spec: corev1.PodSpec{
 					InitContainers: []corev1.Container{
@@ -203,8 +217,8 @@ func getService(ctx context.Context, c client.Client, namespace string, name str
 func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, serviceType corev1.ServiceType) *corev1.Service {
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      make(map[string]string),
-			Annotations: make(map[string]string),
+			Labels:      ModelLabels(ModelAppName(name), name, false),
+			Annotations: ModelAnnotations(ModelAppName(name), false),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
 			OwnerReferences: []metav1.OwnerReference{{

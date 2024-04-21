@@ -18,9 +18,8 @@ import (
 )
 
 const (
-	imageStorePVCName       = "ollama-models-store-pvc"
-	imageStoreStatefulSet   = "ollama-models-store"
-	imagePullingJobImageKey = "ollama.ayaka.io/image"
+	imageStorePVCName     = "ollama-models-store-pvc"
+	imageStoreStatefulSet = "ollama-models-store"
 )
 
 func getImageStorePVC(ctx context.Context, client client.Client, namespace string) (*corev1.PersistentVolumeClaim, error) {
@@ -66,8 +65,8 @@ func EnsureImageStorePVCCreated(
 
 	pvc = &corev1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      make(map[string]string),
-			Annotations: make(map[string]string),
+			Labels:      ModelLabels(imageStoreStatefulSet, imageStoreStatefulSet, true),
+			Annotations: ModelAnnotations(imageStoreStatefulSet, true),
 			Name:        imageStorePVCName,
 			Namespace:   namespace,
 		},
@@ -143,10 +142,8 @@ func EnsureImageStoreStatefulSetCreated(
 
 	statefulSet = &appsv1.StatefulSet{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels: map[string]string{
-				"app": imageStoreStatefulSet,
-			},
-			Annotations: make(map[string]string),
+			Labels:      ModelLabels(imageStoreStatefulSet, imageStoreStatefulSet, true),
+			Annotations: ModelAnnotations(imageStoreStatefulSet, true),
 			Name:        imageStoreStatefulSet,
 			Namespace:   namespace,
 		},
@@ -159,10 +156,8 @@ func EnsureImageStoreStatefulSetCreated(
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: map[string]string{
-						"app": imageStoreStatefulSet,
-					},
-					Annotations: make(map[string]string),
+					Labels:      ModelLabels(imageStoreStatefulSet, imageStoreStatefulSet, true),
+					Annotations: ModelAnnotations(imageStoreStatefulSet, true),
 				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
@@ -257,8 +252,8 @@ func EnsureImageStoreServiceCreated(
 
 	service = &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      map[string]string{},
-			Annotations: map[string]string{},
+			Labels:      ModelLabels(imageStoreStatefulSet, imageStoreStatefulSet, true),
+			Annotations: ModelAnnotations(imageStoreStatefulSet, true),
 			Name:        imageStoreStatefulSet,
 			Namespace:   namespace,
 			OwnerReferences: []metav1.OwnerReference{{

@@ -2,7 +2,7 @@
 
 ## Deploy the model
 
-1. Create one `Model` CRD to rule them all.
+1. Create one [`Model` CRD](/pages/en/references/crd/model) to rule them all.
 
 ::: tip What is CRD?
 
@@ -40,7 +40,7 @@ spec:
 
 :::
 
-Copy the following command to create a phi model CRD:
+Copy the following command to create a phi [`Model` CRD](/pages/en/references/crd/model):
 
 ```shell
 cat <<EOF >> ollama-model-phi.yaml
@@ -70,13 +70,13 @@ spec: # [!code ++]
 
 :::
 
-2. Apply the `Model` CRD to your Kubernetes cluster:
+2. Apply the [`Model` CRD](/pages/en/references/crd/model) to your Kubernetes cluster:
 
 ```shell
 kubectl apply -f ollama-model-phi.yaml
 ```
 
-3. Wait for the model to be ready:
+1. Wait for the [`Model`](/pages/en/references/crd/model) to be ready:
 
 ```shell
 kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-model-phi

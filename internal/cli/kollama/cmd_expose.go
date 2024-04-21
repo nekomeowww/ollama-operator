@@ -90,16 +90,16 @@ func NewCmdExpose(streams genericiooptions.IOStreams) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&o.serviceType, "service-type", "", ""+
-		"Type of the service to expose the model. If not specified, the service will be "+
+		"Type of the Service to expose the model. If not specified, the service will be "+
 		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
 	)
 	cmd.Flags().StringVar(&o.serviceName, "service-name", "", ""+
-		"Name of the service to expose the model. If not specified, the model name will "+
+		"Name of the Service to expose the model. If not specified, the model name will "+
 		"be used as the service name with -nodeport as the suffix for NodePort.",
 	)
 	cmd.Flags().Int32Var(&o.nodePort, "node-port", 0, ""+
 		"NodePort to expose the model. If not specified, a random port will be assigned."+
-		"Only valid when --expose is set to true, and --service-type is set to NodePort.",
+		"Only valid when --expose is specified, and --service-type is set to NodePort.",
 	)
 
 	o.configFlags.AddFlags(cmd.Flags())
@@ -149,7 +149,7 @@ func (o *CmdExposeOptions) runE(cmd *cobra.Command, args []string) error {
 		o.kubeClient,
 		namespace,
 		modelName,
-		corev1.ServiceType("NodePort"),
+		lo.Ternary(o.serviceType == "", corev1.ServiceTypeNodePort, corev1.ServiceType(o.serviceType)),
 		o.serviceName,
 		o.nodePort,
 	)
