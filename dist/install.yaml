@@ -556,7 +556,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: ghcr.io/nekomeowww/ollama-operator:0.5.1
+        image: ghcr.io/nekomeowww/ollama-operator:0.5.2
         livenessProbe:
           httpGet:
             path: /healthz
