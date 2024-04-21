@@ -15,7 +15,7 @@ go install github.com/nekomeowww/ollama-operator/cmd/kollama@latest
 2. 部署 Ollama 模型 CRD 到 Kubernetes 集群：
 
 ```shell
-kollama deploy phi --expose --node-port 30001
+kollama deploy phi --expose --node-port 30101
 ```
 
 > 有关 `deploy` 命令的更多信息，请参阅 [`kollama deploy`](/pages/zh-CN/references/cli/commands/deploy)。
@@ -23,13 +23,13 @@ kollama deploy phi --expose --node-port 30001
 3. 开始与模型进行交互吧：
 
 ```shell
-OLLAMA_HOST=<节点 IP>:30001 ollama run phi
+OLLAMA_HOST=<节点 IP>:30101 ollama run phi
 ```
 
 或者使用 `curl` 连接到与 OpenAI API 兼容的接口：
 
 ```shell
-curl http://<节点 IP>:30001/v1/chat/completions -H "Content-Type: application/json" -d '{
+curl http://<节点 IP>:30101/v1/chat/completions -H "Content-Type: application/json" -d '{
   "model": "phi",
   "messages": [
       {

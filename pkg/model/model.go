@@ -86,9 +86,7 @@ func EnsureDeploymentCreated(
 		Spec: appsv1.DeploymentSpec{
 			Replicas: lo.Ternary(replicas == nil, lo.ToPtr(int32(1)), replicas),
 			Selector: &metav1.LabelSelector{
-				MatchLabels: map[string]string{
-					"app": ModelAppName(name),
-				},
+				MatchLabels: ModelLabels(ModelAppName(name), name, false),
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
