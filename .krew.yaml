@@ -1,7 +1,7 @@
 apiVersion: krew.googlecontainertools.github.com/v1alpha2
 kind: Plugin
 metadata:
-  name: ollama
+  name: kollama
 spec:
   version: {{ .TagName }}
   homepage: https://github.com/nekomeowww/ollama-operator
@@ -39,6 +39,6 @@ spec:
   shortDescription: Interact with the Ollama Operator
   description: |
     Usage:
-      kubectl ollama deploy llama2
+      kubectl kollama deploy llama2
       This plugin will help you to interact with the Ollama Operator to deploy any LLM (Llama Language Model) to your Kubernetes cluster.
       Read more documentation at: https://github.com/nekomeowww/ollama-operator

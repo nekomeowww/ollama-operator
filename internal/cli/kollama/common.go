@@ -31,6 +31,29 @@ var (
 	ErrOllamaModelNotSupported = fmt.Errorf("%s is not supported on the cluster, did you install the Ollama Operator?", modelSchemaGroupVersionResource.String())
 )
 
+func isKubectlPlugin() (bool, error) {
+	exec, err := os.Executable()
+	if err != nil {
+		return false, err
+	}
+
+	basename := filepath.Base(exec)
+	if strings.HasPrefix(basename, "kubectl-") {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func command() string {
+	is, _ := isKubectlPlugin()
+	if is {
+		return "kubectl kollama"
+	}
+
+	return "kollama"
+}
+
 func IsOllamaOperatorCRDSupported(discoveryClient discovery.DiscoveryInterface, resourceName string) (bool, error) {
 	groupVersion := schemaGroupVersion.String()
 
@@ -233,27 +256,4 @@ func exposeOllamaModel(
 	}
 
 	return svc, nil
-}
-
-func isKubectlPlugin() (bool, error) {
-	exec, err := os.Executable()
-	if err != nil {
-		return false, err
-	}
-
-	basename := filepath.Base(exec)
-	if strings.HasPrefix(basename, "kubectl-") {
-		return true, nil
-	}
-
-	return false, nil
-}
-
-func command() string {
-	is, _ := isKubectlPlugin()
-	if is {
-		return "kubectl ollama"
-	}
-
-	return "kollama"
 }
