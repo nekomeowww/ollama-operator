@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -34,7 +35,6 @@ const (
 
   # Deploy a phi model in a specific namespace
   $ %s deploy phi -n phi-namespace
-
 `
 
 	deployedAlreadyMessage = `%s has been deployed already.
@@ -42,11 +42,9 @@ const (
 To undeploy it, use
 
   %s undeploy %s
-
 `
 
 	deployedNonExposedMessage = `🎉 Successfully deployed %s.
-
 💡 Currently the deployed model has not yet exposed. If this is unintentional, you can expose the model through
 
   %s expose %s
@@ -60,11 +58,9 @@ next time.
 To expose manually, use the following command:
 
   kubectl expose deployment %s --name=%s-nodeport --type=NodePort --port 11434
-
 `
 
 	deployedExposedMessage = `🎉 Successfully deployed %s.
-
 🌐 The model has been exposed through a service over %s.
 
 To start a chat with ollama:
@@ -82,8 +78,7 @@ To integrate with your OpenAI API compatible client:
       }
     ]
   }'
-
-	`
+`
 )
 
 // CmdDeployOptions provides information required to deploy a model
@@ -210,7 +205,9 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+	fmt.Println("Deploying model \"" + modelName + "\"...\n")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer cancel()
 
 	model, err := getOllama(ctx, o.dynamicClient, namespace, modelName)
@@ -222,7 +219,10 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		os.Exit(1)
 	}
 
-	createdModel, err := createOllamaModel(ctx, o.dynamicClient, namespace, modelName, modelImage, o.storageClass, o.pvAccessMode)
+	createdModelCtx, createdModelCancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	defer createdModelCancel()
+
+	createdModel, err := createOllamaModel(createdModelCtx, o.dynamicClient, namespace, modelName, modelImage, o.storageClass, o.pvAccessMode)
 	if err != nil {
 		return err
 	}
@@ -231,8 +231,25 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
+	var modelImageFullPath string
+	if strings.Contains(modelImage, "/") {
+		modelImageFullPath = modelImage
+	} else {
+		modelImageFullPath = fmt.Sprintf("registry.ollama.ai/library/%s:latest", modelImage)
+	}
+
+	err = waitUntilModelAvailable(o.kubeClient, namespace, modelName, modelImageFullPath)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println()
+
+	exposeSvcCtx, exposeSvcCancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	defer exposeSvcCancel()
+
 	svc, err := exposeOllamaModel(
-		ctx,
+		exposeSvcCtx,
 		o.kubeClient,
 		namespace,
 		modelName,
