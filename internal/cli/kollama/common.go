@@ -250,6 +250,16 @@ func exposeOllamaModel(
 		svc.Spec.Ports[0].NodePort = nodePort
 	}
 
+	var existingService corev1.Service
+
+	err = kubeClient.Get(ctx, types.NamespacedName{Namespace: namespace, Name: svc.Name}, &existingService)
+	if err != nil && !apierrors.IsNotFound(err) {
+		return nil, err
+	}
+	if err == nil {
+		return &existingService, nil
+	}
+
 	err = kubeClient.Create(ctx, svc)
 	if err != nil {
 		return nil, err

@@ -79,10 +79,10 @@ func EnsureDeploymentCreated(
 
 	deployment = &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      ModelLabels(name),
-			Annotations: ModelAnnotations(ModelAppName(name), false),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
+			Labels:      ModelLabels(name),
+			Annotations: ModelAnnotations(ModelAppName(name), false),
 			OwnerReferences: []metav1.OwnerReference{{
 				APIVersion:         model.APIVersion,
 				Kind:               model.Kind,
@@ -113,7 +113,7 @@ func EnsureDeploymentCreated(
 							Name: "image-storage",
 							VolumeSource: corev1.VolumeSource{
 								PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-									ClaimName: imageStorePVCName,
+									ClaimName: ImageStorePVCName,
 									ReadOnly:  true,
 								},
 							},
@@ -223,10 +223,10 @@ func getService(ctx context.Context, c client.Client, namespace string, name str
 func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, serviceType corev1.ServiceType) *corev1.Service {
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      ModelLabels(name),
-			Annotations: ModelAnnotations(ModelAppName(name), false),
 			Name:        ModelAppName(name),
 			Namespace:   namespace,
+			Labels:      ModelLabels(name),
+			Annotations: ModelAnnotations(ModelAppName(name), false),
 			OwnerReferences: []metav1.OwnerReference{{
 				APIVersion:         "apps/v1",
 				Kind:               "Deployment",

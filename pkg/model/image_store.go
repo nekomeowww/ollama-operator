@@ -18,14 +18,14 @@ import (
 )
 
 const (
-	imageStorePVCName     = "ollama-models-store-pvc"
-	imageStoreStatefulSet = "ollama-models-store"
+	ImageStorePVCName         = "ollama-models-store-pvc"
+	ImageStoreStatefulSetName = "ollama-models-store"
 )
 
 func getImageStorePVC(ctx context.Context, client client.Client, namespace string) (*corev1.PersistentVolumeClaim, error) {
 	var pvc corev1.PersistentVolumeClaim
 
-	err := client.Get(ctx, types.NamespacedName{Namespace: namespace, Name: imageStorePVCName}, &pvc)
+	err := client.Get(ctx, types.NamespacedName{Namespace: namespace, Name: ImageStorePVCName}, &pvc)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return nil, nil
@@ -65,10 +65,10 @@ func EnsureImageStorePVCCreated(
 
 	pvc = &corev1.PersistentVolumeClaim{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      ImageStoreLabels(imageStoreStatefulSet),
-			Annotations: ModelAnnotations(imageStoreStatefulSet, true),
-			Name:        imageStorePVCName,
+			Name:        ImageStorePVCName,
 			Namespace:   namespace,
+			Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+			Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 		},
 		Spec: corev1.PersistentVolumeClaimSpec{
 			Resources: corev1.VolumeResourceRequirements{
@@ -110,7 +110,7 @@ func GetImageStorePVByPVC(ctx context.Context, c client.Client, pvc *corev1.Pers
 func getImageStoreStatefulSet(ctx context.Context, client client.Client, namespace string) (*appsv1.StatefulSet, error) {
 	var statefulSet appsv1.StatefulSet
 
-	err := client.Get(ctx, types.NamespacedName{Namespace: namespace, Name: imageStoreStatefulSet}, &statefulSet)
+	err := client.Get(ctx, types.NamespacedName{Namespace: namespace, Name: ImageStoreStatefulSetName}, &statefulSet)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return nil, nil
@@ -142,22 +142,22 @@ func EnsureImageStoreStatefulSetCreated(
 
 	statefulSet = &appsv1.StatefulSet{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      ImageStoreLabels(imageStoreStatefulSet),
-			Annotations: ModelAnnotations(imageStoreStatefulSet, true),
-			Name:        imageStoreStatefulSet,
+			Name:        ImageStoreStatefulSetName,
 			Namespace:   namespace,
+			Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+			Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 		},
 		Spec: appsv1.StatefulSetSpec{
 			Replicas: lo.ToPtr(int32(1)),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
-					"app": imageStoreStatefulSet,
+					"app": ImageStoreStatefulSetName,
 				},
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels:      ImageStoreLabels(imageStoreStatefulSet),
-					Annotations: ModelAnnotations(imageStoreStatefulSet, true),
+					Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+					Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
@@ -169,7 +169,7 @@ func EnsureImageStoreStatefulSetCreated(
 							Name: "image-storage",
 							VolumeSource: corev1.VolumeSource{
 								PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-									ClaimName: imageStorePVCName,
+									ClaimName: ImageStorePVCName,
 									ReadOnly:  false,
 								},
 							},
@@ -219,7 +219,7 @@ func IsImageStoreStatefulSetReady(
 func getImageStoreService(ctx context.Context, client client.Client, namespace string) (*corev1.Service, error) {
 	var service corev1.Service
 
-	err := client.Get(ctx, types.NamespacedName{Namespace: namespace, Name: imageStoreStatefulSet}, &service)
+	err := client.Get(ctx, types.NamespacedName{Namespace: namespace, Name: ImageStoreStatefulSetName}, &service)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return nil, nil
@@ -252,10 +252,10 @@ func EnsureImageStoreServiceCreated(
 
 	service = &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Labels:      ImageStoreLabels(imageStoreStatefulSet),
-			Annotations: ModelAnnotations(imageStoreStatefulSet, true),
-			Name:        imageStoreStatefulSet,
+			Name:        ImageStoreStatefulSetName,
 			Namespace:   namespace,
+			Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+			Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 			OwnerReferences: []metav1.OwnerReference{{
 				APIVersion:         "apps/v1",
 				Kind:               "StatefulSet",
@@ -274,7 +274,7 @@ func EnsureImageStoreServiceCreated(
 					TargetPort: intstr.FromInt(11434),
 				},
 			},
-			Selector: ImageStoreLabels(imageStoreStatefulSet),
+			Selector: ImageStoreLabels(ImageStoreStatefulSetName),
 		},
 	}
 
