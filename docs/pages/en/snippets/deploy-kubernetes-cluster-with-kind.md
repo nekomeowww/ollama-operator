@@ -16,7 +16,11 @@ Invoke-WebRequest  -OutFile "./Docker Desktop Installer.exe"
 Start-Process 'Docker Desktop Installer.exe' -Wait install
 start /w "" "Docker Desktop Installer.exe" install
 
+# If you use Scoop command line installer
 scoop install docker kubectl go
+# Else if you use Chocolatey as package manager
+choco install docker-desktop kubernetes-cli golang
+
 go install sigs.k8s.io/kind@latest
 wget https://raw.githubusercontent.com/nekomeowww/ollama-operator/main/hack/kind-config.yaml
 kind create cluster --config kind-config.yaml
