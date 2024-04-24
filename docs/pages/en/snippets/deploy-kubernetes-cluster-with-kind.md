@@ -18,7 +18,7 @@ start /w "" "Docker Desktop Installer.exe" install
 
 # If you use Scoop command line installer
 scoop install docker kubectl go
-# Else if you use Chocolatey as package manager
+# Alternatively, if you use Chocolatey as package manager
 choco install docker-desktop kubernetes-cli golang
 
 go install sigs.k8s.io/kind@latest
