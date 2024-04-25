@@ -235,6 +235,9 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		if len(parts) != 2 {
 			return fmt.Errorf("invalid resource limit format: %s", limit)
 		}
+		if resourceRequirements.Limits == nil {
+			resourceRequirements.Limits = make(corev1.ResourceList)
+		}
 
 		resourceRequirements.Limits[corev1.ResourceName(parts[0])] = resource.MustParse(parts[1])
 	}
