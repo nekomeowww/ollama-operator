@@ -59,20 +59,25 @@ type ModelSpec struct {
 	// +patchMergeKey=name
 	// +patchStrategy=merge
 	ImagePullSecrets []corev1.LocalObjectReference `json:"imagePullSecrets,omitempty" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,4,rep,name=imagePullSecrets"`
+	// Compute Resources required by this container.
+	// Cannot be updated.
+	// More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+	// +optional
+	Resources corev1.ResourceRequirements `json:"resources,omitempty" protobuf:"bytes,5,opt,name=resources"`
 	// storageClassName is the name of StorageClass to which this persistent volume belongs. Empty value
 	// means that this volume does not belong to any StorageClass.
 	// +optional
-	StorageClassName *string `json:"storageClassName,omitempty" protobuf:"bytes,5,opt,name=storageClassName"`
+	StorageClassName *string `json:"storageClassName,omitempty" protobuf:"bytes,6,opt,name=storageClassName"`
 	// persistentVolumeClaimVolumeSource represents a reference to a
 	// PersistentVolumeClaim in the same namespace.
 	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims
 	// +optional
-	PersistentVolumeClaim *corev1.PersistentVolumeClaimVolumeSource `json:"persistentVolumeClaim,omitempty" protobuf:"bytes,6,opt,name=persistentVolumeClaim"`
+	PersistentVolumeClaim *corev1.PersistentVolumeClaimVolumeSource `json:"persistentVolumeClaim,omitempty" protobuf:"bytes,7,opt,name=persistentVolumeClaim"`
 	// spec defines a specification of a persistent volume owned by the cluster.
 	// Provisioned by an administrator.
 	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes
 	// +optional
-	PersistentVolume *ModelPersistentVolumeSpec `json:"persistentVolume,omitempty" protobuf:"bytes,7,opt,name=persistentVolume"`
+	PersistentVolume *ModelPersistentVolumeSpec `json:"persistentVolume,omitempty" protobuf:"bytes,8,opt,name=persistentVolume"`
 }
 
 type ConditionType string

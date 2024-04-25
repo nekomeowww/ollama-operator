@@ -19,6 +19,15 @@ spec:
   # Use the model image `phi`
   image: phi
   imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+      nvidia.com/gpu: 1 # If you got GPUs
+    requests:
+      cpu: 4
+      memory: 8Gi
+      nvidia.com/gpu: 1 # If you got GPUs
   storageClassName: local-path
   # If you have your own PersistentVolumeClaim created
   persistentVolumeClaim: your-pvc

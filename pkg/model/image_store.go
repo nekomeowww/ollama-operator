@@ -161,7 +161,7 @@ func EnsureImageStoreStatefulSetCreated(
 				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
-						NewOllamaServerContainer(false),
+						NewOllamaServerContainer(false, corev1.ResourceRequirements{}),
 					},
 					RestartPolicy: corev1.RestartPolicyAlways,
 					Volumes: []corev1.Volume{

@@ -98,6 +98,8 @@ type CmdDeployOptions struct {
 	storageClass string
 	pvAccessMode string
 
+	resourceLimits []string
+
 	genericiooptions.IOStreams
 }
 
@@ -136,6 +138,12 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 		"Model image to deploy. If not specified, the model name will be used as the "+
 		"image name (will be pulled from registry.ollama.ai/library/<model name> by "+
 		"default if no registry is specified), the tag will be latest.",
+	)
+
+	cmd.Flags().StringArrayVar(&o.resourceLimits, "limit", []string{}, ""+
+		"Resource limits for the model. The format is <resource>=<quantity>. "+
+		"For example: --limit=cpu=1 --limit=memory=1Gi"+
+		"Multiple limits can be specified by using the flag multiple times. ",
 	)
 
 	cmd.Flags().StringVarP(&o.storageClass, "storage-class", "", "", ""+

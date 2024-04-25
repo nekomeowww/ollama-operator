@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 
+	"github.com/samber/lo"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
@@ -11,7 +12,7 @@ const (
 	OllamaBaseImage = "ollama/ollama"
 )
 
-func NewOllamaServerContainer(readOnly bool) corev1.Container {
+func NewOllamaServerContainer(readOnly bool, resources corev1.ResourceRequirements) corev1.Container {
 	return corev1.Container{
 		Name:  "server",
 		Image: OllamaBaseImage,
@@ -37,6 +38,10 @@ func NewOllamaServerContainer(readOnly bool) corev1.Container {
 				MountPath: "/root/.ollama",
 				ReadOnly:  readOnly,
 			},
+		},
+		Resources: corev1.ResourceRequirements{
+			Limits:   lo.Ternary(len(resources.Limits) == 0, nil, resources.Limits),
+			Requests: lo.Ternary(len(resources.Requests) == 0, nil, resources.Requests),
 		},
 		ReadinessProbe: &corev1.Probe{
 			ProbeHandler: corev1.ProbeHandler{
@@ -65,7 +70,7 @@ func NewOllamaServerContainer(readOnly bool) corev1.Container {
 	}
 }
 
-func NewOllamaPullerContainer(image string, serverLocatedNamespace string) corev1.Container {
+func NewOllamaPullerContainer(image string, serverLocatedNamespace string, resources corev1.ResourceRequirements) corev1.Container {
 	return corev1.Container{
 		Name:  "ollama-image-pull",
 		Image: OllamaBaseImage,

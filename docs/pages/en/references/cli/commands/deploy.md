@@ -36,6 +36,14 @@ kollama deploy phi --expose
 kollama deploy phi --expose --service-type=LoadBalancer
 ```
 
+### Deploy [`Model`](/pages/en/references/crd/model) with resources limits
+
+The following example deploys the `phi` model with CPU limit to `1` and memory limit to `1Gi`.
+
+```shell
+kollama deploy phi --limit=cpu=1 --limit=memory=1Gi
+```
+
 ## Flags
 
 ### `--namespace`
@@ -54,6 +62,79 @@ Model image to deploy.
 
 - If not specified, the [`Model`](/pages/en/references/crd/model) name will be used as the image name (will be pulled from `registry.ollama.ai/library/<model name>` by default if no registry is specified). For example, if the [`Model`](/pages/en/references/crd/model) name is `phi`, the image name will be `registry.ollama.ai/library/phi:latest`.
 - If not specified, the tag will be latest.
+
+### `--limit` (supports multiple flags)
+
+> Multiple limits can be specified by using the flag multiple times.
+
+Resource limits for the deployed [`Model`](/pages/en/references/crd/model). This is useful for clusters that don't have a large enough number of resources, or if you want to deploy multiple [`Models`](/pages/en/references/crd/model) in a cluster with limited resources.
+
+::: tip For resource limits on NVIDIA, AMD GPUs...
+
+In Kubernetes, any GPU resource follows this pattern for resources labels:
+
+```yaml
+resources:
+  limits:
+    gpu-vendor.example/example-gpu: 1 # requesting 1 GPU
+```
+
+Using `nvidia.com/gpu` allows you to limit the number of NVIDIA GPUs, therefore when using `kollama deploy` you can use `--limit nvidia.com/gpu=1` to specify the number of NVIDIA GPUs as `1`:
+
+```shell
+kollama deploy phi --limit=nvidia.com/gpu=1
+```
+
+this is what it may looks like in the YAML configuration file:
+
+
+```yaml
+resources:
+  limits:
+    nvidia.com/gpu: 1 # requesting 1 GPU # [!code focus]
+```
+
+> [Documentation on using resource labels with `nvidia/k8s-device-plugin`](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#enabling-gpu-support-in-kubernetes)
+
+Using `amd.com/gpu` allows you to limit the number of AMD GPUs, therefore when using `kollama deploy` you can use `--limit amd.com/gpu=1` to specify the number of AMD GPUs as `1`.
+
+```shell
+kollama deploy phi --limit=amd.com/gpu=1
+```
+
+this is what it may looks like in the YAML configuration file:
+
+```yaml
+resources:
+  limits:
+    amd.com/gpu: 1 # requesting a GPU  # [!code focus]
+```
+
+> [Example YAML manifest of labels with `ROCm/k8s-device-plugin`](https://github.com/ROCm/k8s-device-plugin/blob/4607bf06b700e53803d566e0bf9555f773f0b4f1/example/pod/alexnet-gpu.yaml)
+
+Your can read more here: [Schedule GPUs | Kubernetes](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/)
+
+:::
+
+::: details I have deployed [`Model`](/pages/en/references/crd/model), but I want to change the resource limit...
+
+Of course you can, with the [`kubectl set resources`](https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_set/kubectl_set_resources/) command, you can change the resource limit:
+
+```shell
+kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits cpu=4
+```
+
+For memory limits:
+
+```shell
+kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits memory=8Gi
+```
+
+:::
+
+The format is `<resource>=<quantity>`.
+
+For example: `--limit=cpu=1` `--limit=memory=1Gi`.
 
 ### `--storage-class`
 

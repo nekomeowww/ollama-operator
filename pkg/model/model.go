@@ -31,7 +31,7 @@ func ModelLabels(name string) map[string]string {
 
 func ImageStoreLabels(name string) map[string]string {
 	return map[string]string{
-		"app":                        name,
+		"app":                        "ollama-image-store",
 		"model.ollama.ayaka.io":      name,
 		"model.ollama.ayaka.io/type": "image-store",
 	}
@@ -103,10 +103,10 @@ func EnsureDeploymentCreated(
 				},
 				Spec: corev1.PodSpec{
 					InitContainers: []corev1.Container{
-						NewOllamaPullerContainer(image, namespace),
+						NewOllamaPullerContainer(image, namespace, model.Spec.Resources),
 					},
 					Containers: []corev1.Container{
-						NewOllamaServerContainer(true),
+						NewOllamaServerContainer(true, model.Spec.Resources),
 					},
 					Volumes: []corev1.Volume{
 						{

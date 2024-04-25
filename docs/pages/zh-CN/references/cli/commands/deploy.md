@@ -52,6 +52,14 @@ kollama deploy phi --expose --node-port=30000
 kollama deploy phi --expose --service-type=LoadBalancer
 ```
 
+### 部署有着资源限制的 [`Model`](/pages/zh-CN/references/crd/model)
+
+下面的示例部署了 `phi` 模型，并限制 CPU 使用率为 `1` 个核心，内存使用量为 `1Gi`。
+
+```shell
+kollama deploy phi --limit=cpu=1 --limit=memory=1Gi
+```
+
 ## 选项
 
 ### `--namespace`
@@ -70,6 +78,77 @@ kollama deploy phi --image=registry.ollama.ai/library/phi:latest
 
 - 如果未指定，将使用 [`Model`](/pages/zh-CN/references/crd/model) 名称作为镜像名称（如果未指定镜像仓库（Registry），这个时候会默认从 `registry.ollama.ai/library/<model name>` 拉取）。例如，如果 [`Model`](/pages/zh-CN/references/crd/model) 名称是 `phi`，最终获取的镜像名称将是 `registry.ollama.ai/library/phi:latest`。
 - 如果没有指定，标签将会使用 `latest` 的。
+
+### `--limit`（支持多次使用）
+
+> 多次使用该选项可指定多个资源限制。
+
+为即将部署的 [`Model`](/pages/zh-CN/references/crd/model) 指定资源限制。这对于没有足够多资源的集群，或者是希望在有限资源的集群中部署多个 [`Model`](/pages/zh-CN/references/crd/model) 是非常有用的。
+
+::: tip 对于 NVIDIA、AMD GPU 的资源限制...
+
+在 Kubernetes 中，任何 GPU 资源都遵循这个格式：
+
+```yaml
+resources:
+  limits:
+    gpu-vendor.example/example-gpu: 1 # requesting 1 GPU
+```
+
+使用 `nvidia.com/gpu` 可以限制 NVIDIA GPU 的数量，因此，在使用 `kollama deploy` 时，你可以使用 `--limit nvidia.com/gpu=1` 来指定 NVIDIA GPU 的数量为 `1`：
+
+```shell
+kollama deploy phi --limit=nvidia.com/gpu=1
+```
+
+```yaml
+resources:
+  limits:
+    nvidia.com/gpu: 1 # requesting 1 GPU # [!code focus]
+```
+
+> [有关配合 `nvidia/k8s-device-plugin` 使用资源标签的文档](https://github.com/NVIDIA/k8s-device-plugin?tab=readme-ov-file#enabling-gpu-support-in-kubernetes)
+
+使用 `amd.com/gpu` 可以限制 AMD GPU 的数量，在使用 `kollama deploy` 时，你可以使用 `--limit amd.com/gpu=1` 来指定 AMD GPU 的数量为 `1`。
+
+```shell
+kollama deploy phi --limit=amd.com/gpu=1
+```
+
+最终会渲染为：
+
+```yaml
+resources:
+  limits:
+    amd.com/gpu: 1 # requesting a GPU  # [!code focus]
+```
+
+> [关于配合 `ROCm/k8s-device-plugin` 使用 Label 的 YAML 配置文件的示例](https://github.com/ROCm/k8s-device-plugin/blob/4607bf06b700e53803d566e0bf9555f773f0b4f1/example/pod/alexnet-gpu.yaml)
+
+你可以在这里阅读更多：[调度 GPUs | Kubernetes](https://kubernetes.io/zh-cn/docs/tasks/manage-gpus/scheduling-gpus/)
+
+:::
+
+::: details 我已经部署过 [`Model`](/pages/zh-CN/references/crd/model)，但是我想要更改资源限制...
+
+当然可以，用 [`kubectl set resources`](https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_set/kubectl_set_resources/) 命令来可以更改资源限制：
+
+```shell
+kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits cpu=4
+```
+
+改内存限制：
+
+```shell
+kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits memory=8Gi
+```
+
+:::
+
+格式是 `<resource>=<quantity>`.
+
+比如：`--limit=cpu=1` `--limit=memory=1Gi`.
+
 
 ### `--storage-class`
 
