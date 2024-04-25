@@ -161,6 +161,7 @@ func createOllamaModel(
 	namespace string,
 	name string,
 	image string,
+	resources corev1.ResourceRequirements,
 	storageClass string,
 	pvAccessMode string,
 ) (*ollamav1.Model, error) {
@@ -176,7 +177,8 @@ func createOllamaModel(
 			},
 		},
 		Spec: ollamav1.ModelSpec{
-			Image: image,
+			Image:     image,
+			Resources: resources,
 		},
 	}
 	if storageClass != "" {

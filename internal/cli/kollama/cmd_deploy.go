@@ -13,6 +13,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/rest"
@@ -227,10 +228,21 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		os.Exit(1)
 	}
 
+	var resourceRequirements corev1.ResourceRequirements
+
+	for _, limit := range o.resourceLimits {
+		parts := strings.Split(limit, "=")
+		if len(parts) != 2 {
+			return fmt.Errorf("invalid resource limit format: %s", limit)
+		}
+
+		resourceRequirements.Limits[corev1.ResourceName(parts[0])] = resource.MustParse(parts[1])
+	}
+
 	createdModelCtx, createdModelCancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer createdModelCancel()
 
-	createdModel, err := createOllamaModel(createdModelCtx, o.dynamicClient, namespace, modelName, modelImage, o.storageClass, o.pvAccessMode)
+	createdModel, err := createOllamaModel(createdModelCtx, o.dynamicClient, namespace, modelName, modelImage, resourceRequirements, o.storageClass, o.pvAccessMode)
 	if err != nil {
 		return err
 	}
