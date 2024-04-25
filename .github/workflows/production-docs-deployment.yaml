@@ -1,0 +1,74 @@
+name: Build Docs to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  STORE_PATH: ''
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    environment:
+      name: Production Docs
+      url: https://ollama-operator.ayaka.io
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build docs
+        run: |
+          pnpm docs:build
+        env:
+          # As suggested in Verbose Build option to be able to track down errors https://github.com/vuejs/vitepress/issues/422
+          # vitepress build command does not have --debug option, so we need to set it manually where the debug package is used.
+          # DEBUG: 'vitepress:*'
+          VUE_PROD_HYDRATION_MISMATCH_DETAILS_FLAG: '1'
+
+      - name: Publish to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: .vitepress/dist
+          # Optional: Switch what branch you are publishing to.
+          # By default this will be the branch which triggered this workflow
+          branch: main
+          # Optional: Change the working directory
+          workingDirectory: docs
+          # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
+          wranglerVersion: '3'

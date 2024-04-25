@@ -1,0 +1,139 @@
+name: Push PR Previewing Docs to Cloudflare Pages
+
+on:
+  workflow_run:
+    workflows:
+      - Build PR Previewing Docs
+    types:
+      - completed
+
+env:
+  PR_NUM: 0
+  BRANCH_NAME: main
+  STORE_PATH: ''
+
+jobs:
+  on-success:
+    name: Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Download artifact - PR
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow_conclusion: success
+          run_id: ${{ github.event.workflow_run.id }}
+          name: pr-num
+          path: pr-num
+          allow_forks: true
+
+      - name: Download artifact - PR
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow_conclusion: success
+          run_id: ${{ github.event.workflow_run.id }}
+          name: branch-name
+          path: branch-name
+          allow_forks: true
+
+      - name: Obtain PR number
+        id: pr-num
+        run: |
+          echo "PR_NUM=$(cat pr-num/pr_num)" >> $GITHUB_ENV
+
+      - name: Obtain branch name
+        id: branch-name
+        run: |
+          echo "BRANCH_NAME=$(cat branch-name/branch_name)" >> $GITHUB_ENV
+
+      - name: Download artifact - Ubuntu
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow_conclusion: success
+          run_id: ${{ github.event.workflow_run.id }}
+          name: docs-ubuntu-latest-build
+          path: docs-ubuntu-latest-build
+          allow_forks: true
+
+      - name: Publish to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: .vitepress/dist
+          # Optional: Switch what branch you are publishing to.
+          # By default this will be the branch which triggered this workflow
+          branch: ${{ env.BRANCH_NAME }}
+          # Optional: Change the working directory
+          workingDirectory: docs
+          # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
+          wranglerVersion: '3'
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ env.PR_NUM }}
+          comment-author: 'github-actions[bot]'
+          body-includes: to Cloudflare Pages
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ env.PR_NUM }}
+          body: |
+            ## ✅ Successfully deployed to Cloudflare Pages
+
+            | Status      | URL                                |
+            |:------------|:-----------------------------------|
+            | Success     | ${{ steps.deploy.outputs.url }}    |
+          edit-mode: replace
+
+  on-failure:
+    name: Failed to build previewing docs
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: Download artifact - PR
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow_conclusion: success
+          run_id: ${{ github.event.workflow_run.id }}
+          name: pr-num
+          path: pr-num
+          allow_forks: true
+
+      - name: Obtain PR number
+        id: pr-num
+        run: |
+          echo "PR_NUM=$(cat pr-num/pr_num)" >> $GITHUB_ENV
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ env.PR_NUM }}
+          comment-author: 'github-actions[bot]'
+          body-includes: to Cloudflare Pages
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ env.PR_NUM }}
+          body: |
+            ## ❌ Failed to deploy to Cloudflare Pages
+
+            | Platform | Status      | URL                                                   |
+            |:---------|:------------|:------------------------------------------------------|
+            | Ubuntu   | Failed      | Please check the status and logs of the workflow run. |
+            | Windows  | Failed      | Please check the status and logs of the workflow run. |
+          edit-mode: replace
