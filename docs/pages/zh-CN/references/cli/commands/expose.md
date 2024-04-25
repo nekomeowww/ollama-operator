@@ -45,7 +45,7 @@ kollama deploy phi --expose --service-type=NodePort
 ::: tip 了解有多少服务与 [`Model`](/pages/zh-CN/references/crd/model) 相关联...
 
 ```shell
-kubectl get svc --selector model.ollama.ayaka.io
+kubectl get svc --selector ollama.ayaka.io/type=model
 ```
 
 :::

@@ -24,24 +24,20 @@ func ModelAppName(name string) string {
 func ModelLabels(name string) map[string]string {
 	return map[string]string{
 		"app":                        ModelAppName(name),
-		"model.ollama.ayaka.io":      name,
-		"model.ollama.ayaka.io/type": "model",
+		"ollama.ayaka.io/type":       "model",
+		"model.ollama.ayaka.io/name": name,
 	}
 }
 
-func ImageStoreLabels(name string) map[string]string {
+func ImageStoreLabels() map[string]string {
 	return map[string]string{
-		"app":                        "ollama-image-store",
-		"model.ollama.ayaka.io":      name,
-		"model.ollama.ayaka.io/type": "image-store",
+		"app":                  "ollama-image-store",
+		"ollama.ayaka.io/type": "image-store",
 	}
 }
 
 func ModelAnnotations(name string, imageStore bool) map[string]string {
-	return map[string]string{
-		"model.ollama.ayaka.io/name": name,
-		"model.ollama.ayaka.io/type": lo.Ternary(imageStore, "image-store", "model"),
-	}
+	return map[string]string{}
 }
 
 func getDeployment(ctx context.Context, c client.Client, namespace string, name string) (*appsv1.Deployment, error) {

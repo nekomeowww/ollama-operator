@@ -67,7 +67,7 @@ func EnsureImageStorePVCCreated(
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        ImageStorePVCName,
 			Namespace:   namespace,
-			Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+			Labels:      ImageStoreLabels(),
 			Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 		},
 		Spec: corev1.PersistentVolumeClaimSpec{
@@ -144,19 +144,17 @@ func EnsureImageStoreStatefulSetCreated(
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        ImageStoreStatefulSetName,
 			Namespace:   namespace,
-			Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+			Labels:      ImageStoreLabels(),
 			Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 		},
 		Spec: appsv1.StatefulSetSpec{
 			Replicas: lo.ToPtr(int32(1)),
 			Selector: &metav1.LabelSelector{
-				MatchLabels: map[string]string{
-					"app": ImageStoreStatefulSetName,
-				},
+				MatchLabels: ImageStoreLabels(),
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+					Labels:      ImageStoreLabels(),
 					Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 				},
 				Spec: corev1.PodSpec{
@@ -254,7 +252,7 @@ func EnsureImageStoreServiceCreated(
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        ImageStoreStatefulSetName,
 			Namespace:   namespace,
-			Labels:      ImageStoreLabels(ImageStoreStatefulSetName),
+			Labels:      ImageStoreLabels(),
 			Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
 			OwnerReferences: []metav1.OwnerReference{{
 				APIVersion:         "apps/v1",
@@ -274,7 +272,7 @@ func EnsureImageStoreServiceCreated(
 					TargetPort: intstr.FromInt(11434),
 				},
 			},
-			Selector: ImageStoreLabels(ImageStoreStatefulSetName),
+			Selector: ImageStoreLabels(),
 		},
 	}
 

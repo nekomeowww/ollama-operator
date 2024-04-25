@@ -121,13 +121,13 @@ Your can read more here: [Schedule GPUs | Kubernetes](https://kubernetes.io/docs
 Of course you can, with the [`kubectl set resources`](https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_set/kubectl_set_resources/) command, you can change the resource limit:
 
 ```shell
-kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits cpu=4
+kubectl set resources deployment -l model.ollama.ayaka.io/name=<model name> --limits cpu=4
 ```
 
 For memory limits:
 
 ```shell
-kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits memory=8Gi
+kubectl set resources deployment -l model.ollama.ayaka.io/name=<model name> --limits memory=8Gi
 ```
 
 :::
@@ -193,7 +193,7 @@ If not specified, the service will be exposed as [`NodePort`](https://kubernetes
 ::: tip To understand how many Services are associated to [`Model`](/pages/en/references/crd/model)...
 
 ```shell
-kubectl get svc --selector model.ollama.ayaka.io
+kubectl get svc --selector ollama.ayaka.io/type=model
 ```
 
 :::

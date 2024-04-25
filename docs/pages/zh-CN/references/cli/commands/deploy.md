@@ -134,13 +134,13 @@ resources:
 当然可以，用 [`kubectl set resources`](https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_set/kubectl_set_resources/) 命令来可以更改资源限制：
 
 ```shell
-kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits cpu=4
+kubectl set resources deployment -l model.ollama.ayaka.io/name=<model name> --limits cpu=4
 ```
 
 改内存限制：
 
 ```shell
-kubectl set resources deployment -l model.ollama.ayaka.io=<model name> --limits memory=8Gi
+kubectl set resources deployment -l model.ollama.ayaka.io/name=<model name> --limits memory=8Gi
 ```
 
 :::
@@ -207,7 +207,7 @@ kollama deploy phi --expose --service-type=NodePort
 ::: tip 了解有多少服务与 [`Model`](/pages/zh-CN/references/crd/model) 相关联...
 
 ```shell
-kubectl get svc --selector model.ollama.ayaka.io
+kubectl get svc --selector ollama.ayaka.io/type=model
 ```
 
 :::

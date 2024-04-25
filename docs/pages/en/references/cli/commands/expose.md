@@ -45,7 +45,7 @@ If not specified, the service will be exposed as [`NodePort`](https://kubernetes
 ::: tip To understand how many Services are associated to models...
 
 ```shell
-kubectl get svc --selector model.ollama.ayaka.io
+kubectl get svc --selector ollama.ayaka.io/type=model
 ```
 
 :::
@@ -67,7 +67,7 @@ If not specified, the service will be exposed as [`NodePort`](https://kubernetes
 ::: tip To understand how many Services are associated to [`Model`](/pages/en/references/crd/model)...
 
 ```shell
-kubectl get svc --selector model.ollama.ayaka.io
+kubectl get svc --selector ollama.ayaka.io/type=model
 ```
 
 :::
