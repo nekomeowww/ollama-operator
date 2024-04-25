@@ -46,9 +46,11 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
+        working-directory: docs
         run: pnpm install --frozen-lockfile
 
       - name: Build docs
+        working-directory: docs
         run: |
           pnpm docs:build
         env:

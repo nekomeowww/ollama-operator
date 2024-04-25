@@ -64,12 +64,10 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
-          directory: .vitepress/dist
+          directory: docs-ubuntu-latest-build
           # Optional: Switch what branch you are publishing to.
           # By default this will be the branch which triggered this workflow
           branch: ${{ env.BRANCH_NAME }}
-          # Optional: Change the working directory
-          workingDirectory: docs
           # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
           wranglerVersion: '3'
 
