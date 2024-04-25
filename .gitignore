@@ -29,6 +29,7 @@ go.work
 *.swp
 *.swo
 *~
+.obsidian/
 
 # Node.js related
 .eslintcache
