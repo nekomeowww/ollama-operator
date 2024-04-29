@@ -25,6 +25,7 @@ func ModelLabels(name string) map[string]string {
 	return map[string]string{
 		"app":                        ModelAppName(name),
 		"ollama.ayaka.io/type":       "model",
+		"model.ollama.ayaka.io":      name,
 		"model.ollama.ayaka.io/name": name,
 	}
 }
