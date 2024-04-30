@@ -81,7 +81,7 @@ kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-operat
 >     accessMode: ReadWriteOnce
 > ```
 
-Let's create a `Model` CRD for the model `phi`:
+Let's create a `Model` CR for the model `phi`:
 
 ```yaml
 apiVersion: ollama.ayaka.io/v1
@@ -92,7 +92,7 @@ spec:
   image: phi
 ```
 
-Apply the `Model` CRD to your Kubernetes cluster:
+Apply the `Model` CR to your Kubernetes cluster:
 
 ```shell
 kubectl apply -f ollama-model-phi.yaml
@@ -112,7 +112,7 @@ kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-model-
 kubectl port-forward svc/ollama-model-phi ollama
 ```
 
-7. Interact with the model:
+2. Interact with the model:
 
 ```shell
 ollama run phi
