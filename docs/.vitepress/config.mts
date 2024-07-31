@@ -5,11 +5,11 @@ import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 export default defineConfig({
   markdown: {
     config(md) {
-      md.use(tabsMarkdownPlugin)
-    }
+      md.use(tabsMarkdownPlugin as any)
+    },
   },
-  title: "Ollama Operator",
-  description: "Large language models, scaled, deployed. - Yet another operator for running large language models on Kubernetes with ease. 🙀",
+  title: 'Ollama Operator',
+  description: 'Large language models, scaled, deployed. - Yet another operator for running large language models on Kubernetes with ease. 🙀',
   lastUpdated: true,
   ignoreDeadLinks: [
     // Site Config | VitePress
@@ -21,7 +21,7 @@ export default defineConfig({
   themeConfig: {
     outline: 'deep',
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/nekomeowww/ollama-operator' }
+      { icon: 'github', link: 'https://github.com/nekomeowww/ollama-operator' },
     ],
     search: {
       provider: 'local',
@@ -48,12 +48,12 @@ export default defineConfig({
     },
   },
   head: [
-    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png'}],
-    ['link', { rel: 'icon',type: 'image/png', href:'/logo.png'}],
-    ['link', { rel: 'manifest', href: '/site.webmanifest'}],
-    ['link', { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color:'#5bbad5'}],
-    ['meta', { name: 'msapplication-TileColor', content: '#2b5797'}],
-    ['meta', { name: 'theme-color', content: '#ffffff'}],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
+    ['link', { rel: 'manifest', href: '/site.webmanifest' }],
+    ['link', { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#5bbad5' }],
+    ['meta', { name: 'msapplication-TileColor', content: '#2b5797' }],
+    ['meta', { name: 'theme-color', content: '#ffffff' }],
   ],
   locales: {
     'root': {
@@ -74,10 +74,10 @@ export default defineConfig({
                   { text: 'Install Ollama Operator', link: '/pages/en/guide/getting-started/' },
                   { text: 'Deploy models through CLI', link: '/pages/en/guide/getting-started/cli' },
                   { text: 'Deploy models through CRD', link: '/pages/en/guide/getting-started/crd' },
-                ]
+                ],
               },
               { text: 'Supported models', link: '/pages/en/guide/supported-models' },
-            ]
+            ],
           },
           {
             text: 'Reference',
@@ -85,12 +85,12 @@ export default defineConfig({
               { text: 'CLI Reference', link: '/pages/en/references/cli/' },
               { text: 'CRD Reference', link: '/pages/en/references/crd/' },
               { text: 'Architectural Design', link: '/pages/en/references/architectural-design' },
-            ]
+            ],
           },
           {
             text: 'Acknowledgements',
-            link: '/pages/en/acknowledgements'
-          }
+            link: '/pages/en/acknowledgements',
+          },
         ],
         sidebar: [
           {
@@ -103,10 +103,10 @@ export default defineConfig({
                   { text: 'Install Ollama Operator', link: '/pages/en/guide/getting-started/' },
                   { text: 'Deploy models through CLI', link: '/pages/en/guide/getting-started/cli' },
                   { text: 'Deploy models through CRD', link: '/pages/en/guide/getting-started/crd' },
-                ]
+                ],
               },
               { text: 'Supported models', link: '/pages/en/guide/supported-models' },
-            ]
+            ],
           },
           {
             text: 'Reference',
@@ -120,26 +120,26 @@ export default defineConfig({
                     items: [
                       { text: 'kollama deploy', link: '/pages/en/references/cli/commands/deploy' },
                       { text: 'kollama undeploy', link: '/pages/en/references/cli/commands/undeploy' },
-                      { text: 'kollama expose', link: '/pages/en/references/cli/commands/expose' }
-                    ]
-                  }
-                ]
+                      { text: 'kollama expose', link: '/pages/en/references/cli/commands/expose' },
+                    ],
+                  },
+                ],
               },
               {
                 text: 'CRD Reference',
                 items: [
                   { text: 'CRD list', link: '/pages/en/references/crd/' },
-                  { text: 'Model', link: '/pages/en/references/crd/model' }
-                ]
+                  { text: 'Model', link: '/pages/en/references/crd/model' },
+                ],
               },
               { text: 'Architectural Design', link: '/pages/en/references/architectural-design' },
-            ]
+            ],
           },
           {
             text: 'Acknowledgements',
-            link: '/pages/en/acknowledgements'
-          }
-        ]
+            link: '/pages/en/acknowledgements',
+          },
+        ],
       },
     },
     'zh-CN': {
@@ -160,10 +160,10 @@ export default defineConfig({
                   { text: '安装 Ollama Operator', link: '/pages/zh-CN/guide/getting-started/' },
                   { text: '通过 CLI 部署模型', link: '/pages/zh-CN/guide/getting-started/cli' },
                   { text: '通过 CRD 部署模型', link: '/pages/zh-CN/guide/getting-started/crd' },
-                ]
+                ],
               },
               { text: '支持模型', link: '/pages/zh-CN/guide/supported-models' },
-            ]
+            ],
           },
           {
             text: '参考',
@@ -172,16 +172,16 @@ export default defineConfig({
                 text: 'CLI 参考',
                 items: [
                   { text: '命令列表', link: '/pages/zh-CN/references/cli/' },
-                ]
+                ],
               },
               { text: 'CRD 参考', link: '/pages/zh-CN/references/crd/' },
               { text: '架构设计', link: '/pages/zh-CN/references/architectural-design' },
-            ]
+            ],
           },
           {
             text: '致谢',
-            link: '/pages/zh-CN/acknowledgements'
-          }
+            link: '/pages/zh-CN/acknowledgements',
+          },
         ],
         sidebar: [
           {
@@ -194,10 +194,10 @@ export default defineConfig({
                   { text: '安装 Ollama Operator', link: '/pages/zh-CN/guide/getting-started/' },
                   { text: '通过 CLI 部署模型', link: '/pages/zh-CN/guide/getting-started/cli' },
                   { text: '通过 CRD 部署模型', link: '/pages/zh-CN/guide/getting-started/crd' },
-                ]
+                ],
               },
               { text: '支持模型', link: '/pages/zh-CN/guide/supported-models' },
-            ]
+            ],
           },
           {
             text: '参考',
@@ -211,27 +211,27 @@ export default defineConfig({
                     items: [
                       { text: 'kollama deploy', link: '/pages/zh-CN/references/cli/commands/deploy' },
                       { text: 'kollama undeploy', link: '/pages/zh-CN/references/cli/commands/undeploy' },
-                      { text: 'kollama expose', link: '/pages/zh-CN/references/cli/commands/expose' }
-                    ]
-                  }
-                ]
+                      { text: 'kollama expose', link: '/pages/zh-CN/references/cli/commands/expose' },
+                    ],
+                  },
+                ],
               },
               {
                 text: 'CRD 参考',
                 items: [
                   { text: 'CRD 列表', link: '/pages/zh-CN/references/crd/' },
-                  { text: 'Model 模型资源', link: '/pages/zh-CN/references/crd/model' }
-                ]
+                  { text: 'Model 模型资源', link: '/pages/zh-CN/references/crd/model' },
+                ],
               },
               { text: '架构设计', link: '/pages/zh-CN/references/architectural-design' },
-            ]
+            ],
           },
           {
             text: '致谢',
-            link: '/pages/zh-CN/acknowledgements'
-          }
-        ]
+            link: '/pages/zh-CN/acknowledgements',
+          },
+        ],
       },
-    }
-  }
+    },
+  },
 })

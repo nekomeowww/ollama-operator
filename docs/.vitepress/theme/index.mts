@@ -6,10 +6,10 @@ import DefaultTheme from 'vitepress/theme'
 import {
   InjectionKey,
   NolebaseEnhancedReadabilitiesMenu,
-  NolebaseEnhancedReadabilitiesScreenMenu
+  NolebaseEnhancedReadabilitiesScreenMenu,
 } from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
 import {
-  NolebaseGitChangelogPlugin
+  NolebaseGitChangelogPlugin,
 } from '@nolebase/vitepress-plugin-git-changelog/client'
 import {
   NolebaseHighlightTargetedHeading,
@@ -26,7 +26,7 @@ import '@nolebase/vitepress-plugin-enhanced-mark/client/style.css'
 import '@nolebase/vitepress-plugin-enhanced-readabilities/client/style.css'
 import '@nolebase/vitepress-plugin-highlight-targeted-heading/client/style.css'
 
-import 'asciinema-player/dist/bundle/asciinema-player.css';
+import 'asciinema-player/dist/bundle/asciinema-player.css'
 
 import 'virtual:uno.css'
 import './style.css'
@@ -40,11 +40,11 @@ export default {
       ],
       // A enhanced readabilities menu for wider screens
       'nav-bar-content-after': () => [
-        h(NolebaseEnhancedReadabilitiesMenu)
+        h(NolebaseEnhancedReadabilitiesMenu),
       ],
       // A enhanced readabilities menu for narrower screens (usually smaller than iPad Mini)
       'nav-screen-content-after': () => [
-        h(NolebaseEnhancedReadabilitiesScreenMenu)
+        h(NolebaseEnhancedReadabilitiesScreenMenu),
       ],
     })
   },
@@ -57,9 +57,9 @@ export default {
     app.use(enhanceAppWithTabs)
     app.provide(InjectionKey, {
       spotlight: {
-        defaultToggle: true
-      }
+        defaultToggle: true,
+      },
     })
     app.use(NolebaseGitChangelogPlugin)
-  }
+  },
 } satisfies Theme
