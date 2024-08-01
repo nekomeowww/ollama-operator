@@ -35,7 +35,7 @@ features:
 ---
 
 <script setup>
-import { NuAsciinemaPlayer } from '@nolebase/ui'
+import { NuAsciinemaPlayer } from '@nolebase/ui-asciinema'
 </script>
 
 ### Getting started
