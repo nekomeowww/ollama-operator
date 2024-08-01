@@ -60,6 +60,21 @@ export default {
         defaultToggle: true,
       },
     })
-    app.use(NolebaseGitChangelogPlugin)
+    app.use(NolebaseGitChangelogPlugin, {
+      locales: {
+        'en': {
+          gitChangelogMarkdownSectionTitles: {
+            changelog: 'Changelog',
+            contributors: 'Contributors',
+          },
+        },
+        'zh-CN': {
+          gitChangelogMarkdownSectionTitles: {
+            changelog: '页面历史',
+            contributors: '贡献者',
+          },
+        },
+      },
+    })
   },
 } satisfies Theme
