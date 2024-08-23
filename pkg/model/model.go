@@ -100,7 +100,7 @@ func EnsureDeploymentCreated(
 				},
 				Spec: corev1.PodSpec{
 					InitContainers: []corev1.Container{
-						NewOllamaPullerContainer(image, namespace, model.Spec.Resources),
+						NewOllamaPullerContainer(name, image, namespace, model.Spec.Resources),
 					},
 					Containers: []corev1.Container{
 						NewOllamaServerContainer(true, model.Spec.Resources),

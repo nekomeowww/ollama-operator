@@ -70,13 +70,17 @@ func NewOllamaServerContainer(readOnly bool, resources corev1.ResourceRequiremen
 	}
 }
 
-func NewOllamaPullerContainer(image string, serverLocatedNamespace string, resources corev1.ResourceRequirements) corev1.Container {
+func NewOllamaPullerContainer(name string, image string, serverLocatedNamespace string, resources corev1.ResourceRequirements) corev1.Container {
 	return corev1.Container{
 		Name:  "ollama-image-pull",
 		Image: OllamaBaseImage,
+		Command: []string{
+			"bash",
+		},
 		Args: []string{
-			"pull",
-			image,
+			"-c",
+			// TODO: This is a temporary solution, we need to find a better way to preload the models
+			fmt.Sprintf("apt install curl -y && ollama pull %s && curl http://ollama-models-store:11434/api/generate -d '{\"model\": \"%s\"}'"+image, name),
 		},
 		Env: []corev1.EnvVar{
 			{
