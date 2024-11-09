@@ -78,6 +78,30 @@ type ModelSpec struct {
 	// More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistent-volumes
 	// +optional
 	PersistentVolume *ModelPersistentVolumeSpec `json:"persistentVolume,omitempty" protobuf:"bytes,8,opt,name=persistentVolume"`
+	// RuntimeClassName refers to a RuntimeClass object in the node.k8s.io group, which should be used
+	// to run this pod.  If no RuntimeClass resource matches the named class, the pod will not be run.
+	// If unset or empty, the "legacy" RuntimeClass will be used, which is an implicit class with an
+	// empty definition that uses the default runtime handler.
+	// More info: https://git.k8s.io/enhancements/keps/sig-node/585-runtime-class
+	// +optional
+	RuntimeClassName *string `json:"runtimeClassName,omitempty" protobuf:"bytes,9,opt,name=runtimeClassName"`
+	// List of sources to populate environment variables in the container.
+	// The keys defined within a source must be a C_IDENTIFIER. All invalid keys
+	// will be reported as an event when the container is starting. When a key exists in multiple
+	// sources, the value associated with the last source will take precedence.
+	// Values defined by an Env with a duplicate key will take precedence.
+	// Cannot be updated.
+	// +optional
+	ExtraEnvFrom []corev1.EnvFromSource `json:"extraEnvFrom,omitempty" protobuf:"bytes,10,rep,name=extraEnvFrom"`
+	// List of environment variables to set in the container.
+	// Cannot be updated.
+	// +optional
+	// +patchMergeKey=name
+	// +patchStrategy=merge
+	Env []corev1.EnvVar `json:"extraEnv,omitempty" patchStrategy:"merge" patchMergeKey:"name" protobuf:"bytes,11,rep,name=extraEnv"`
+	// PodTemplateSpec describes the data a pod should have when created from a template
+	// +optional
+	PodTemplate *corev1.PodTemplateSpec `json:"podTemplate" protobuf:"bytes,12,opt,name=podTemplate"`
 }
 
 type ConditionType string

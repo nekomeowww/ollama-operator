@@ -28,6 +28,7 @@ import (
 
 	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 	model "github.com/nekomeowww/ollama-operator/pkg/model"
+	"github.com/nekomeowww/ollama-operator/pkg/operator"
 )
 
 // ModelReconciler reconciles a Model object
@@ -63,106 +64,154 @@ func (r *ModelReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		return reconcile.Result{}, client.IgnoreNotFound(err)
 	}
 
-	modelRecorder := model.NewWrappedRecorder(r.Recorder, &m)
+	ctx = model.WithWrappedRecorder(ctx, model.NewWrappedRecorder(r.Recorder, &m))
+	ctx = model.WithClient(ctx, r.Client)
 
-	if !model.IsAvailable(ctx, m) {
-		hasSet, err := model.SetProgressing(ctx, r.Client, m)
+	res, err := operator.ResultFromError(r.reconcile(ctx, req, &m))
+
+	return operator.HandleError(ctx, res, err)
+}
+
+func (r *ModelReconciler) reconcile(ctx context.Context, req ctrl.Request, m *ollamav1.Model) error {
+	client := model.ClientFromContext(ctx)
+	recorder := model.WrappedRecorderFromContext[*ollamav1.Model](ctx)
+
+	if !model.IsAvailable(ctx, *m) {
+		hasSet, err := model.SetProgressing(ctx, client, *m)
 		if err != nil {
-			return reconcile.Result{}, err
+			return err
 		}
 		if hasSet {
-			modelRecorder.Eventf("Normal", "ModelProgressing", "Model is progressing")
-			return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 1}, nil
+			recorder.Eventf("Normal", "ModelProgressing", "Model is progressing")
+			return operator.RequeueAfter(time.Second)
 		}
 	}
 
+	return operator.NewSubReconcilers(
+		operator.NewPVCReconciler(r.reconcilePVC),
+		operator.NewStatefulSetReconciler(r.reconcileStatefulSet),
+		operator.NewServiceReconciler(r.reconcileService),
+		operator.NewDeploymentReconciler(r.reconcileDeployment),
+		operator.NewServiceReconciler(r.reconcileModelService),
+	).Reconcile(ctx, req, m)
+}
+
+func (r *ModelReconciler) reconcilePVC(ctx context.Context, ns string, name string, m *ollamav1.Model) error {
 	modelStorageClass := m.Spec.StorageClassName
 	modelPVC := m.Spec.PersistentVolumeClaim
 	modelPV := m.Spec.PersistentVolume
 
-	_, err = model.EnsureImageStorePVCCreated(ctx, r.Client, req.Namespace, modelStorageClass, modelPVC, modelPV, modelRecorder)
+	_, err := model.EnsureImageStorePVCCreated(ctx, ns, modelStorageClass, modelPVC, modelPV)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 
-	statefulSet, err := model.EnsureImageStoreStatefulSetCreated(ctx, r.Client, req.Namespace, modelRecorder)
+	return nil
+}
+
+func (r *ModelReconciler) reconcileStatefulSet(ctx context.Context, ns string, name string, m *ollamav1.Model) error {
+	_, err := model.EnsureImageStoreStatefulSetCreated(ctx, ns, m)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 
-	statefulSetReady, err := model.IsImageStoreStatefulSetReady(ctx, r.Client, req.Namespace, modelRecorder)
+	statefulSetReady, err := model.IsImageStoreStatefulSetReady(ctx, ns)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 	if !statefulSetReady {
-		return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 5}, nil
+		return operator.RequeueAfter(time.Second * 5)
 	}
 
-	_, err = model.EnsureImageStoreServiceCreated(ctx, r.Client, req.Namespace, statefulSet, modelRecorder)
+	return nil
+}
+
+func (r *ModelReconciler) reconcileService(ctx context.Context, ns string, name string, m *ollamav1.Model) error {
+	statefulSet, err := model.EnsureImageStoreStatefulSetCreated(ctx, ns, m)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 
-	serviceReady, err := model.IsImageStoreServiceReady(ctx, r.Client, req.Namespace, modelRecorder)
+	_, err = model.EnsureImageStoreServiceCreated(ctx, ns, statefulSet)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
+	}
+
+	serviceReady, err := model.IsImageStoreServiceReady(ctx, ns)
+	if err != nil {
+		return err
 	}
 	if !serviceReady {
-		return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 5}, nil
+		return operator.RequeueAfter(time.Second * 5)
 	}
 
-	deployment, err := model.EnsureDeploymentCreated(ctx, r.Client, req.Namespace, req.Name, m.Spec.Image, m.Spec.Replicas, &m, modelRecorder)
+	return nil
+}
+
+func (r *ModelReconciler) reconcileDeployment(ctx context.Context, ns string, name string, m *ollamav1.Model) error {
+	_, err := model.EnsureDeploymentCreated(ctx, ns, name, m.Spec.Image, m.Spec.Replicas, m)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 
-	modelDeploymentUpdated, err := model.UpdateDeployment(ctx, r.Client, &m, modelRecorder)
+	modelDeploymentUpdated, err := model.UpdateDeployment(ctx, m)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 	if modelDeploymentUpdated {
-		return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 5}, nil
+		return operator.RequeueAfter(time.Second * 5)
 	}
 
-	modelDeploymentReady, err := model.IsDeploymentReady(ctx, r.Client, req.Namespace, req.Name, modelRecorder)
+	modelDeploymentReady, err := model.IsDeploymentReady(ctx, ns, name)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 	if !modelDeploymentReady {
-		return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 5}, nil
+		return operator.RequeueAfter(time.Second * 5)
 	}
 
-	_, err = model.EnsureServiceCreated(ctx, r.Client, req.Namespace, req.Name, deployment, modelRecorder)
+	return nil
+}
+
+func (r *ModelReconciler) reconcileModelService(ctx context.Context, ns string, name string, m *ollamav1.Model) error {
+	recorder := model.WrappedRecorderFromContext[*ollamav1.Model](ctx)
+
+	deployment, err := model.EnsureDeploymentCreated(ctx, ns, name, m.Spec.Image, m.Spec.Replicas, m)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 
-	modelServiceReady, err := model.IsServiceReady(ctx, r.Client, req.Namespace, req.Name, modelRecorder)
+	_, err = model.EnsureServiceCreated(ctx, ns, name, deployment)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
+	}
+
+	modelServiceReady, err := model.IsServiceReady(ctx, ns, name)
+	if err != nil {
+		return err
 	}
 	if !modelServiceReady {
-		return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 5}, nil
+		return operator.RequeueAfter(time.Second * 5)
 	}
 
 	if model.ShouldSetReplicas(ctx, m, deployment.Status.Replicas, deployment.Status.ReadyReplicas, deployment.Status.AvailableReplicas, deployment.Status.UnavailableReplicas) {
-		hasSet, err := model.SetReplicas(ctx, r.Client, m, deployment.Status.Replicas, deployment.Status.ReadyReplicas, deployment.Status.AvailableReplicas, deployment.Status.UnavailableReplicas)
+		hasSet, err := model.SetReplicas(ctx, m, deployment.Status.Replicas, deployment.Status.ReadyReplicas, deployment.Status.AvailableReplicas, deployment.Status.UnavailableReplicas)
 		if err != nil {
-			return reconcile.Result{}, err
+			return err
 		}
 		if hasSet {
-			return reconcile.Result{Requeue: true, RequeueAfter: time.Second * 5}, nil
+			return operator.RequeueAfter(time.Second * 5)
 		}
 	}
 
-	_, err = model.SetAvailable(ctx, r.Client, m)
+	_, err = model.SetAvailable(ctx, m)
 	if err != nil {
-		return reconcile.Result{}, err
+		return err
 	}
 
-	modelRecorder.Eventf("Normal", "ModelAvailable", "Model is available")
+	recorder.Eventf("Normal", "ModelAvailable", "Model is available")
 
-	return ctrl.Result{}, nil
+	return nil
 }
 
 // SetupWithManager sets up the controller with the Manager.

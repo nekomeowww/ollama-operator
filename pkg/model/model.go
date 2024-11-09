@@ -58,14 +58,15 @@ func getDeployment(ctx context.Context, c client.Client, namespace string, name 
 
 func EnsureDeploymentCreated(
 	ctx context.Context,
-	c client.Client,
 	namespace string,
 	name string,
 	image string,
 	replicas *int32,
 	model *ollamav1.Model,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (*appsv1.Deployment, error) {
+	c := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
+
 	deployment, err := getDeployment(ctx, c, namespace, name)
 	if err != nil {
 		return nil, err
@@ -93,31 +94,7 @@ func EnsureDeploymentCreated(
 			Selector: &metav1.LabelSelector{
 				MatchLabels: ModelLabels(name),
 			},
-			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels:      ModelLabels(name),
-					Annotations: ModelAnnotations(ModelAppName(name), false),
-				},
-				Spec: corev1.PodSpec{
-					InitContainers: []corev1.Container{
-						NewOllamaPullerContainer(name, image, namespace, model.Spec.Resources),
-					},
-					Containers: []corev1.Container{
-						NewOllamaServerContainer(true, model.Spec.Resources),
-					},
-					Volumes: []corev1.Volume{
-						{
-							Name: "image-storage",
-							VolumeSource: corev1.VolumeSource{
-								PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-									ClaimName: ImageStorePVCName,
-									ReadOnly:  true,
-								},
-							},
-						},
-					},
-				},
-			},
+			Template: MergePodTemplate(ctx, namespace, name, image, replicas, model),
 		},
 	}
 
@@ -131,14 +108,91 @@ func EnsureDeploymentCreated(
 	return deployment, nil
 }
 
-func IsDeploymentReady(
+func MergePodTemplate(
 	ctx context.Context,
-	c client.Client,
 	namespace string,
 	name string,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
+	image string,
+	replicas *int32,
+	model *ollamav1.Model,
+) corev1.PodTemplateSpec {
+	var pod corev1.PodTemplateSpec
+
+	if model.Spec.PodTemplate != nil {
+		pod = *model.Spec.PodTemplate
+	}
+
+	pod.ObjectMeta.Labels = lo.Assign(pod.ObjectMeta.Labels, ModelLabels(name))
+	pod.ObjectMeta.Annotations = lo.Assign(pod.ObjectMeta.Annotations, ModelAnnotations(ModelAppName(name), false))
+
+	pod.Spec.InitContainers = AssignOrAppend(
+		pod.Spec.InitContainers,
+		FindOllamaPullerContainer,
+		AssignOllamaPullerContainer(name, image, namespace, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env),
+		func() corev1.Container {
+			return NewOllamaPullerContainer(name, image, namespace, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env)
+		},
+	)
+	pod.Spec.Containers = AssignOrAppend(
+		pod.Spec.Containers,
+		FindOllamaServerContainer,
+		AssignOllamaServerContainer(true, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env),
+		func() corev1.Container {
+			return NewOllamaServerContainer(true, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env)
+		},
+	)
+
+	pod.Spec.Volumes = AppendIfNotFound(pod.Spec.Volumes, func(item corev1.Volume) bool {
+		return item.Name == "image-storage"
+	}, func() corev1.Volume {
+		return corev1.Volume{
+			Name: "image-storage",
+			VolumeSource: corev1.VolumeSource{
+				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+					ClaimName: ImageStorePVCName,
+					ReadOnly:  true,
+				},
+			},
+		}
+	})
+
+	if model.Spec.RuntimeClassName != nil {
+		pod.Spec.RuntimeClassName = model.Spec.RuntimeClassName
+	}
+
+	return pod
+}
+
+func AssignOrAppend[T any](source []T, predicate func(item T) bool, modifier func(item T, index int) T, newFn func() T) []T {
+	target, index, found := lo.FindIndexOf(source, predicate)
+	if found {
+		target = modifier(target, index)
+		source[index] = target
+	} else {
+		target = newFn()
+		source = append(source, target)
+	}
+
+	return source
+}
+
+func AppendIfNotFound[T any](source []T, predicate func(item T) bool, newFn func() T) []T {
+	_, _, found := lo.FindIndexOf(source, predicate)
+	if !found {
+		source = append(source, newFn())
+	}
+
+	return source
+}
+
+func IsDeploymentReady(
+	ctx context.Context,
+	namespace string,
+	name string,
 ) (bool, error) {
 	log := log.FromContext(ctx)
+	c := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
 	deployment, err := getDeployment(ctx, c, namespace, name)
 	if err != nil {
@@ -165,10 +219,11 @@ func IsDeploymentReady(
 
 func UpdateDeployment(
 	ctx context.Context,
-	c client.Client,
 	model *ollamav1.Model,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (bool, error) {
+	c := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
+
 	deployment, err := getDeployment(ctx, c, model.Namespace, model.Name)
 	if err != nil {
 		return false, err
@@ -248,12 +303,13 @@ func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, s
 
 func EnsureServiceCreated(
 	ctx context.Context,
-	c client.Client,
 	namespace string,
 	name string,
 	deployment *appsv1.Deployment,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (*corev1.Service, error) {
+	c := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
+
 	service, err := getService(ctx, c, namespace, name)
 	if err != nil {
 		return nil, err
@@ -276,12 +332,12 @@ func EnsureServiceCreated(
 
 func IsServiceReady(
 	ctx context.Context,
-	c client.Client,
 	namespace string,
 	name string,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (bool, error) {
 	log := log.FromContext(ctx)
+	c := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
 	service, err := getService(ctx, c, namespace, name)
 	if err != nil {
@@ -345,9 +401,10 @@ func IsAvailable(ctx context.Context, ollamaModelResource ollamav1.Model) bool {
 
 func SetAvailable(
 	ctx context.Context,
-	c client.Client,
-	ollamaModelResource ollamav1.Model,
+	ollamaModelResource *ollamav1.Model,
 ) (bool, error) {
+	c := ClientFromContext(ctx)
+
 	hasAvailable := len(lo.Filter(ollamaModelResource.Status.Conditions, func(item ollamav1.ModelStatusCondition, _ int) bool {
 		return item.Type == ollamav1.ModelAvailable
 	})) > 0
@@ -364,7 +421,7 @@ func SetAvailable(
 		},
 	}
 
-	err := c.Status().Update(ctx, &ollamaModelResource)
+	err := c.Status().Update(ctx, ollamaModelResource)
 	if err != nil {
 		return false, err
 	}
@@ -374,7 +431,7 @@ func SetAvailable(
 
 func ShouldSetReplicas(
 	ctx context.Context,
-	ollamaModelResource ollamav1.Model,
+	ollamaModelResource *ollamav1.Model,
 	replicas int32,
 	readyReplicas int32,
 	availableReplicas int32,
@@ -388,19 +445,20 @@ func ShouldSetReplicas(
 
 func SetReplicas(
 	ctx context.Context,
-	c client.Client,
-	ollamaModelResource ollamav1.Model,
+	ollamaModelResource *ollamav1.Model,
 	replicas int32,
 	readyReplicas int32,
 	availableReplicas int32,
 	unavailableReplicas int32,
 ) (bool, error) {
+	c := ClientFromContext(ctx)
+
 	ollamaModelResource.Status.Replicas = replicas
 	ollamaModelResource.Status.ReadyReplicas = readyReplicas
 	ollamaModelResource.Status.AvailableReplicas = availableReplicas
 	ollamaModelResource.Status.UnavailableReplicas = unavailableReplicas
 
-	err := c.Status().Update(ctx, &ollamaModelResource)
+	err := c.Status().Update(ctx, ollamaModelResource)
 	if err != nil {
 		return false, err
 	}
