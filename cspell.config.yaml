@@ -8,6 +8,7 @@ words:
   - antfu
   - apierrors
   - apiextensions
+  - apimachinery
   - appsv1
   - asciinema
   - ayaka
@@ -24,6 +25,7 @@ words:
   - crdkustomizeresource
   - crdkustomizewebhookpatch
   - deepcopy
+  - deletecollection
   - dupl
   - durationcheck
   - envtest
@@ -84,7 +86,9 @@ words:
   - printcolumn
   - readyz
   - rolebinding
+  - samber
   - servicemonitor
+  - statefulsets
   - staticcheck
   - storageclasses
   - subresource

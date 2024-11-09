@@ -39,14 +39,14 @@ func getImageStorePVC(ctx context.Context, client client.Client, namespace strin
 
 func EnsureImageStorePVCCreated(
 	ctx context.Context,
-	client client.Client,
 	namespace string,
 	storageClassName *string,
 	pvcSource *corev1.PersistentVolumeClaimVolumeSource,
 	pvSpec *ollamav1.ModelPersistentVolumeSpec,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (*corev1.PersistentVolumeClaim, error) {
 	log := log.FromContext(ctx)
+	client := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
 	pvc, err := getImageStorePVC(ctx, client, namespace)
 	if err != nil {
@@ -124,11 +124,12 @@ func getImageStoreStatefulSet(ctx context.Context, client client.Client, namespa
 
 func EnsureImageStoreStatefulSetCreated(
 	ctx context.Context,
-	client client.Client,
 	namespace string,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
+	model *ollamav1.Model,
 ) (*appsv1.StatefulSet, error) {
 	log := log.FromContext(ctx)
+	client := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
 	statefulSet, err := getImageStoreStatefulSet(ctx, client, namespace)
 	if err != nil {
@@ -159,7 +160,7 @@ func EnsureImageStoreStatefulSetCreated(
 				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
-						NewOllamaServerContainer(false, corev1.ResourceRequirements{}),
+						NewOllamaServerContainer(false, corev1.ResourceRequirements{}, model.Spec.ExtraEnvFrom, model.Spec.Env),
 					},
 					RestartPolicy: corev1.RestartPolicyAlways,
 					Volumes: []corev1.Volume{
@@ -191,11 +192,11 @@ func EnsureImageStoreStatefulSetCreated(
 
 func IsImageStoreStatefulSetReady(
 	ctx context.Context,
-	client client.Client,
 	namespace string,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (bool, error) {
 	log := log.FromContext(ctx)
+	client := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
 	statefulSet, err := getImageStoreStatefulSet(ctx, client, namespace)
 	if err != nil {
@@ -231,12 +232,12 @@ func getImageStoreService(ctx context.Context, client client.Client, namespace s
 
 func EnsureImageStoreServiceCreated(
 	ctx context.Context,
-	client client.Client,
 	namespace string,
 	statefulSet *appsv1.StatefulSet,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (*corev1.Service, error) {
 	log := log.FromContext(ctx)
+	client := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
 	service, err := getImageStoreService(ctx, client, namespace)
 	if err != nil {
@@ -289,11 +290,11 @@ func EnsureImageStoreServiceCreated(
 
 func IsImageStoreServiceReady(
 	ctx context.Context,
-	client client.Client,
 	namespace string,
-	modelRecorder *WrappedRecorder[*ollamav1.Model],
 ) (bool, error) {
 	log := log.FromContext(ctx)
+	client := ClientFromContext(ctx)
+	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
 	service, err := getImageStoreService(ctx, client, namespace)
 	if err != nil {
