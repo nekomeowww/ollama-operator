@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: ghcr.io/nekomeowww/ollama-operator
-  newTag: 0.9.1
+  newTag: 0.10.0
