@@ -38,13 +38,18 @@ The journey to large language models, AIGC, localized agents, [🦜🔗 Langchai
 ### Install operator
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/main/dist/install.yaml
+kubectl apply \
+  --server-side=true \
+  -f https://raw.githubusercontent.com/nekomeowww/ollama-operator/v0.10.1/dist/install.yaml
 ```
 
 ### Wait for the operator to be ready
 
 ```shell
-kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 deployment/ollama-operator-controller-manager -n ollama-operator-system
+kubectl wait \
+  -n ollama-operator-system \
+  --for=jsonpath='{.status.readyReplicas}'=1 \
+  deployment/ollama-operator-controller-manager
 ```
 
 ### Deploy a model
