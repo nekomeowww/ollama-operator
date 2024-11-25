@@ -14,7 +14,7 @@
     "@iconify-json/octicon": "^1.2.1",
     "@iconify-json/simple-icons": "^1.2.11",
     "@iconify-json/twemoji": "^1.2.1",
-    "@nolebase/ui": "^2.8.1",
+    "@nolebase/ui": "^2.10.0",
     "@nolebase/ui-asciinema": "^2.8.1",
     "@nolebase/vitepress-plugin-enhanced-mark": "^2.8.1",
     "@nolebase/vitepress-plugin-enhanced-readabilities": "^2.8.1",
