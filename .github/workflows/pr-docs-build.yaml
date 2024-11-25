@@ -34,26 +34,26 @@ jobs:
           echo "${{ github.head_ref }}" > branch_name
 
       - name: Upload PR artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: pr-num
           path: ./pr_num
           overwrite: true
 
       - name: Upload PR artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: branch-name
           path: ./branch_name
           overwrite: true
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Install Node.js 22.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
         with:
           node-version: 22.x
 
@@ -68,7 +68,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
@@ -90,7 +90,7 @@ jobs:
           VUE_PROD_HYDRATION_MISMATCH_DETAILS_FLAG: '1'
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: docs-${{ matrix.os }}-build
           path: docs/.vitepress/dist

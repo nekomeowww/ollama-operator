@@ -21,7 +21,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Download artifact - PR
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11 # v6
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
@@ -30,7 +30,7 @@ jobs:
           allow_forks: true
 
       - name: Download artifact - PR
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11 # v6
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
@@ -49,7 +49,7 @@ jobs:
           echo "BRANCH_NAME=$(cat branch-name/branch_name)" >> $GITHUB_ENV
 
       - name: Download artifact - Ubuntu
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11 # v6
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
@@ -59,7 +59,7 @@ jobs:
 
       - name: Publish to Cloudflare Pages
         id: deploy
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -72,7 +72,7 @@ jobs:
           wranglerVersion: '3'
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v3
+        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e # v3
         id: fc
         with:
           issue-number: ${{ env.PR_NUM }}
@@ -80,7 +80,7 @@ jobs:
           body-includes: to Cloudflare Pages
 
       - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUM }}
@@ -101,7 +101,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: Download artifact - PR
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11 # v6
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
@@ -115,7 +115,7 @@ jobs:
           echo "PR_NUM=$(cat pr-num/pr_num)" >> $GITHUB_ENV
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v3
+        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e # v3
         id: fc
         with:
           issue-number: ${{ env.PR_NUM }}
@@ -123,7 +123,7 @@ jobs:
           body-includes: to Cloudflare Pages
 
       - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUM }}
