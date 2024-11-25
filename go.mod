@@ -8,7 +8,7 @@ require (
 	github.com/briandowns/spinner v1.23.1
 	github.com/gookit/color v1.5.4
 	github.com/onsi/ginkgo/v2 v2.22.0
-	github.com/onsi/gomega v1.34.2
+	github.com/onsi/gomega v1.35.1
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
