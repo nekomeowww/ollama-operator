@@ -8,6 +8,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
@@ -15,7 +16,28 @@ import (
 	"github.com/samber/lo"
 
 	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
+	"github.com/nekomeowww/xo"
 )
+
+func getServiceByLabels(ctx context.Context, c client.Client, namespace string, l labels.Set) (*corev1.Service, error) {
+	var service corev1.ServiceList
+
+	err := c.List(ctx, &service, &client.ListOptions{
+		LabelSelector: labels.SelectorFromValidatedSet(l),
+	})
+	if err != nil {
+		return nil, err
+	}
+	if len(service.Items) == 0 {
+		return nil, nil
+	}
+
+	return &service.Items[0], nil
+}
+
+func ModelServiceName(name string) string {
+	return fmt.Sprintf("ollama-srv-%s", xo.RandomHashString(6))
+}
 
 func ModelAppName(name string) string {
 	return fmt.Sprintf("ollama-model-%s", name)
@@ -275,7 +297,7 @@ func getService(ctx context.Context, c client.Client, namespace string, name str
 func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, serviceType corev1.ServiceType) *corev1.Service {
 	return &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        ModelAppName(name),
+			Name:        ModelServiceName(name),
 			Namespace:   namespace,
 			Labels:      ModelLabels(name),
 			Annotations: ModelAnnotations(ModelAppName(name), false),
@@ -310,7 +332,7 @@ func EnsureServiceCreated(
 	c := ClientFromContext(ctx)
 	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
-	service, err := getService(ctx, c, namespace, name)
+	service, err := getServiceByLabels(ctx, c, namespace, ModelLabels(name))
 	if err != nil {
 		return nil, err
 	}
@@ -339,7 +361,7 @@ func IsServiceReady(
 	c := ClientFromContext(ctx)
 	modelRecorder := WrappedRecorderFromContext[*ollamav1.Model](ctx)
 
-	service, err := getService(ctx, c, namespace, name)
+	service, err := getServiceByLabels(ctx, c, namespace, ModelLabels(name))
 	if err != nil {
 		return false, err
 	}
