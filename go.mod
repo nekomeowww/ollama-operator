@@ -1,12 +1,13 @@
 module github.com/nekomeowww/ollama-operator
 
-go 1.23
+go 1.23.0
 
 toolchain go1.23.3
 
 require (
 	github.com/briandowns/spinner v1.23.1
 	github.com/gookit/color v1.5.4
+	github.com/nekomeowww/xo v1.14.0
 	github.com/onsi/ginkgo/v2 v2.22.0
 	github.com/onsi/gomega v1.36.0
 	github.com/samber/lo v1.47.0
@@ -20,6 +21,7 @@ require (
 )
 
 require (
+	entgo.io/ent v0.14.1 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
@@ -69,6 +71,7 @@ require (
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.60.1 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
+	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
