@@ -25,11 +25,9 @@ func getServiceByLabels(ctx context.Context, c client.Client, namespace string, 
 	err := c.List(ctx, &service, &client.ListOptions{
 		LabelSelector: labels.SelectorFromValidatedSet(l),
 	})
-
 	if err != nil {
 		return nil, err
 	}
-
 	if len(service.Items) == 0 {
 		return nil, nil
 	}
