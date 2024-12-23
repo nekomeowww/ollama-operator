@@ -23,6 +23,7 @@ func getServiceByLabels(ctx context.Context, c client.Client, namespace string, 
 	var service corev1.ServiceList
 
 	err := c.List(ctx, &service, &client.ListOptions{
+		Namespace:     namespace,
 		LabelSelector: labels.SelectorFromValidatedSet(l),
 	})
 	if err != nil {
@@ -277,21 +278,6 @@ func UpdateDeployment(
 	modelRecorder.Eventf(corev1.EventTypeNormal, "ModelScaled", "Model scaled from %d to %d", deployment.Status.Replicas, replicas)
 
 	return true, nil
-}
-
-func getService(ctx context.Context, c client.Client, namespace string, name string) (*corev1.Service, error) {
-	var service corev1.Service
-
-	err := c.Get(ctx, client.ObjectKey{Namespace: namespace, Name: ModelAppName(name)}, &service)
-	if err != nil {
-		if errors.IsNotFound(err) {
-			return nil, nil
-		}
-
-		return nil, err
-	}
-
-	return &service, nil
 }
 
 func NewServiceForModel(namespace, name string, deployment *appsv1.Deployment, serviceType corev1.ServiceType) *corev1.Service {
