@@ -178,7 +178,7 @@ func AssignOllamaPullerContainer(name string, image string, serverLocatedNamespa
 		container.Args = []string{
 			"-c",
 			// TODO: This is a temporary solution, we need to find a better way to preload the models
-			fmt.Sprintf("apt update && apt install curl -y && ollama pull %s && curl http://ollama-models-store:11434/api/generate -d '{\"model\": \"%s\"}'"+image, name),
+			fmt.Sprintf("apt update && apt install curl -y && ollama pull %s && curl http://ollama-models-store:11434/api/generate -d '{\"model\": \"%s\"}'", image, name),
 		}
 
 		container.Env = AppendIfNotFound(container.Env, func(item corev1.EnvVar) bool {
@@ -204,7 +204,7 @@ func NewOllamaPullerContainer(name string, image string, serverLocatedNamespace 
 		Args: []string{
 			"-c",
 			// TODO: This is a temporary solution, we need to find a better way to preload the models
-			fmt.Sprintf("apt update && apt install curl -y && ollama pull %s && curl http://ollama-models-store:11434/api/generate -d '{\"model\": \"%s\"}'"+image, name),
+			fmt.Sprintf("apt update && apt install curl -y && ollama pull %s && curl http://ollama-models-store:11434/api/generate -d '{\"model\": \"%s\"}'", image, name),
 		},
 		Env: []corev1.EnvVar{
 			{
