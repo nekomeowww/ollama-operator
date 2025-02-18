@@ -3,7 +3,10 @@ package model
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
+	namepkg "github.com/google/go-containerregistry/pkg/name"
+	"github.com/samber/lo"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -12,8 +15,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-
-	"github.com/samber/lo"
 
 	ollamav1 "github.com/nekomeowww/ollama-operator/api/ollama/v1"
 	"github.com/nekomeowww/xo"
@@ -51,6 +52,15 @@ func ModelLabels(name string) map[string]string {
 		"model.ollama.ayaka.io":      name,
 		"model.ollama.ayaka.io/name": name,
 	}
+}
+
+func OllamaModelNameFromNameReference(ref namepkg.Reference) string {
+	parsedModelName := filepath.Base(ref.Context().RepositoryStr())
+	if ref.Identifier() != "latest" {
+		parsedModelName += ":" + ref.Identifier()
+	}
+
+	return parsedModelName
 }
 
 func ImageStoreLabels() map[string]string {
@@ -98,6 +108,16 @@ func EnsureDeploymentCreated(
 		return deployment, nil
 	}
 
+	ref, err := namepkg.ParseReference(
+		image,
+		namepkg.Insecure,
+		namepkg.WithDefaultRegistry("https://registry.ollama.ai"),
+		namepkg.WithDefaultTag("latest"),
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	deployment = &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        ModelAppName(name),
@@ -117,7 +137,7 @@ func EnsureDeploymentCreated(
 			Selector: &metav1.LabelSelector{
 				MatchLabels: ModelLabels(name),
 			},
-			Template: MergePodTemplate(ctx, namespace, name, image, replicas, model),
+			Template: MergePodTemplate(ctx, namespace, name, image, OllamaModelNameFromNameReference(ref), replicas, model),
 		},
 	}
 
@@ -136,6 +156,7 @@ func MergePodTemplate(
 	namespace string,
 	name string,
 	image string,
+	parsedModelName string,
 	replicas *int32,
 	model *ollamav1.Model,
 ) corev1.PodTemplateSpec {
@@ -151,9 +172,9 @@ func MergePodTemplate(
 	pod.Spec.InitContainers = AssignOrAppend(
 		pod.Spec.InitContainers,
 		FindOllamaPullerContainer,
-		AssignOllamaPullerContainer(name, image, namespace, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env),
+		AssignOllamaPullerContainer(name, image, parsedModelName, namespace, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env),
 		func() corev1.Container {
-			return NewOllamaPullerContainer(name, image, namespace, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env)
+			return NewOllamaPullerContainer(name, image, parsedModelName, namespace, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env)
 		},
 	)
 	pod.Spec.Containers = AssignOrAppend(

@@ -65,6 +65,10 @@ func waitUntilOllamaModelDeploymentPullImageDone(ctx context.Context, kubeClient
 			time.Sleep(1 * time.Second)
 			return waitUntilOllamaModelDeploymentPullImageDone(ctx, kubeClient, namespace, name)
 		}
+		if len(pod.Status.ContainerStatuses) == 0 || !pod.Status.ContainerStatuses[0].Ready {
+			time.Sleep(1 * time.Second)
+			return waitUntilOllamaModelDeploymentPullImageDone(ctx, kubeClient, namespace, name)
+		}
 	}
 
 	return nil
@@ -92,16 +96,15 @@ func waitUntilOllamaModelDeploymentReady(ctx context.Context, kubeClient client.
 }
 
 func waitUntilOllamaModelServiceReady(ctx context.Context, kubeClient client.Client, namespace string, name string) error {
-	var service corev1.Service
+	var services corev1.ServiceList
 
-	err := kubeClient.Get(ctx, types.NamespacedName{Namespace: namespace, Name: model.ModelAppName(name)}, &service)
+	err := kubeClient.List(ctx, &services, client.MatchingLabels(model.ModelLabels(name)))
 	if err != nil {
-		if apierrors.IsNotFound(err) {
-			time.Sleep(1 * time.Second)
-			return waitUntilOllamaModelServiceReady(ctx, kubeClient, namespace, name)
-		}
-
 		return err
+	}
+	if len(services.Items) == 0 {
+		time.Sleep(1 * time.Second)
+		return waitUntilOllamaModelServiceReady(ctx, kubeClient, namespace, name)
 	}
 
 	return nil
@@ -164,21 +167,6 @@ func waitUntilModelAvailable(kubeClient client.Client, namespace string, modelNa
 	s.Suffix = " deploying model..."
 
 	err = waitUntilOllamaModelDeploymentReady(waitConditionCtx, kubeClient, namespace, modelName)
-	if err != nil {
-		return err
-	}
-
-	s.Stop()
-	fmt.Println()
-
-	s = spinner.New(spinner.CharSets[14], 200*time.Millisecond)
-	s.FinalMSG = color.FgGreen.Render("✓") + " model exposed"
-	_ = s.Color("blue")
-
-	s.Start()
-	s.Suffix = " exposing model service..."
-
-	err = waitUntilOllamaModelServiceReady(waitConditionCtx, kubeClient, namespace, modelName)
 	if err != nil {
 		return err
 	}
