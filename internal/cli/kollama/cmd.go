@@ -33,15 +33,15 @@ var (
 
 // NewCmd provides a cobra command wrapping NamespaceOptions
 func NewCmd(streams genericiooptions.IOStreams) *cobra.Command {
-	cmd := &cobra.Command{
+	rootCmd := &cobra.Command{
 		Use:   "kollama [cmd] [args] [flags]",
 		Short: "CLI for Ollama Operator",
 		Args:  cobra.NoArgs,
 	}
 
-	cmd.AddCommand(NewCmdDeploy(streams))
-	cmd.AddCommand(NewCmdUndeploy(streams))
-	cmd.AddCommand(NewCmdExpose(streams))
+	rootCmd.AddCommand(NewCmdDeploy(streams))
+	rootCmd.AddCommand(NewCmdUndeploy(streams))
+	rootCmd.AddCommand(NewCmdExpose(streams))
 
-	return cmd
+	return rootCmd
 }

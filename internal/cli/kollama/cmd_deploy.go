@@ -10,6 +10,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	corev1 "k8s.io/api/core/v1"
@@ -112,6 +113,54 @@ func NewCmdDeployOptions(streams genericiooptions.IOStreams) *CmdDeployOptions {
 	}
 }
 
+func (o *CmdDeployOptions) AddFlags(flags *pflag.FlagSet) {
+	flags.StringVar(&o.modelImage, "image", "", ""+
+		"Model image to deploy. If not specified, the model name will be used as the "+
+		"image name (will be pulled from registry.ollama.ai/library/<model name> by "+
+		"default if no registry is specified), the tag will be latest.",
+	)
+
+	flags.StringArrayVar(&o.resourceLimits, "limit", []string{}, ""+
+		"Resource limits for the model. The format is <resource>=<quantity>. "+
+		"For example: --limit=cpu=1 --limit=memory=1Gi"+
+		"Multiple limits can be specified by using the flag multiple times. ",
+	)
+
+	flags.StringVarP(&o.storageClass, "storage-class", "", "", ""+
+		"StorageClass to use for the model's associated PersistentVolumeClaim. If not specified, "+
+		"the default StorageClass will be used.",
+	)
+
+	flags.StringVarP(&o.pvAccessMode, "pv-access-mode", "", "", ""+
+		"Access mode for Ollama Operator created image store (to cache pulled images)'s StatefulSet "+
+		"resource associated PersistentVolume. If not specified, the access mode will be ReadWriteOnce. "+
+		"If you are deploying models into default deployed kind and k3s clusters, you should keep "+
+		"it as ReadWriteOnce. If you are deploying models into a custom cluster, you can set it to "+
+		"ReadWriteMany if StorageClass supports it.",
+	)
+
+	flags.BoolVar(&o.expose, "expose", false, ""+
+		"Whether to expose the model through a service for external access and makes it "+
+		"easy to interact with the model. By default, --expose will create a NodePort "+
+		"service. Use --service-type=LoadBalancer to create a LoadBalancer service",
+	)
+
+	flags.StringVar(&o.serviceType, "service-type", "", ""+
+		"Type of the Service to expose the model. If not specified, the service will be "+
+		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
+	)
+
+	flags.StringVar(&o.serviceName, "service-name", "", ""+
+		"Name of the Service to expose the model. If not specified, the model name will "+
+		"be used as the service name with -nodeport as the suffix for NodePort.",
+	)
+
+	flags.Int32Var(&o.nodePort, "node-port", 0, ""+
+		"NodePort to expose the model. If not specified, a random port will be assigned."+
+		"Only valid when --expose is specified, and --service-type is set to NodePort.",
+	)
+}
+
 // NewCmdNamespace provides a cobra command wrapping CmdDeployOptions
 func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	o := NewCmdDeployOptions(streams)
@@ -134,53 +183,7 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 			return o.runE(c, args)
 		},
 	}
-
-	cmd.Flags().StringVar(&o.modelImage, "image", "", ""+
-		"Model image to deploy. If not specified, the model name will be used as the "+
-		"image name (will be pulled from registry.ollama.ai/library/<model name> by "+
-		"default if no registry is specified), the tag will be latest.",
-	)
-
-	cmd.Flags().StringArrayVar(&o.resourceLimits, "limit", []string{}, ""+
-		"Resource limits for the model. The format is <resource>=<quantity>. "+
-		"For example: --limit=cpu=1 --limit=memory=1Gi"+
-		"Multiple limits can be specified by using the flag multiple times. ",
-	)
-
-	cmd.Flags().StringVarP(&o.storageClass, "storage-class", "", "", ""+
-		"StorageClass to use for the model's associated PersistentVolumeClaim. If not specified, "+
-		"the default StorageClass will be used.",
-	)
-
-	cmd.Flags().StringVarP(&o.pvAccessMode, "pv-access-mode", "", "", ""+
-		"Access mode for Ollama Operator created image store (to cache pulled images)'s StatefulSet "+
-		"resource associated PersistentVolume. If not specified, the access mode will be ReadWriteOnce. "+
-		"If you are deploying models into default deployed kind and k3s clusters, you should keep "+
-		"it as ReadWriteOnce. If you are deploying models into a custom cluster, you can set it to "+
-		"ReadWriteMany if StorageClass supports it.",
-	)
-
-	cmd.Flags().BoolVar(&o.expose, "expose", false, ""+
-		"Whether to expose the model through a service for external access and makes it "+
-		"easy to interact with the model. By default, --expose will create a NodePort "+
-		"service. Use --service-type=LoadBalancer to create a LoadBalancer service",
-	)
-
-	cmd.Flags().StringVar(&o.serviceType, "service-type", "", ""+
-		"Type of the Service to expose the model. If not specified, the service will be "+
-		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
-	)
-
-	cmd.Flags().StringVar(&o.serviceName, "service-name", "", ""+
-		"Name of the Service to expose the model. If not specified, the model name will "+
-		"be used as the service name with -nodeport as the suffix for NodePort.",
-	)
-
-	cmd.Flags().Int32Var(&o.nodePort, "node-port", 0, ""+
-		"NodePort to expose the model. If not specified, a random port will be assigned."+
-		"Only valid when --expose is specified, and --service-type is set to NodePort.",
-	)
-
+	o.AddFlags(cmd.Flags())
 	o.configFlags.AddFlags(cmd.Flags())
 	o.clientConfig = o.configFlags.ToRawKubeConfigLoader()
 	o.kubeConfig = lo.Must(o.clientConfig.ClientConfig())
