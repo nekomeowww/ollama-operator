@@ -20,11 +20,13 @@ words:
   - clusterrole
   - clusterrolebinding
   - containedctx
+  - containerregistry
   - corev1
   - crdkustomizecainjectionpatch
   - crdkustomizeresource
   - crdkustomizewebhookpatch
   - deepcopy
+  - deepseek
   - deletecollection
   - dupl
   - durationcheck
@@ -66,6 +68,7 @@ words:
   - metricsserver
   - musttag
   - nakedret
+  - namepkg
   - nekomeowww
   - nestif
   - nodeport
@@ -91,6 +94,7 @@ words:
   - statefulsets
   - staticcheck
   - storageclasses
+  - stretchr
   - subresource
   - tenv
   - testableexamples

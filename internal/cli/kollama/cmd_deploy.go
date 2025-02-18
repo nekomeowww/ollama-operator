@@ -4,24 +4,26 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 
+	"github.com/briandowns/spinner"
+	"github.com/gookit/color"
+	"github.com/nekomeowww/ollama-operator/pkg/model"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	namepkg "github.com/google/go-containerregistry/pkg/name"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
+	"k8s.io/cli-runtime/pkg/genericclioptions"
+	"k8s.io/cli-runtime/pkg/genericiooptions"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-
-	"k8s.io/cli-runtime/pkg/genericclioptions"
-	"k8s.io/cli-runtime/pkg/genericiooptions"
 )
 
 const (
@@ -216,60 +218,52 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	modelImageRef, err := namepkg.ParseReference(modelImage, namepkg.Insecure, namepkg.WithDefaultRegistry(""), namepkg.WithDefaultTag("latest"))
+	if err != nil {
+		return err
+	}
 
 	fmt.Println("Deploying model \"" + modelName + "\"...\n")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer cancel()
 
-	model, err := getOllama(ctx, o.dynamicClient, namespace, modelName)
+	createdModel, err := getOllama(ctx, o.dynamicClient, namespace, modelName)
 	if err != nil {
 		return err
 	}
-	if model != nil {
-		fmt.Printf(deployedAlreadyMessage, modelName, command(), modelName)
-		os.Exit(1)
-	}
+	if createdModel == nil {
+		var resourceRequirements corev1.ResourceRequirements
 
-	var resourceRequirements corev1.ResourceRequirements
+		for _, limit := range o.resourceLimits {
+			parts := strings.Split(limit, "=")
+			if len(parts) != 2 {
+				return fmt.Errorf("invalid resource limit format: %s", limit)
+			}
+			if resourceRequirements.Limits == nil {
+				resourceRequirements.Limits = make(corev1.ResourceList)
+			}
 
-	for _, limit := range o.resourceLimits {
-		parts := strings.Split(limit, "=")
-		if len(parts) != 2 {
-			return fmt.Errorf("invalid resource limit format: %s", limit)
+			resourceRequirements.Limits[corev1.ResourceName(parts[0])] = resource.MustParse(parts[1])
 		}
-		if resourceRequirements.Limits == nil {
-			resourceRequirements.Limits = make(corev1.ResourceList)
+
+		createdModelCtx, createdModelCancel := context.WithTimeout(context.Background(), 1*time.Minute)
+		defer createdModelCancel()
+
+		createdModel, err := createOllamaModel(createdModelCtx, o.dynamicClient, namespace, modelName, modelImage, resourceRequirements, o.storageClass, o.pvAccessMode)
+		if err != nil {
+			return err
 		}
-
-		resourceRequirements.Limits[corev1.ResourceName(parts[0])] = resource.MustParse(parts[1])
+		if !o.expose {
+			fmt.Printf(deployedNonExposedMessage, modelName, command(), modelName, command(), modelName, createdModel.Name, createdModel.Name)
+			return nil
+		}
 	}
 
-	createdModelCtx, createdModelCancel := context.WithTimeout(context.Background(), 1*time.Minute)
-	defer createdModelCancel()
-
-	createdModel, err := createOllamaModel(createdModelCtx, o.dynamicClient, namespace, modelName, modelImage, resourceRequirements, o.storageClass, o.pvAccessMode)
+	err = waitUntilModelAvailable(o.kubeClient, namespace, modelName, modelImageRef.String())
 	if err != nil {
 		return err
 	}
-	if !o.expose {
-		fmt.Printf(deployedNonExposedMessage, modelName, command(), modelName, command(), modelName, createdModel.Name, createdModel.Name)
-		return nil
-	}
-
-	var modelImageFullPath string
-	if strings.Contains(modelImage, "/") {
-		modelImageFullPath = modelImage
-	} else {
-		modelImageFullPath = fmt.Sprintf("registry.ollama.ai/library/%s:latest", modelImage)
-	}
-
-	err = waitUntilModelAvailable(o.kubeClient, namespace, modelName, modelImageFullPath)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println()
 
 	exposeSvcCtx, exposeSvcCancel := context.WithTimeout(context.Background(), 1*time.Minute)
 	defer exposeSvcCancel()
@@ -287,13 +281,29 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	s := spinner.New(spinner.CharSets[14], 200*time.Millisecond)
+	s.FinalMSG = color.FgGreen.Render("✓") + " model exposed"
+	_ = s.Color("blue")
+
+	s.Start()
+	s.Suffix = " exposing model service..."
+
+	err = waitUntilOllamaModelServiceReady(exposeSvcCtx, o.kubeClient, namespace, modelName)
+	if err != nil {
+		return err
+	}
+
+	s.Stop()
+	fmt.Println()
+	fmt.Println()
+
 	parsedHost, err := url.Parse(o.kubeConfig.Host)
 	if err != nil {
 		return err
 	}
 
 	ollamaHost := fmt.Sprintf("%s:%d", parsedHost.Hostname(), svc.Spec.Ports[0].NodePort)
-	fmt.Printf(deployedExposedMessage, modelName, ollamaHost, ollamaHost, modelName, ollamaHost, modelName)
+	fmt.Printf(deployedExposedMessage, modelName, ollamaHost, ollamaHost, model.OllamaModelNameFromNameReference(modelImageRef), ollamaHost, model.OllamaModelNameFromNameReference(modelImageRef))
 
 	return nil
 }
