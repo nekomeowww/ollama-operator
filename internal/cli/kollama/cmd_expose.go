@@ -9,6 +9,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	corev1 "k8s.io/api/core/v1"
@@ -66,6 +67,21 @@ func NewCmdExposeOptions(streams genericiooptions.IOStreams) *CmdExposeOptions {
 	}
 }
 
+func (o *CmdExposeOptions) AddFlags(flags *pflag.FlagSet) {
+	flags.StringVar(&o.serviceType, "service-type", "", ""+
+		"Type of the Service to expose the model. If not specified, the service will be "+
+		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
+	)
+	flags.StringVar(&o.serviceName, "service-name", "", ""+
+		"Name of the Service to expose the model. If not specified, the model name will "+
+		"be used as the service name with -nodeport as the suffix for NodePort.",
+	)
+	flags.Int32Var(&o.nodePort, "node-port", 0, ""+
+		"NodePort to expose the model. If not specified, a random port will be assigned."+
+		"Only valid when --expose is specified, and --service-type is set to NodePort.",
+	)
+}
+
 // NewCmdExpose provides a cobra command wrapping NamespaceOptions
 func NewCmdExpose(streams genericiooptions.IOStreams) *cobra.Command {
 	o := NewCmdExposeOptions(streams)
@@ -88,20 +104,7 @@ func NewCmdExpose(streams genericiooptions.IOStreams) *cobra.Command {
 			return o.runE(c, args)
 		},
 	}
-
-	cmd.Flags().StringVar(&o.serviceType, "service-type", "", ""+
-		"Type of the Service to expose the model. If not specified, the service will be "+
-		"exposed as NodePort. Use LoadBalancer to expose the service as LoadBalancer.",
-	)
-	cmd.Flags().StringVar(&o.serviceName, "service-name", "", ""+
-		"Name of the Service to expose the model. If not specified, the model name will "+
-		"be used as the service name with -nodeport as the suffix for NodePort.",
-	)
-	cmd.Flags().Int32Var(&o.nodePort, "node-port", 0, ""+
-		"NodePort to expose the model. If not specified, a random port will be assigned."+
-		"Only valid when --expose is specified, and --service-type is set to NodePort.",
-	)
-
+	o.AddFlags(cmd.Flags())
 	o.configFlags.AddFlags(cmd.Flags())
 	o.clientConfig = o.configFlags.ToRawKubeConfigLoader()
 	o.kubeConfig = lo.Must(o.clientConfig.ClientConfig())
