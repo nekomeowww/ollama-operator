@@ -19,7 +19,7 @@ That's where the Ollama Operator kicks in:
 - Create your models
 - Wait for the models to be fetched and loaded, that's it!
 
-Thanks to the great works of [lama.cpp](https://github.com/ggerganov/llama.cpp), **no more worries about Python environment, CUDA drivers.**
+Thanks to the great works of [llama.cpp](https://github.com/ggerganov/llama.cpp), **no more worries about Python environment, CUDA drivers.**
 
 The journey to large language models, AIGC, localized agents, [🦜🔗 Langchain](https://www.langchain.com/) and more is just a few steps away!
 
