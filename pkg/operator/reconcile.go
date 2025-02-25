@@ -110,7 +110,7 @@ func RequeueAfter(d time.Duration) error {
 }
 
 func RequeueAfterWithError(d time.Duration, err error) error {
-	return &RequeueError{after: d}
+	return &RequeueError{after: d, err: err}
 }
 
 type RequeueError struct {
