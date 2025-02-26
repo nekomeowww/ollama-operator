@@ -28,7 +28,7 @@ jobs:
           cache: true
 
       - name: Test Build
-        run: go build -v
+        run: go build -v ./...
 
   lint:
     name: Lint
