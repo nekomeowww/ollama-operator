@@ -7,7 +7,7 @@
       ":prHourlyLimitNone",
       ":prConcurrentLimitNone",
       ":ignoreModulesAndTests",
-      "schedule:monthly",
+      "schedule:weekly",
       "group:allNonMajor",
       "replacements:all",
       "workarounds:all"

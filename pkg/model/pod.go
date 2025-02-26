@@ -186,7 +186,7 @@ func AssignOllamaPullerContainer(name string, image string, parsedModelName stri
 		}, func() corev1.EnvVar {
 			return corev1.EnvVar{
 				Name:  "OLLAMA_HOST",
-				Value: fmt.Sprintf("ollama-models-store.%s", serverLocatedNamespace),
+				Value: "ollama-models-store." + serverLocatedNamespace,
 			}
 		})
 
@@ -209,7 +209,7 @@ func NewOllamaPullerContainer(name string, image string, parsedModelName string,
 		Env: []corev1.EnvVar{
 			{
 				Name:  "OLLAMA_HOST",
-				Value: fmt.Sprintf("ollama-models-store.%s", serverLocatedNamespace),
+				Value: "ollama-models-store." + serverLocatedNamespace,
 			},
 		},
 	}

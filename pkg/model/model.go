@@ -2,7 +2,6 @@ package model
 
 import (
 	"context"
-	"fmt"
 	"path/filepath"
 
 	namepkg "github.com/google/go-containerregistry/pkg/name"
@@ -38,11 +37,11 @@ func getServiceByLabels(ctx context.Context, c client.Client, namespace string, 
 }
 
 func ModelServiceName(name string) string {
-	return fmt.Sprintf("ollama-srv-%s", xo.RandomHashString(6))
+	return "ollama-srv-" + xo.RandomHashString(6)
 }
 
 func ModelAppName(name string) string {
-	return fmt.Sprintf("ollama-model-%s", name)
+	return "ollama-model-" + name
 }
 
 func ModelLabels(name string) map[string]string {
