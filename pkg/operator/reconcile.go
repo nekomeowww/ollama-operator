@@ -2,6 +2,7 @@ package operator
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -18,7 +19,8 @@ func ResultFromError(err error) (*ctrl.Result, error) {
 		return &ctrl.Result{}, nil
 	}
 
-	if requeueErr, ok := err.(*RequeueError); ok {
+	var requeueErr *RequeueError
+	if errors.As(err, &requeueErr) {
 		return lo.ToPtr(requeueErr.Result()), requeueErr.err
 	}
 

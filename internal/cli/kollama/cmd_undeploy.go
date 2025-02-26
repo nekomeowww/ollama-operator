@@ -2,6 +2,7 @@ package kollama
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -59,10 +60,10 @@ func NewCmdUndeploy(streams genericiooptions.IOStreams) *cobra.Command {
 		Example: unDeployExample,
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
-				return fmt.Errorf("model name is required")
+				return errors.New("model name is required")
 			}
 			if args[0] == "" {
-				return fmt.Errorf("model name cannot be empty")
+				return errors.New("model name cannot be empty")
 			}
 
 			return nil

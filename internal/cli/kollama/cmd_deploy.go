@@ -2,6 +2,7 @@ package kollama
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"strings"
@@ -39,13 +40,6 @@ const (
 
   # Deploy a phi model in a specific namespace
   $ %s deploy phi -n phi-namespace
-`
-
-	deployedAlreadyMessage = `%s has been deployed already.
-
-To undeploy it, use
-
-  %s undeploy %s
 `
 
 	deployedNonExposedMessage = `🎉 Successfully deployed %s.
@@ -173,10 +167,10 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 		Example: fmt.Sprintf(deployExample, command(), command(), command(), command()),
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
-				return fmt.Errorf("model name is required")
+				return errors.New("model name is required")
 			}
 			if args[0] == "" {
-				return fmt.Errorf("model name cannot be empty")
+				return errors.New("model name cannot be empty")
 			}
 
 			return nil
@@ -218,6 +212,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	modelImageRef, err := namepkg.ParseReference(modelImage, namepkg.Insecure, namepkg.WithDefaultRegistry(""), namepkg.WithDefaultTag("latest"))
 	if err != nil {
 		return err

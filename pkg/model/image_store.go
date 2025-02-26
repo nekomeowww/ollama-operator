@@ -307,7 +307,7 @@ func IsImageStoreServiceReady(
 		return true, nil
 	}
 
-	log.Info("waiting for image store service to be ready", "service", service, "due to no ClusterIP is set")
+	log.Info("waiting for image store service to be ready", "service", service, "reason", "due to no ClusterIP is set")
 	modelRecorder.Event(corev1.EventTypeNormal, "WaitingForImageStoreService", "Waiting for image store service to become ready")
 
 	return false, nil

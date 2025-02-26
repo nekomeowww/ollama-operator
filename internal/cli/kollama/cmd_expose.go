@@ -2,6 +2,7 @@ package kollama
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"os"
@@ -92,10 +93,10 @@ func NewCmdExpose(streams genericiooptions.IOStreams) *cobra.Command {
 		Example: fmt.Sprintf(deployExample, command(), command(), command(), command()),
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) < 1 {
-				return fmt.Errorf("model name is required")
+				return errors.New("model name is required")
 			}
 			if args[0] == "" {
-				return fmt.Errorf("model name cannot be empty")
+				return errors.New("model name cannot be empty")
 			}
 
 			return nil
@@ -142,7 +143,8 @@ func (o *CmdExposeOptions) runE(cmd *cobra.Command, args []string) error {
 	}
 	if model == nil {
 		fmt.Println("Ollama Model", modelName, "not found, did you deploy it?")
-		os.Exit(1)
+		cancel()
+		os.Exit(1) //nolint:gocritic
 
 		return nil
 	}

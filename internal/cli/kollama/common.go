@@ -233,11 +233,11 @@ func exposeOllamaModel(
 	} else {
 		switch serviceType {
 		case corev1.ServiceTypeNodePort:
-			svc.Name = fmt.Sprintf("%s-nodeport", model.ModelAppName(name))
+			svc.Name = model.ModelAppName(name) + "-nodeport"
 		case corev1.ServiceTypeLoadBalancer:
-			svc.Name = fmt.Sprintf("%s-lb", model.ModelAppName(name))
+			svc.Name = model.ModelAppName(name) + "-lb"
 		case corev1.ServiceTypeExternalName:
-			svc.Name = fmt.Sprintf("%s-external", model.ModelAppName(name))
+			svc.Name = model.ModelAppName(name) + "-external"
 		case corev1.ServiceTypeClusterIP:
 			svc.Name = model.ModelAppName(name)
 		default:

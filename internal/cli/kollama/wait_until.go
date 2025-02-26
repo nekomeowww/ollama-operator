@@ -95,7 +95,7 @@ func waitUntilOllamaModelDeploymentReady(ctx context.Context, kubeClient client.
 	return nil
 }
 
-func waitUntilOllamaModelServiceReady(ctx context.Context, kubeClient client.Client, namespace string, name string) error {
+func waitUntilOllamaModelServiceReady(ctx context.Context, kubeClient client.Client, namespace string, name string) error { //nolint:unparam
 	var services corev1.ServiceList
 
 	err := kubeClient.List(ctx, &services, client.MatchingLabels(model.ModelLabels(name)))

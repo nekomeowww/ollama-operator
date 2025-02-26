@@ -49,7 +49,7 @@ func init() {
 
 	utilruntime.Must(ollamav1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
-} //nolint:wsl
+}
 
 func main() {
 	var metricsAddr string
