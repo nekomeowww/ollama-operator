@@ -12,6 +12,10 @@ env:
   BRANCH_NAME: main
   STORE_PATH: ''
 
+defaults:
+  run:
+    working_directory: ./docs
+
 jobs:
   on-success:
     name: Deploy to Cloudflare Pages

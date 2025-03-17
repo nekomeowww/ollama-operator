@@ -5,8 +5,9 @@ on:
     branches:
       - 'main'
 
-env:
-  STORE_PATH: ''
+defaults:
+  run:
+    working_directory: ./docs
 
 jobs:
   build:
@@ -30,19 +31,6 @@ jobs:
         name: Install pnpm
         with:
           run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
         working-directory: docs
@@ -69,7 +57,5 @@ jobs:
           # Optional: Switch what branch you are publishing to.
           # By default this will be the branch which triggered this workflow
           branch: main
-          # Optional: Change the working directory
-          workingDirectory: docs
           # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
           wranglerVersion: '3'
