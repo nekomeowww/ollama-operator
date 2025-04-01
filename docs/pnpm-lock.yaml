@@ -22,31 +22,31 @@ importers:
         version: 1.2.5
       '@iconify-json/simple-icons':
         specifier: ^1.2.13
-        version: 1.2.29
+        version: 1.2.30
       '@iconify-json/twemoji':
         specifier: ^1.2.1
         version: 1.2.2
       '@nolebase/ui':
         specifier: ^2.11.1
-        version: 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+        version: 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       '@nolebase/ui-asciinema':
         specifier: ^2.11.1
-        version: 2.15.1(asciinema-player@3.9.0)(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+        version: 2.15.1(asciinema-player@3.9.0)(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       '@nolebase/vitepress-plugin-enhanced-mark':
         specifier: ^2.11.1
-        version: 2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+        version: 2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       '@nolebase/vitepress-plugin-enhanced-readabilities':
         specifier: ^2.11.1
-        version: 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+        version: 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       '@nolebase/vitepress-plugin-git-changelog':
         specifier: ^2.11.1
-        version: 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+        version: 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       '@nolebase/vitepress-plugin-highlight-targeted-heading':
         specifier: ^2.11.1
-        version: 2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+        version: 2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       '@types/node':
         specifier: ^22.10.1
-        version: 22.13.12
+        version: 22.13.15
       '@vueuse/core':
         specifier: ^13.0.0
         version: 13.0.0(vue@3.5.13(typescript@5.8.2))
@@ -61,19 +61,19 @@ importers:
         version: 5.8.2
       unocss:
         specifier: ^66.0.0
-        version: 66.0.0(postcss@8.5.3)(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
+        version: 66.0.0(postcss@8.5.3)(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
       vite:
         specifier: ^6.0.1
-        version: 6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
+        version: 6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
       vite-plugin-inspect:
         specifier: ^11.0.0
-        version: 11.0.0(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))
+        version: 11.0.0(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))
       vitepress:
         specifier: ^1.5.0
-        version: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+        version: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
       vitepress-plugin-tabs:
         specifier: ^0.6.0
-        version: 0.6.0(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))(vue@3.5.13(typescript@5.8.2))
+        version: 0.6.0(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))(vue@3.5.13(typescript@5.8.2))
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.2)
@@ -804,8 +804,8 @@ packages:
   '@iconify-json/octicon@1.2.5':
     resolution: {integrity: sha512-FVFjjmAC1R1Feis9k+COO3WvL3yumk0E7RxNvOEGT9K8CDp05k3Qg2lLlynBzZrSfuT1DhReJUUXFAj60ZHkpA==}
 
-  '@iconify-json/simple-icons@1.2.29':
-    resolution: {integrity: sha512-KYrxmxtRz6iOAulRiUsIBMUuXek+H+Evwf8UvYPIkbQ+KDoOqTegHx3q/w3GDDVC0qJYB+D3hXPMZcpm78qIuA==}
+  '@iconify-json/simple-icons@1.2.30':
+    resolution: {integrity: sha512-KiVViMvnohpS5Q9WMP+4ksOhF3Dnq73Ba9hxBhUIIhp1r6RJ6edMZ8QGKZcFZp/B0/PZC4jAIhXcKKq73WZckQ==}
 
   '@iconify-json/twemoji@1.2.2':
     resolution: {integrity: sha512-ckWEY5KhIQgdFd9VGvfhecTtYUx3ihXycwlZcEws87LxuvIThMHNBCblrQQ5afhbGMfg21dF+z9F+ODMRDYHMg==}
@@ -1064,8 +1064,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@22.13.12':
-    resolution: {integrity: sha512-ixiWrCSRi33uqBMRuICcKECW7rtgY43TbsHDpM2XK7lXispd48opW+0IXrBVxv9NMhaz/Ue9kyj6r3NTVyXm8A==}
+  '@types/node@22.13.15':
+    resolution: {integrity: sha512-imAbQEEbVni6i6h6Bd5xkCRwLqFc8hihCsi2GbtDoAtUcAFQ6Zs4pFXTZUUbroTkXdImczWM9AI8eZUuybXE3w==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -3665,7 +3665,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/simple-icons@1.2.29':
+  '@iconify-json/simple-icons@1.2.30':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -3724,43 +3724,43 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@nolebase/ui-asciinema@2.15.1(asciinema-player@3.9.0)(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
+  '@nolebase/ui-asciinema@2.15.1(asciinema-player@3.9.0)(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
     dependencies:
       asciinema-player: 3.9.0
       less: 4.2.2
-      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
       vue: 3.5.13(typescript@5.8.2)
     transitivePeerDependencies:
       - typescript
 
-  '@nolebase/ui@2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
+  '@nolebase/ui@2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
     dependencies:
       '@iconify-json/octicon': 1.2.5
       less: 4.2.2
-      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
       vue: 3.5.13(typescript@5.8.2)
     transitivePeerDependencies:
       - typescript
 
-  '@nolebase/vitepress-plugin-enhanced-mark@2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
+  '@nolebase/vitepress-plugin-enhanced-mark@2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
     dependencies:
       less: 4.2.2
-      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
 
-  '@nolebase/vitepress-plugin-enhanced-readabilities@2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
+  '@nolebase/vitepress-plugin-enhanced-readabilities@2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
     dependencies:
       '@iconify-json/carbon': 1.2.8
       '@iconify-json/icon-park-outline': 1.2.2
-      '@nolebase/ui': 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+      '@nolebase/ui': 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       less: 4.2.2
-      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
     transitivePeerDependencies:
       - typescript
 
-  '@nolebase/vitepress-plugin-git-changelog@2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
+  '@nolebase/vitepress-plugin-git-changelog@2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
     dependencies:
       '@iconify-json/octicon': 1.2.5
-      '@nolebase/ui': 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
+      '@nolebase/ui': 2.15.1(typescript@5.8.2)(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))
       colorette: 2.0.20
       date-fns: 4.1.0
       defu: 6.1.4
@@ -3770,14 +3770,14 @@ snapshots:
       gray-matter: 4.0.3
       less: 4.2.2
       uncrypto: 0.1.3
-      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
     transitivePeerDependencies:
       - typescript
 
-  '@nolebase/vitepress-plugin-highlight-targeted-heading@2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
+  '@nolebase/vitepress-plugin-highlight-targeted-heading@2.15.1(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))':
     dependencies:
       less: 4.2.2
-      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
 
   '@pkgr/core@0.1.2': {}
 
@@ -3940,7 +3940,7 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@22.13.12':
+  '@types/node@22.13.15':
     dependencies:
       undici-types: 6.20.0
 
@@ -4031,13 +4031,13 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@unocss/astro@66.0.0(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))':
+  '@unocss/astro@66.0.0(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))':
     dependencies:
       '@unocss/core': 66.0.0
       '@unocss/reset': 66.0.0
-      '@unocss/vite': 66.0.0(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
+      '@unocss/vite': 66.0.0(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
     optionalDependencies:
-      vite: 6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
+      vite: 6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
     transitivePeerDependencies:
       - vue
 
@@ -4162,7 +4162,7 @@ snapshots:
     dependencies:
       '@unocss/core': 66.0.0
 
-  '@unocss/vite@66.0.0(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))':
+  '@unocss/vite@66.0.0(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@unocss/config': 66.0.0
@@ -4172,7 +4172,7 @@ snapshots:
       magic-string: 0.30.17
       tinyglobby: 0.2.10
       unplugin-utils: 0.2.4
-      vite: 6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
+      vite: 6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
     transitivePeerDependencies:
       - vue
 
@@ -4211,9 +4211,9 @@ snapshots:
   '@unrs/rspack-resolver-binding-win32-x64-msvc@1.2.2':
     optional: true
 
-  '@vitejs/plugin-vue@5.2.1(vite@5.4.16(@types/node@22.13.12)(less@4.2.2))(vue@3.5.13(typescript@5.8.2))':
+  '@vitejs/plugin-vue@5.2.1(vite@5.4.16(@types/node@22.13.15)(less@4.2.2))(vue@3.5.13(typescript@5.8.2))':
     dependencies:
-      vite: 5.4.16(@types/node@22.13.12)(less@4.2.2)
+      vite: 5.4.16(@types/node@22.13.15)(less@4.2.2)
       vue: 3.5.13(typescript@5.8.2)
 
   '@vitest/eslint-plugin@1.1.38(@typescript-eslint/utils@8.27.0(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.23.0(jiti@2.4.2))(typescript@5.8.2)':
@@ -6150,9 +6150,9 @@ snapshots:
       unist-util-is: 6.0.0
       unist-util-visit-parents: 6.0.1
 
-  unocss@66.0.0(postcss@8.5.3)(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)):
+  unocss@66.0.0(postcss@8.5.3)(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)):
     dependencies:
-      '@unocss/astro': 66.0.0(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
+      '@unocss/astro': 66.0.0(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
       '@unocss/cli': 66.0.0
       '@unocss/core': 66.0.0
       '@unocss/postcss': 66.0.0(postcss@8.5.3)
@@ -6169,9 +6169,9 @@ snapshots:
       '@unocss/transformer-compile-class': 66.0.0
       '@unocss/transformer-directives': 66.0.0
       '@unocss/transformer-variant-group': 66.0.0
-      '@unocss/vite': 66.0.0(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
+      '@unocss/vite': 66.0.0(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
     optionalDependencies:
-      vite: 6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
+      vite: 6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
     transitivePeerDependencies:
       - postcss
       - supports-color
@@ -6209,17 +6209,17 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite-dev-rpc@1.0.7(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)):
+  vite-dev-rpc@1.0.7(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)):
     dependencies:
       birpc: 2.2.0
-      vite: 6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
-      vite-hot-client: 2.0.4(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))
+      vite: 6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
+      vite-hot-client: 2.0.4(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))
 
-  vite-hot-client@2.0.4(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)):
+  vite-hot-client@2.0.4(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)):
     dependencies:
-      vite: 6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
+      vite: 6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
 
-  vite-plugin-inspect@11.0.0(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)):
+  vite-plugin-inspect@11.0.0(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)):
     dependencies:
       ansis: 3.16.0
       debug: 4.4.0
@@ -6229,49 +6229,49 @@ snapshots:
       perfect-debounce: 1.0.0
       sirv: 3.0.1
       unplugin-utils: 0.2.4
-      vite: 6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
-      vite-dev-rpc: 1.0.7(vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))
+      vite: 6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0)
+      vite-dev-rpc: 1.0.7(vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0))
     transitivePeerDependencies:
       - supports-color
 
-  vite@5.4.16(@types/node@22.13.12)(less@4.2.2):
+  vite@5.4.16(@types/node@22.13.15)(less@4.2.2):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.5.3
       rollup: 4.38.0
     optionalDependencies:
-      '@types/node': 22.13.12
+      '@types/node': 22.13.15
       fsevents: 2.3.3
       less: 4.2.2
 
-  vite@6.2.4(@types/node@22.13.12)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0):
+  vite@6.2.4(@types/node@22.13.15)(jiti@2.4.2)(less@4.2.2)(tsx@4.19.2)(yaml@2.7.0):
     dependencies:
       esbuild: 0.25.2
       postcss: 8.5.3
       rollup: 4.38.0
     optionalDependencies:
-      '@types/node': 22.13.12
+      '@types/node': 22.13.15
       fsevents: 2.3.3
       jiti: 2.4.2
       less: 4.2.2
       tsx: 4.19.2
       yaml: 2.7.0
 
-  vitepress-plugin-tabs@0.6.0(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))(vue@3.5.13(typescript@5.8.2)):
+  vitepress-plugin-tabs@0.6.0(vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2))(vue@3.5.13(typescript@5.8.2)):
     dependencies:
-      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
+      vitepress: 1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2)
       vue: 3.5.13(typescript@5.8.2)
 
-  vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.12)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2):
+  vitepress@1.6.3(@algolia/client-search@5.20.0)(@types/node@22.13.15)(less@4.2.2)(postcss@8.5.3)(search-insights@2.13.0)(typescript@5.8.2):
     dependencies:
       '@docsearch/css': 3.8.2
       '@docsearch/js': 3.8.2(@algolia/client-search@5.20.0)(search-insights@2.13.0)
-      '@iconify-json/simple-icons': 1.2.29
+      '@iconify-json/simple-icons': 1.2.30
       '@shikijs/core': 2.2.0
       '@shikijs/transformers': 2.2.0
       '@shikijs/types': 2.2.0
       '@types/markdown-it': 14.1.2
-      '@vitejs/plugin-vue': 5.2.1(vite@5.4.16(@types/node@22.13.12)(less@4.2.2))(vue@3.5.13(typescript@5.8.2))
+      '@vitejs/plugin-vue': 5.2.1(vite@5.4.16(@types/node@22.13.15)(less@4.2.2))(vue@3.5.13(typescript@5.8.2))
       '@vue/devtools-api': 7.7.1
       '@vue/shared': 3.5.13
       '@vueuse/core': 12.8.2(typescript@5.8.2)
@@ -6280,7 +6280,7 @@ snapshots:
       mark.js: 8.11.1
       minisearch: 7.1.1
       shiki: 2.2.0
-      vite: 5.4.16(@types/node@22.13.12)(less@4.2.2)
+      vite: 5.4.16(@types/node@22.13.15)(less@4.2.2)
       vue: 3.5.13(typescript@5.8.2)
     optionalDependencies:
       postcss: 8.5.3
