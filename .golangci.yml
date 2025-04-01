@@ -1,82 +1,98 @@
+version: "2"
 run:
   allow-parallel-runners: true
-
 linters:
-  enable-all: true
+  default: all
   disable:
-    - mnd
-    - depguard
-    - funlen
     - containedctx
-    - exhaustruct
-    - testpackage
-    - varnamelen
-    - maintidx
-    - err113
-    - nlreturn
-    - wrapcheck
-    - tagliatelle
-    - paralleltest
-    - lll
     - contextcheck
+    - cyclop
+    - depguard
+    - err113
+    - exhaustruct
+    - funlen
     - gochecknoglobals
-    - tagalign
-    - nilnil
-    - godot
-    - godox
-    - gci
+    - gochecknoinits
     - gocognit
     - gocyclo
-    - cyclop
+    - godot
+    - godox
     - ireturn
-    - gofumpt
-    - gochecknoinits
-
-linters-settings:
-  wsl:
-    allow-assign-and-call: false
-    strict-append: false
-    allow-trailing-comment: true
-    allow-cuddle-declarations: true
-    allow-separated-leading-comment: true
-  revive:
+    - lll
+    - maintidx
+    - mnd
+    - nilnil
+    - nlreturn
+    - paralleltest
+    - tagalign
+    - tagliatelle
+    - testpackage
+    - varnamelen
+    - wrapcheck
+  settings:
+    dupl:
+      threshold: 1000
+    gocritic:
+      disabled-checks:
+        - ifElseChain
+    gosec:
+      excludes:
+        - G115
+    mnd:
+      ignored-files:
+        - examples/.*
+      ignored-functions:
+        - context.WithTimeout
+        - strconv.ParseComplex
+    nestif:
+      min-complexity: 9
+    revive:
+      rules:
+        - name: blank-imports
+          disabled: true
+    wsl:
+      strict-append: false
+      allow-assign-and-call: false
+      allow-trailing-comment: true
+      allow-separated-leading-comment: true
+      allow-cuddle-declarations: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
     rules:
-      - name: blank-imports
-        disabled: true
-  nestif:
-    # Minimal complexity of if statements to report.
-    # Default: 5
-    min-complexity: 9
-  dupl:
-    # Tokens count to trigger issue.
-    # Default: 150
-    threshold: 1000
-  mnd:
-    ignored-functions:
-      - "context.WithTimeout"
-      - "strconv.ParseComplex"
-    ignored-files:
-      - "examples/.*"
-  gocritic:
-    disabled-checks:
-      - ifElseChain
-  gosec:
-    excludes:
-      - G115
-
-issues:
-  exclude:
-    - "if statements should only be cuddled with assignments" # from wsl
-    - "if statements should only be cuddled with assignments used in the if statement itself" # from wsl
-    - "assignments should only be cuddled with other assignments" # from wsl. false positive case: var a bool\nb := true
-    - "declarations should never be cuddled" # from wsl
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - perfsprint
-    - path: internal\/cli\/.*\.go
-      linters:
-        - forbidigo
-  exclude-dirs:
-    - apis
-    - api
+      - linters:
+          - perfsprint
+        path: _test\.go
+      - linters:
+          - forbidigo
+        path: internal\/cli\/.*\.go
+      - path: (.+)\.go$
+        text: if statements should only be cuddled with assignments
+      - path: (.+)\.go$
+        text: if statements should only be cuddled with assignments used in the if statement itself
+      - path: (.+)\.go$
+        text: assignments should only be cuddled with other assignments
+      - path: (.+)\.go$
+        text: declarations should never be cuddled
+    paths:
+      - apis
+      - api
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - apis
+      - api
+      - third_party$
+      - builtin$
+      - examples$
