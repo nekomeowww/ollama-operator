@@ -95,7 +95,7 @@ func EnsureImageStorePVCCreated(
 func GetImageStorePVByPVC(ctx context.Context, c client.Client, pvc *corev1.PersistentVolumeClaim) (*corev1.PersistentVolume, error) {
 	var pv corev1.PersistentVolume
 
-	err := c.Get(ctx, types.NamespacedName{Namespace: pvc.ObjectMeta.Namespace, Name: pvc.Spec.VolumeName}, &pv)
+	err := c.Get(ctx, types.NamespacedName{Namespace: pvc.Namespace, Name: pvc.Spec.VolumeName}, &pv)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return nil, nil

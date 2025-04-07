@@ -165,8 +165,8 @@ func MergePodTemplate(
 		pod = *model.Spec.PodTemplate
 	}
 
-	pod.ObjectMeta.Labels = lo.Assign(pod.ObjectMeta.Labels, ModelLabels(name))
-	pod.ObjectMeta.Annotations = lo.Assign(pod.ObjectMeta.Annotations, ModelAnnotations(ModelAppName(name), false))
+	pod.Labels = lo.Assign(pod.Labels, ModelLabels(name))
+	pod.Annotations = lo.Assign(pod.Annotations, ModelAnnotations(ModelAppName(name), false))
 
 	pod.Spec.InitContainers = AssignOrAppend(
 		pod.Spec.InitContainers,
