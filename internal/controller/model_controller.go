@@ -72,6 +72,13 @@ func (r *ModelReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	return operator.HandleError(ctx, res, err)
 }
 
+// SetupWithManager sets up the controller with the Manager.
+func (r *ModelReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&ollamav1.Model{}).
+		Complete(r)
+}
+
 func (r *ModelReconciler) reconcile(ctx context.Context, req ctrl.Request, m *ollamav1.Model) error {
 	client := model.ClientFromContext(ctx)
 	recorder := model.WrappedRecorderFromContext[*ollamav1.Model](ctx)
@@ -212,11 +219,4 @@ func (r *ModelReconciler) reconcileModelService(ctx context.Context, ns string, 
 	recorder.Eventf("Normal", "ModelAvailable", "Model is available")
 
 	return nil
-}
-
-// SetupWithManager sets up the controller with the Manager.
-func (r *ModelReconciler) SetupWithManager(mgr ctrl.Manager) error {
-	return ctrl.NewControllerManagedBy(mgr).
-		For(&ollamav1.Model{}).
-		Complete(r)
 }

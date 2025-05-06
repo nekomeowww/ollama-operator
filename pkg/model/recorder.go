@@ -34,11 +34,11 @@ func (r *WrappedRecorder[T]) AnnotatedEventf(annotations map[string]string, even
 	r.recorder.AnnotatedEventf(r.t, annotations, eventType, reason, messageFmt, args...)
 }
 
+type baseWrapperRecorderContextKey string
+
 func NewWrappedRecorderContextKey(key string) baseWrapperRecorderContextKey {
 	return baseWrapperRecorderContextKey(key)
 }
-
-type baseWrapperRecorderContextKey string
 
 const (
 	defaultBaseWrapperRecorderContextKey baseWrapperRecorderContextKey = "default"
