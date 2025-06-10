@@ -25,7 +25,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Download artifact - PR
-        uses: dawidd6/action-download-artifact@v9
+        uses: dawidd6/action-download-artifact@v10
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
@@ -34,7 +34,7 @@ jobs:
           allow_forks: true
 
       - name: Download artifact - PR
-        uses: dawidd6/action-download-artifact@v9
+        uses: dawidd6/action-download-artifact@v10
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
@@ -53,7 +53,7 @@ jobs:
           echo "BRANCH_NAME=$(cat branch-name/branch_name)" >> $GITHUB_ENV
 
       - name: Download artifact - Ubuntu
-        uses: dawidd6/action-download-artifact@v9
+        uses: dawidd6/action-download-artifact@v10
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
@@ -105,7 +105,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: Download artifact - PR
-        uses: dawidd6/action-download-artifact@v9
+        uses: dawidd6/action-download-artifact@v10
         with:
           workflow_conclusion: success
           run_id: ${{ github.event.workflow_run.id }}
