@@ -2,7 +2,7 @@ module github.com/nekomeowww/ollama-operator
 
 go 1.24.0
 
-toolchain go1.24.6
+toolchain go1.25.0
 
 require (
 	github.com/briandowns/spinner v1.23.2
@@ -13,10 +13,10 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.7
 	github.com/stretchr/testify v1.10.0
-	k8s.io/api v0.33.3
-	k8s.io/apimachinery v0.33.3
-	k8s.io/cli-runtime v0.33.3
-	k8s.io/client-go v0.33.3
+	k8s.io/api v0.33.4
+	k8s.io/apimachinery v0.33.4
+	k8s.io/cli-runtime v0.33.4
+	k8s.io/client-go v0.33.4
 	sigs.k8s.io/controller-runtime v0.21.0
 )
 
