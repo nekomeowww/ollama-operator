@@ -81,6 +81,8 @@ To integrate with your OpenAI API compatible client:
 
 // CmdDeployOptions provides information required to deploy a model
 type CmdDeployOptions struct {
+	genericiooptions.IOStreams
+
 	configFlags     *genericclioptions.ConfigFlags
 	clientConfig    clientcmd.ClientConfig
 	kubeConfig      *rest.Config
@@ -97,8 +99,6 @@ type CmdDeployOptions struct {
 	pvAccessMode string
 
 	resourceLimits []string
-
-	genericiooptions.IOStreams
 }
 
 // NewCmdDeployOptions provides an instance of CmdDeployOptions with default values
@@ -181,6 +181,7 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	}
 	o.AddFlags(cmd.Flags())
 	o.configFlags.AddFlags(cmd.Flags())
+
 	o.clientConfig = o.configFlags.ToRawKubeConfigLoader()
 	o.kubeConfig = lo.Must(o.clientConfig.ClientConfig())
 	o.kubeClient = lo.Must(client.New(o.kubeConfig, client.Options{}))
@@ -202,6 +203,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	if !supported {
 		return ErrOllamaModelNotSupported
 	}
@@ -227,6 +229,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	if createdModel == nil {
 		var resourceRequirements corev1.ResourceRequirements
 
@@ -235,6 +238,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 			if len(parts) != 2 {
 				return fmt.Errorf("invalid resource limit format: %s", limit)
 			}
+
 			if resourceRequirements.Limits == nil {
 				resourceRequirements.Limits = make(corev1.ResourceList)
 			}
@@ -249,6 +253,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			return err
 		}
+
 		if !o.expose {
 			fmt.Printf(deployedNonExposedMessage, modelName, command(), modelName, command(), modelName, createdModel.Name, createdModel.Name)
 			return nil
@@ -281,6 +286,7 @@ func (o *CmdDeployOptions) runE(cmd *cobra.Command, args []string) error {
 	_ = s.Color("blue")
 
 	s.Start()
+
 	s.Suffix = " exposing model service..."
 
 	err = waitUntilOllamaModelServiceReady(exposeSvcCtx, o.kubeClient, namespace, modelName)

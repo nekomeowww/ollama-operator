@@ -78,7 +78,9 @@ func IsOllamaOperatorCRDSupported(discoveryClient discovery.DiscoveryInterface, 
 
 func FromUnstructured[T any](obj *unstructured.Unstructured) (*T, error) {
 	typedObj := new(T)
-	if err := runtime.DefaultUnstructuredConverter.FromUnstructured(obj.UnstructuredContent(), typedObj); err != nil {
+
+	err := runtime.DefaultUnstructuredConverter.FromUnstructured(obj.UnstructuredContent(), typedObj)
+	if err != nil {
 		return nil, err
 	}
 
@@ -126,6 +128,7 @@ func getNamespace(clientConfig clientcmd.ClientConfig, cmd *cobra.Command) (stri
 	if err != nil {
 		return "", err
 	}
+
 	if namespace == "" {
 		var ok bool
 
@@ -133,6 +136,7 @@ func getNamespace(clientConfig clientcmd.ClientConfig, cmd *cobra.Command) (stri
 		if err != nil {
 			return "", err
 		}
+
 		if !ok {
 			namespace = "default"
 		}
@@ -148,6 +152,7 @@ func getImage(cmd *cobra.Command, args []string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	if modelImage == "" {
 		return modelName, nil
 	}
@@ -184,6 +189,7 @@ func createOllamaModel(
 	if storageClass != "" {
 		model.Spec.StorageClassName = lo.ToPtr(storageClass)
 	}
+
 	if pvAccessMode != "" {
 		model.Spec.PersistentVolume = &ollamav1.ModelPersistentVolumeSpec{
 			AccessMode: lo.ToPtr(corev1.PersistentVolumeAccessMode(pvAccessMode)),
@@ -244,6 +250,7 @@ func exposeOllamaModel(
 			return nil, fmt.Errorf("unsupported service type: %s", serviceType)
 		}
 	}
+
 	if serviceType == "NodePort" && nodePort != 0 {
 		if nodePort < 0 || nodePort > 65535 {
 			return nil, fmt.Errorf("invalid nodePort: %d", nodePort)
@@ -258,6 +265,7 @@ func exposeOllamaModel(
 	if err != nil && !apierrors.IsNotFound(err) {
 		return nil, err
 	}
+
 	if err == nil {
 		return &existingService, nil
 	}

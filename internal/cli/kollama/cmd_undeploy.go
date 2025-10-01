@@ -35,13 +35,13 @@ const (
 )
 
 type CmdUndeployOptions struct {
+	genericiooptions.IOStreams
+
 	configFlags     *genericclioptions.ConfigFlags
 	clientConfig    clientcmd.ClientConfig
 	kubeConfig      *rest.Config
 	dynamicClient   dynamic.Interface
 	discoveryClient discovery.DiscoveryInterface
-
-	genericiooptions.IOStreams
 }
 
 func NewCmdUndeployOptions(streams genericiooptions.IOStreams) *CmdUndeployOptions {
@@ -74,6 +74,7 @@ func NewCmdUndeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	}
 
 	o.configFlags.AddFlags(cmd.Flags())
+
 	o.clientConfig = o.configFlags.ToRawKubeConfigLoader()
 	o.kubeConfig = lo.Must(o.clientConfig.ClientConfig())
 	o.dynamicClient = lo.Must(dynamic.NewForConfig(o.kubeConfig))
@@ -94,6 +95,7 @@ func (o *CmdUndeployOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	if !supported {
 		return ErrOllamaModelNotSupported
 	}
@@ -107,6 +109,7 @@ func (o *CmdUndeployOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	if model == nil {
 		fmt.Println(modelImage, "undeployed")
 		return nil

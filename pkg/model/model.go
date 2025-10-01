@@ -29,6 +29,7 @@ func getServiceByLabels(ctx context.Context, c client.Client, namespace string, 
 	if err != nil {
 		return nil, err
 	}
+
 	if len(service.Items) == 0 {
 		return nil, nil
 	}
@@ -103,6 +104,7 @@ func EnsureDeploymentCreated(
 	if err != nil {
 		return nil, err
 	}
+
 	if deployment != nil {
 		return deployment, nil
 	}
@@ -241,6 +243,7 @@ func IsDeploymentReady(
 	if err != nil {
 		return false, err
 	}
+
 	if deployment == nil {
 		return false, nil
 	}
@@ -249,6 +252,7 @@ func IsDeploymentReady(
 	if deployment.Spec.Replicas != nil {
 		replica = int(*deployment.Spec.Replicas)
 	}
+
 	if deployment.Status.ReadyReplicas == int32(replica) {
 		log.Info("deployment is ready", "deployment", deployment)
 		return true, nil
@@ -271,6 +275,7 @@ func UpdateDeployment(
 	if err != nil {
 		return false, err
 	}
+
 	if deployment == nil {
 		return false, nil
 	}
@@ -280,6 +285,7 @@ func UpdateDeployment(
 	if model.Spec.Replicas != nil {
 		replicas = int(*model.Spec.Replicas)
 	}
+
 	if deployment.Spec.Replicas != nil {
 		if int(*deployment.Spec.Replicas) == replicas {
 			return false, nil
@@ -342,6 +348,7 @@ func EnsureServiceCreated(
 	if err != nil {
 		return nil, err
 	}
+
 	if service != nil {
 		return service, nil
 	}
@@ -371,9 +378,11 @@ func IsServiceReady(
 	if err != nil {
 		return false, err
 	}
+
 	if service == nil {
 		return false, nil
 	}
+
 	if service.Spec.ClusterIP == "" {
 		log.Info("waiting for service to have cluster IP", "service", service)
 		modelRecorder.Eventf("Normal", "WaitingForService", "Waiting for service %s to have cluster IP", service.Name)

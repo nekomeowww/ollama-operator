@@ -34,6 +34,7 @@ func HandleError(ctx context.Context, result *ctrl.Result, err error) (ctrl.Resu
 		log.Error(err, "Requeue", "after", result.RequeueAfter)
 		return *result, err
 	}
+
 	if result != nil {
 		return *result, nil
 	}

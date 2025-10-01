@@ -36,7 +36,9 @@ func main() {
 	pflag.CommandLine = flags
 
 	root := kollama.NewCmd(genericiooptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr})
-	if err := root.Execute(); err != nil {
+
+	err := root.Execute()
+	if err != nil {
 		os.Exit(1)
 	}
 }

@@ -34,6 +34,7 @@ import (
 // ModelReconciler reconciles a Model object
 type ModelReconciler struct {
 	client.Client
+
 	Scheme   *runtime.Scheme
 	Recorder record.EventRecorder
 }
@@ -88,6 +89,7 @@ func (r *ModelReconciler) reconcile(ctx context.Context, req ctrl.Request, m *ol
 		if err != nil {
 			return err
 		}
+
 		if hasSet {
 			recorder.Eventf("Normal", "ModelProgressing", "Model is progressing")
 			return operator.RequeueAfter(time.Second)
@@ -126,6 +128,7 @@ func (r *ModelReconciler) reconcileStatefulSet(ctx context.Context, ns string, n
 	if err != nil {
 		return err
 	}
+
 	if !statefulSetReady {
 		return operator.RequeueAfter(time.Second * 5)
 	}
@@ -148,6 +151,7 @@ func (r *ModelReconciler) reconcileService(ctx context.Context, ns string, name 
 	if err != nil {
 		return err
 	}
+
 	if !serviceReady {
 		return operator.RequeueAfter(time.Second * 5)
 	}
@@ -165,6 +169,7 @@ func (r *ModelReconciler) reconcileDeployment(ctx context.Context, ns string, na
 	if err != nil {
 		return err
 	}
+
 	if modelDeploymentUpdated {
 		return operator.RequeueAfter(time.Second * 5)
 	}
@@ -173,6 +178,7 @@ func (r *ModelReconciler) reconcileDeployment(ctx context.Context, ns string, na
 	if err != nil {
 		return err
 	}
+
 	if !modelDeploymentReady {
 		return operator.RequeueAfter(time.Second * 5)
 	}
@@ -197,6 +203,7 @@ func (r *ModelReconciler) reconcileModelService(ctx context.Context, ns string, 
 	if err != nil {
 		return err
 	}
+
 	if !modelServiceReady {
 		return operator.RequeueAfter(time.Second * 5)
 	}
@@ -206,6 +213,7 @@ func (r *ModelReconciler) reconcileModelService(ctx context.Context, ns string, 
 		if err != nil {
 			return err
 		}
+
 		if hasSet {
 			return operator.RequeueAfter(time.Second * 5)
 		}

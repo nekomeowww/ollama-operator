@@ -65,6 +65,7 @@ func waitUntilOllamaModelDeploymentPullImageDone(ctx context.Context, kubeClient
 			time.Sleep(1 * time.Second)
 			return waitUntilOllamaModelDeploymentPullImageDone(ctx, kubeClient, namespace, name)
 		}
+
 		if len(pod.Status.ContainerStatuses) == 0 || !pod.Status.ContainerStatuses[0].Ready {
 			time.Sleep(1 * time.Second)
 			return waitUntilOllamaModelDeploymentPullImageDone(ctx, kubeClient, namespace, name)
@@ -102,6 +103,7 @@ func waitUntilOllamaModelServiceReady(ctx context.Context, kubeClient client.Cli
 	if err != nil {
 		return err
 	}
+
 	if len(services.Items) == 0 {
 		time.Sleep(1 * time.Second)
 		return waitUntilOllamaModelServiceReady(ctx, kubeClient, namespace, name)
@@ -116,6 +118,7 @@ func waitUntilModelAvailable(kubeClient client.Client, namespace string, modelNa
 	_ = s.Color("blue")
 
 	s.Start()
+
 	s.Suffix = " preparing image store..."
 
 	waitConditionCtx, waitConditionCancel := context.WithTimeout(context.Background(), 1*time.Hour)
@@ -134,6 +137,7 @@ func waitUntilModelAvailable(kubeClient client.Client, namespace string, modelNa
 	_ = s.Color("blue")
 
 	s.Start()
+
 	s.Suffix = " exposing image store service..."
 
 	err = waitUntilImageStoreServiceReady(waitConditionCtx, kubeClient, namespace)
@@ -149,6 +153,7 @@ func waitUntilModelAvailable(kubeClient client.Client, namespace string, modelNa
 	_ = s.Color("blue")
 
 	s.Start()
+
 	s.Suffix = " pulling model image \"" + modelImage + "\"..."
 
 	err = waitUntilOllamaModelDeploymentPullImageDone(waitConditionCtx, kubeClient, namespace, modelName)
@@ -164,6 +169,7 @@ func waitUntilModelAvailable(kubeClient client.Client, namespace string, modelNa
 	_ = s.Color("blue")
 
 	s.Start()
+
 	s.Suffix = " deploying model..."
 
 	err = waitUntilOllamaModelDeploymentReady(waitConditionCtx, kubeClient, namespace, modelName)

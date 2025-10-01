@@ -52,6 +52,7 @@ func EnsureImageStorePVCCreated(
 	if err != nil {
 		return nil, err
 	}
+
 	if pvc != nil {
 		return pvc, nil
 	}
@@ -135,6 +136,7 @@ func EnsureImageStoreStatefulSetCreated(
 	if err != nil {
 		return nil, err
 	}
+
 	if statefulSet != nil {
 		return statefulSet, nil
 	}
@@ -202,9 +204,11 @@ func IsImageStoreStatefulSetReady(
 	if err != nil {
 		return false, err
 	}
+
 	if statefulSet == nil {
 		return false, nil
 	}
+
 	if statefulSet.Status.ReadyReplicas == 1 {
 		return true, nil
 	}
@@ -243,6 +247,7 @@ func EnsureImageStoreServiceCreated(
 	if err != nil {
 		return nil, err
 	}
+
 	if service != nil {
 		return service, nil
 	}
@@ -300,9 +305,11 @@ func IsImageStoreServiceReady(
 	if err != nil {
 		return false, err
 	}
+
 	if service == nil {
 		return false, nil
 	}
+
 	if service.Spec.ClusterIP != "" {
 		return true, nil
 	}

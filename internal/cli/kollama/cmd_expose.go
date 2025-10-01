@@ -46,6 +46,8 @@ To integrate with your OpenAI API compatible client:
 
 // CmdDeployOptions provides information required to expose a model
 type CmdExposeOptions struct {
+	genericiooptions.IOStreams
+
 	configFlags     *genericclioptions.ConfigFlags
 	clientConfig    clientcmd.ClientConfig
 	kubeConfig      *rest.Config
@@ -56,8 +58,6 @@ type CmdExposeOptions struct {
 	serviceType string
 	serviceName string
 	nodePort    int32
-
-	genericiooptions.IOStreams
 }
 
 // NewCmdExposeOptions provides an instance of CmdExposeOptions with default values
@@ -107,6 +107,7 @@ func NewCmdExpose(streams genericiooptions.IOStreams) *cobra.Command {
 	}
 	o.AddFlags(cmd.Flags())
 	o.configFlags.AddFlags(cmd.Flags())
+
 	o.clientConfig = o.configFlags.ToRawKubeConfigLoader()
 	o.kubeConfig = lo.Must(o.clientConfig.ClientConfig())
 	o.kubeClient = lo.Must(client.New(o.kubeConfig, client.Options{}))
@@ -128,6 +129,7 @@ func (o *CmdExposeOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	if !supported {
 		return ErrOllamaModelNotSupported
 	}
@@ -141,6 +143,7 @@ func (o *CmdExposeOptions) runE(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
 	if model == nil {
 		fmt.Println("Ollama Model", modelName, "not found, did you deploy it?")
 		cancel()
