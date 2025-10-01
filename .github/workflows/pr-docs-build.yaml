@@ -7,10 +7,6 @@ on:
     paths:
       - 'docs/**'
 
-defaults:
-  run:
-    working_directory: ./docs
-
 jobs:
   build:
     strategy:
@@ -22,15 +18,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       # This is quite weird.
-      # Eventhough this is the *intended* solution introduces in official blog post here
+      # Even though this is the *intended* solution introduces in official blog post here
       # https://securitylab.github.com/research/github-actions-preventing-pwn-requests/.
       # But still, as https://github.com/orgs/community/discussions/25220#discussioncomment-7856118 stated,
       # this is vulnerable since there is no source of truth about which PR in the triggered workflow.
-      - name: Presist PR number
+      - name: Persist PR number
         run: |
           echo "${{ github.event.number }}" > pr_num
 
-      - name: Presist branch name
+      - name: Persist branch name
         run: |
           echo "${{ github.head_ref }}" > branch_name
 
@@ -47,28 +43,23 @@ jobs:
           name: branch-name
           path: ./branch_name
           overwrite: true
-
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Install Node.js 23.x
-        uses: actions/setup-node@v5
-        with:
-          node-version: 23.x
-
       - uses: pnpm/action-setup@v4
-        name: Install pnpm
         with:
           run_install: false
-
-      - name: Install dependencies
-        working-directory: docs
+          package_json_file: docs/package.json
+      - uses: actions/setup-node@v5
+        with:
+          cache: pnpm
+          node-version: latest
+          registry-url: https://registry.npmjs.org
+          cache-dependency-path: 'docs/pnpm-lock.yaml'
+      - working-directory: docs
         run: pnpm install --frozen-lockfile
 
-      - name: Build docs
-        working-directory: docs
+      - working-directory: docs
         run: pnpm docs:build
         env:
           # As suggested in Verbose Build option to be able to track down errors https://github.com/vuejs/vitepress/issues/422
@@ -80,5 +71,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: docs-${{ matrix.os }}-build
-          path: .vitepress/dist
+          path: docs/.vitepress/dist
           overwrite: true

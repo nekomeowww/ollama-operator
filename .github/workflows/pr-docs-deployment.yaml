@@ -10,11 +10,6 @@ on:
 env:
   PR_NUM: 0
   BRANCH_NAME: main
-  STORE_PATH: ''
-
-defaults:
-  run:
-    working_directory: ./docs
 
 jobs:
   on-success:

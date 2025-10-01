@@ -5,10 +5,6 @@ on:
     branches:
       - 'main'
 
-defaults:
-  run:
-    working_directory: ./docs
-
 jobs:
   build:
     name: Build
@@ -17,29 +13,24 @@ jobs:
       name: Production Docs
       url: https://ollama-operator.ayaka.io
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Install Node.js 23.x
-        uses: actions/setup-node@v5
-        with:
-          node-version: 23.x
-
       - uses: pnpm/action-setup@v4
-        name: Install pnpm
         with:
           run_install: false
-
-      - name: Install dependencies
-        working-directory: docs
+          package_json_file: docs/package.json
+      - uses: actions/setup-node@v5
+        with:
+          cache: pnpm
+          node-version: latest
+          registry-url: https://registry.npmjs.org
+          cache-dependency-path: 'docs/pnpm-lock.yaml'
+      - working-directory: docs
         run: pnpm install --frozen-lockfile
 
-      - name: Build docs
-        working-directory: docs
-        run: |
-          pnpm docs:build
+      - working-directory: docs
+        run: pnpm docs:build
         env:
           # As suggested in Verbose Build option to be able to track down errors https://github.com/vuejs/vitepress/issues/422
           # vitepress build command does not have --debug option, so we need to set it manually where the debug package is used.
@@ -53,7 +44,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
-          directory: .vitepress/dist
+          directory: docs/.vitepress/dist
           # Optional: Switch what branch you are publishing to.
           # By default this will be the branch which triggered this workflow
           branch: main
