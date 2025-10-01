@@ -157,7 +157,7 @@ func (o *CmdDeployOptions) AddFlags(flags *pflag.FlagSet) {
 	)
 }
 
-// NewCmdNamespace provides a cobra command wrapping CmdDeployOptions
+// NewCmdDeploy provides a cobra command wrapping CmdDeployOptions
 func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 	o := NewCmdDeployOptions(streams)
 
@@ -169,6 +169,7 @@ func NewCmdDeploy(streams genericiooptions.IOStreams) *cobra.Command {
 			if len(args) < 1 {
 				return errors.New("model name is required")
 			}
+
 			if args[0] == "" {
 				return errors.New("model name cannot be empty")
 			}

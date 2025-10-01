@@ -44,7 +44,7 @@ To integrate with your OpenAI API compatible client:
 `
 )
 
-// CmdDeployOptions provides information required to expose a model
+// CmdExposeOptions provides information required to expose a model
 type CmdExposeOptions struct {
 	genericiooptions.IOStreams
 
@@ -95,6 +95,7 @@ func NewCmdExpose(streams genericiooptions.IOStreams) *cobra.Command {
 			if len(args) < 1 {
 				return errors.New("model name is required")
 			}
+
 			if args[0] == "" {
 				return errors.New("model name cannot be empty")
 			}

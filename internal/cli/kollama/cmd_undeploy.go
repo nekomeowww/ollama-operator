@@ -62,6 +62,7 @@ func NewCmdUndeploy(streams genericiooptions.IOStreams) *cobra.Command {
 			if len(args) < 1 {
 				return errors.New("model name is required")
 			}
+
 			if args[0] == "" {
 				return errors.New("model name cannot be empty")
 			}
