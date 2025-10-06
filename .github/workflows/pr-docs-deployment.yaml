@@ -71,7 +71,7 @@ jobs:
           wranglerVersion: '3'
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v3
+        uses: peter-evans/find-comment@v4
         id: fc
         with:
           issue-number: ${{ env.PR_NUM }}
@@ -114,7 +114,7 @@ jobs:
           echo "PR_NUM=$(cat pr-num/pr_num)" >> $GITHUB_ENV
 
       - name: Find Comment
-        uses: peter-evans/find-comment@v3
+        uses: peter-evans/find-comment@v4
         id: fc
         with:
           issue-number: ${{ env.PR_NUM }}
