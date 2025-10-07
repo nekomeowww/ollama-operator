@@ -43,7 +43,7 @@ jobs:
           name: branch-name
           path: ./branch_name
           overwrite: true
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - uses: pnpm/action-setup@v4
