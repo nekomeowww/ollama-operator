@@ -2,14 +2,14 @@ module github.com/nekomeowww/ollama-operator
 
 go 1.24.0
 
-toolchain go1.25.1
+toolchain go1.25.2
 
 require (
 	github.com/briandowns/spinner v1.23.2
 	github.com/google/go-containerregistry v0.20.6
 	github.com/gookit/color v1.6.0
 	github.com/nekomeowww/xo v1.17.0
-	github.com/samber/lo v1.51.0
+	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
@@ -17,7 +17,7 @@ require (
 	k8s.io/apimachinery v0.34.1
 	k8s.io/cli-runtime v0.34.1
 	k8s.io/client-go v0.34.1
-	sigs.k8s.io/controller-runtime v0.22.1
+	sigs.k8s.io/controller-runtime v0.22.2
 )
 
 require (
