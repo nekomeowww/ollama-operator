@@ -9219,7 +9219,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: ghcr.io/nekomeowww/ollama-operator:0.10.8
+        image: ghcr.io/nekomeowww/ollama-operator:0.10.9
         livenessProbe:
           httpGet:
             path: /healthz
