@@ -178,7 +178,7 @@ func AssignOllamaPullerContainer(name string, image string, parsedModelName stri
 		container.Args = []string{
 			"-c",
 			// TODO: This is a temporary solution, we need to find a better way to preload the models
-			fmt.Sprintf("until curl -f http://ollama-models-store:11434/api/version; do echo 'Waiting for Ollama...'; sleep 5; done && curl http://ollama-models-store:11434/api/pull -H 'Content-Type: application/json' -d '{\"model\": \"%s\"}'", image, parsedModelName),
+			fmt.Sprintf("until curl -f http://ollama-models-store:11434/api/version; do echo 'Waiting for Ollama...'; sleep 5; done && curl http://ollama-models-store:11434/api/generate -H 'Content-Type: application/json' -d '{\"model\": \"%s\"}'", image, parsedModelName),
 		}
 
 		container.Env = AppendIfNotFound(container.Env, func(item corev1.EnvVar) bool {
