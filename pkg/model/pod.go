@@ -1,11 +1,16 @@
 package model
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 
 	"github.com/samber/lo"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	"moul.io/http2curl"
 )
 
 const (
@@ -169,6 +174,32 @@ func FindOllamaPullerContainer(container corev1.Container) bool {
 	return container.Name == "ollama-image-pull"
 }
 
+func ioReaderOfJsonBody(body map[string]any) (io.Reader, error) {
+	jsonBytes, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+
+	buffer := bytes.NewBuffer(jsonBytes)
+	return buffer, nil
+}
+
+func ollamaPull(image string) string {
+	pullRequest := lo.Must(http.NewRequest(http.MethodPost, "http://ollama-models-store:11434/api/pull", lo.Must(ioReaderOfJsonBody(map[string]any{"model": image}))))
+	pullRequest.Header.Set("Content-Type", "application/json")
+	pullModelCurlCommand := lo.Must(http2curl.GetCurlCommand(pullRequest))
+
+	return pullModelCurlCommand.String()
+}
+
+func ollamaGenerate(image string) string {
+	generateRequest := lo.Must(http.NewRequest(http.MethodPost, "http://ollama-models-store:11434/api/generate", lo.Must(ioReaderOfJsonBody(map[string]any{"model": image}))))
+	generateRequest.Header.Set("Content-Type", "application/json")
+	generateModelCurlCommand := lo.Must(http2curl.GetCurlCommand(generateRequest))
+
+	return generateModelCurlCommand.String()
+}
+
 func AssignOllamaPullerContainer(name string, image string, parsedModelName string, serverLocatedNamespace string, resources corev1.ResourceRequirements, extraEnvFrom []corev1.EnvFromSource, extraEnv []corev1.EnvVar) func(container corev1.Container, _ int) corev1.Container {
 	return func(container corev1.Container, _ int) corev1.Container {
 		container.Command = []string{
@@ -178,7 +209,7 @@ func AssignOllamaPullerContainer(name string, image string, parsedModelName stri
 		container.Args = []string{
 			"-c",
 			// TODO: This is a temporary solution, we need to find a better way to preload the models
-			fmt.Sprintf("until curl -f http://ollama-models-store:11434/api/version; do echo 'Waiting for Ollama...'; sleep 5; done && curl http://ollama-models-store:11434/api/generate -H 'Content-Type: application/json' -d '{\"model\": \"%s\"}'", image, parsedModelName),
+			fmt.Sprintf("until curl -f http://ollama-models-store:11434/api/version; do echo 'Waiting for Ollama...'; sleep 5; done && %s && %s", ollamaPull(image), ollamaGenerate(parsedModelName)),
 		}
 
 		container.Env = AppendIfNotFound(container.Env, func(item corev1.EnvVar) bool {
@@ -204,7 +235,7 @@ func NewOllamaPullerContainer(name string, image string, parsedModelName string,
 		Args: []string{
 			"-c",
 			// TODO: This is a temporary solution, we need to find a better way to preload the models
-			fmt.Sprintf("until curl -f http://ollama-models-store:11434/api/version; do echo 'Waiting for Ollama...'; sleep 5; done && curl http://ollama-models-store:11434/api/pull -H 'Content-Type: application/json' -d '{\"model\": \"%s\"}'", image, parsedModelName),
+			fmt.Sprintf("until curl -f http://ollama-models-store:11434/api/version; do echo 'Waiting for Ollama...'; sleep 5; done && %s", ollamaPull(image)),
 		},
 		Env: []corev1.EnvVar{
 			{
