@@ -206,7 +206,7 @@ func ollamaGenerate(image string) string {
 func AssignOllamaPullerContainer(name string, image string, parsedModelName string, serverLocatedNamespace string, resources corev1.ResourceRequirements, extraEnvFrom []corev1.EnvFromSource, extraEnv []corev1.EnvVar) func(container corev1.Container, _ int) corev1.Container {
 	return func(container corev1.Container, _ int) corev1.Container {
 		container.Command = []string{
-			"bash",
+			"sh",
 		}
 
 		container.Args = []string{
@@ -233,7 +233,7 @@ func NewOllamaPullerContainer(name string, image string, parsedModelName string,
 		Name:  "ollama-image-pull",
 		Image: "curlimages/curl",
 		Command: []string{
-			"bash",
+			"sh",
 		},
 		Args: []string{
 			"-c",
