@@ -2,7 +2,7 @@ module github.com/nekomeowww/ollama-operator
 
 go 1.24.0
 
-toolchain go1.25.2
+toolchain go1.25.3
 
 require (
 	github.com/briandowns/spinner v1.23.2
@@ -17,7 +17,7 @@ require (
 	k8s.io/apimachinery v0.34.1
 	k8s.io/cli-runtime v0.34.1
 	k8s.io/client-go v0.34.1
-	sigs.k8s.io/controller-runtime v0.22.2
+	sigs.k8s.io/controller-runtime v0.22.3
 )
 
 require (
