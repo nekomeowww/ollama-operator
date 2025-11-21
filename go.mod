@@ -2,22 +2,23 @@ module github.com/nekomeowww/ollama-operator
 
 go 1.24.0
 
-toolchain go1.25.3
+toolchain go1.25.4
 
 require (
 	github.com/briandowns/spinner v1.23.2
 	github.com/google/go-containerregistry v0.20.6
 	github.com/gookit/color v1.6.0
-	github.com/nekomeowww/xo v1.17.0
+	github.com/nekomeowww/xo v1.18.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
-	k8s.io/api v0.34.1
-	k8s.io/apimachinery v0.34.1
-	k8s.io/cli-runtime v0.34.1
-	k8s.io/client-go v0.34.1
-	sigs.k8s.io/controller-runtime v0.22.3
+	k8s.io/api v0.34.2
+	k8s.io/apimachinery v0.34.2
+	k8s.io/cli-runtime v0.34.2
+	k8s.io/client-go v0.34.2
+	moul.io/http2curl v1.0.0
+	sigs.k8s.io/controller-runtime v0.22.4
 )
 
 require (
@@ -133,7 +134,7 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
 	gonum.org/v1/gonum v0.15.0 // indirect
-	google.golang.org/protobuf v1.36.9 // indirect
+	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -143,7 +144,6 @@ require (
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20250910181357-589584f1c912 // indirect
 	k8s.io/utils v0.0.0-20250820121507-0af2bda4dd1d // indirect
-	moul.io/http2curl v1.0.0 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
 	sigs.k8s.io/kustomize/api v0.20.1 // indirect
 	sigs.k8s.io/kustomize/kyaml v0.20.1 // indirect
