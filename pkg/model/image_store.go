@@ -143,6 +143,46 @@ func EnsureImageStoreStatefulSetCreated(
 
 	log.Info("no existing image store stateful set found, creating one...")
 
+	// Build pod template spec first so we can safely copy pointers from model.Spec.PodTemplate
+	podTemplate := corev1.PodTemplateSpec{
+		ObjectMeta: metav1.ObjectMeta{
+			Labels:      ImageStoreLabels(),
+			Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
+		},
+		Spec: corev1.PodSpec{
+			Containers: []corev1.Container{
+				NewOllamaServerContainer(false, model.Spec.Resources, model.Spec.ExtraEnvFrom, model.Spec.Env),
+			},
+			RestartPolicy: corev1.RestartPolicyAlways,
+			Volumes: []corev1.Volume{
+				{
+					Name: "image-storage",
+					VolumeSource: corev1.VolumeSource{
+						PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+							ClaimName: ImageStorePVCName,
+							ReadOnly:  false,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	// If user provided a PodTemplate, copy over pointer fields safely onto the podTemplate we will use
+	if model.Spec.PodTemplate != nil {
+		if model.Spec.PodTemplate.Spec.SecurityContext != nil {
+			// copy the security context pointer directly to preserve the pointer type
+			podTemplate.Spec.SecurityContext = model.Spec.PodTemplate.Spec.SecurityContext
+		}
+
+		if len(model.Spec.PodTemplate.Spec.Containers) > 0 {
+			if model.Spec.PodTemplate.Spec.Containers[0].SecurityContext != nil {
+				// copy the security context pointer directly to preserve the pointer type
+				podTemplate.Spec.Containers[0].SecurityContext = model.Spec.PodTemplate.Spec.Containers[0].SecurityContext
+			}
+		}
+	}
+
 	statefulSet = &appsv1.StatefulSet{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        ImageStoreStatefulSetName,
@@ -155,29 +195,7 @@ func EnsureImageStoreStatefulSetCreated(
 			Selector: &metav1.LabelSelector{
 				MatchLabels: ImageStoreLabels(),
 			},
-			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels:      ImageStoreLabels(),
-					Annotations: ModelAnnotations(ImageStoreStatefulSetName, true),
-				},
-				Spec: corev1.PodSpec{
-					Containers: []corev1.Container{
-						NewOllamaServerContainer(false, corev1.ResourceRequirements{}, model.Spec.ExtraEnvFrom, model.Spec.Env),
-					},
-					RestartPolicy: corev1.RestartPolicyAlways,
-					Volumes: []corev1.Volume{
-						{
-							Name: "image-storage",
-							VolumeSource: corev1.VolumeSource{
-								PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-									ClaimName: ImageStorePVCName,
-									ReadOnly:  false,
-								},
-							},
-						},
-					},
-				},
-			},
+			Template: podTemplate,
 		},
 	}
 
