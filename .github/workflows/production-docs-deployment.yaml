@@ -13,7 +13,7 @@ jobs:
       name: Production Docs
       url: https://ollama-operator.ayaka.io
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: pnpm/action-setup@v4
