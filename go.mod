@@ -2,7 +2,7 @@ module github.com/nekomeowww/ollama-operator
 
 go 1.24.0
 
-toolchain go1.25.4
+toolchain go1.25.5
 
 require (
 	github.com/briandowns/spinner v1.23.2
@@ -10,7 +10,7 @@ require (
 	github.com/gookit/color v1.6.0
 	github.com/nekomeowww/xo v1.18.1
 	github.com/samber/lo v1.52.0
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
 	k8s.io/api v0.34.2
