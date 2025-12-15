@@ -10,7 +10,7 @@ import (
 	"github.com/samber/lo"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	"moul.io/http2curl"
+	"moul.io/http2curl/v2"
 )
 
 const (
