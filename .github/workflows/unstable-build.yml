@@ -50,7 +50,7 @@ jobs:
           make build-installer IMG=ghcr.io/${{ github.repository }}:unstable
 
       - name: Upload installer
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ollama-operator-installer-unstable
           path: dist/install.yaml
