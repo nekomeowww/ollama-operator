@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "type": "module",
-  "packageManager": "pnpm@10.26.2",
+  "packageManager": "pnpm@10.27.0",
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
