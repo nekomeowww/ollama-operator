@@ -2,7 +2,7 @@ module github.com/nekomeowww/ollama-operator
 
 go 1.25.0
 
-toolchain go1.25.5
+toolchain go1.25.6
 
 require (
 	github.com/briandowns/spinner v1.23.2
