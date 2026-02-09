@@ -23,7 +23,7 @@
     "@types/node": "^24.6.1",
     "@vueuse/core": "^14.0.0",
     "asciinema-player": "^3.10.0",
-    "eslint": "^9.36.0",
+    "eslint": "^10.0.0",
     "typescript": "^5.9.3",
     "unocss": "^66.5.2",
     "vite": "^7.1.7",
