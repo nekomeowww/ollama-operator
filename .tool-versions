@@ -1,2 +1,2 @@
-golang 1.25.6
-golangci-lint 2.8.0
+golang 1.26.1
+golangci-lint 2.11.3
