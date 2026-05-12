@@ -24,7 +24,7 @@
     "@vueuse/core": "^14.0.0",
     "asciinema-player": "^3.10.0",
     "eslint": "^10.0.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.0",
     "unocss": "^66.5.2",
     "vite": "^8.0.0",
     "vite-plugin-inspect": "^11.3.3",
